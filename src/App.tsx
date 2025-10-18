@@ -8,33 +8,28 @@ import Order from "./pages/Order/Order";
 import Warehouse from "./pages/Warehouse/Warehouse";
 import User from "./pages/User/User";
 
-
-
 function App() {
+    return (
+        <div className="App">
+            <title>Quản lí cửa hàng</title>
 
-
-  return (
-    <div className="App">
-      <title>Quản lí cửa hàng</title>
-
-      
-
-      
-      <BrowserRouter>
-        <Routes>
-          <Route path="/Login" element={<Login/>}/>
-          <Route path="/Dashboard" element={<Dashboard/>}/>
-          <Route path="/Product" element={<Product/>}/>
-          <Route path="/Customer" element={<Customer/>}/>
-          <Route path="/Order" element={<Order/>}/>
-          <Route path="/Warehouse" element={<Warehouse/>}/>
-          <Route path="/User" element={<User/>}></Route>
-          <Route path="/" element={<Navigate to="/login" replace/>}></Route>          
-        </Routes>
-      </BrowserRouter>
-
-    </div>
-  );
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/Login" element={<Login />} />
+                    <Route path="/Dashboard" element={<Dashboard />} />
+                    <Route path="/Product" element={<Product />} />
+                    <Route path="/Customer" element={<Customer />} />
+                    <Route path="/Order" element={<Order />} />
+                    <Route path="/Warehouse" element={<Warehouse />} />
+                    <Route path="/User" element={<User />}></Route>
+                    <Route
+                        path="/"
+                        element={<Navigate to="/login" replace />}
+                    ></Route>
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
