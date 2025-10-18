@@ -33,7 +33,7 @@ const Header = (props) => {
             style={{ minWidth: "180px" }}
           >
             <li>
-              <a className="dropdown-item" href="">
+              <a className="dropdown-item" href="/User">
                 Quản lí thông tin
               </a>
             </li>
