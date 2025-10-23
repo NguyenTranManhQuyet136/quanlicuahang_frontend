@@ -2,7 +2,7 @@ import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import UserDetail from "../../components/User/UserDetail";
 
-const User = () => {
+const User:React.FC = () => {
     return (
         <div className="d-flex" style={{ minHeight: "100vh" }}>
             <Menubar focus={""} />

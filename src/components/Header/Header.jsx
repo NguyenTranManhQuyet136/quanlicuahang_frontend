@@ -43,6 +43,7 @@ const Header = (props) => {
                         <li>
                             <a
                                 className="dropdown-item text-danger"
+                                onClick={() => localStorage.clear()}
                                 href="/Login"
                             >
                                 Đăng xuất

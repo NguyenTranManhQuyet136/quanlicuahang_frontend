@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const FormAdd = (props) => {
+const FormAdd = (props  ) => {
     const [dataForm, setDataForm] = useState({
         status: 1,
     });

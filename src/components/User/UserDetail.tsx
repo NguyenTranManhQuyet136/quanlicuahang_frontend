@@ -2,28 +2,68 @@ import { useEffect, useState } from "react";
 import ChangePassword from "../Form/FormChangePassword";
 import FormEditProfile from "../Form/FormEditProfile";
 import axios from "axios";
+import { Console } from "console";
 
 interface setVari {
     closeForm: () => void;
+    fullname: string
+    gender: string
+    birthday: string
+    position: string
+    phoneNumber: string
+    email: string
 }
 
-const UserDetail = () => {
+const UserDetail:React.FC = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [fullname, setFullname] = useState("")
     const [gender, setGender] = useState("")
     const [birthday, setBirthday] = useState("")
     const [position, setPosition] = useState("")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [email, setEmail] = useState("")  
 
     useEffect( () => {
-        const getDataAccount = () => {
+        const getDataAccount = async () => {
             const username = localStorage.getItem("username") || ""
             const password = localStorage.getItem("password") || ""
+
+            const res = await axios.post("http://localhost:5000/api/users_detail",{
+                username: username
+            })
+            const profile = (res.data)[0]
+            setFullname(profile.fullname)
+            setGender(profile.gender)
+            setBirthday(profile.birthday.slice(0,10))
+            setPosition(profile.position)
+            setPhoneNumber(profile.phone_number)
+            setEmail(profile.email)
+
             setUsername(username)
             setPassword(password)
         }
         getDataAccount()
     },[])
+
+    async function resetData() {
+        console.log("123")
+        const username = localStorage.getItem("username") || ""
+        const password = localStorage.getItem("password") || ""
+        const res = await axios.post("http://localhost:5000/api/users_detail",{
+            username: username
+        })
+        const profile = (res.data)[0]
+        setFullname(profile.fullname)
+        setGender(profile.gender)
+        setBirthday(profile.birthday.slice(0,10))   
+        setPosition(profile.position)
+        setPhoneNumber(profile.phone_number)
+        setEmail(profile.email)
+
+        setUsername(username)
+        setPassword(password)
+    }
     
 
 
@@ -41,6 +81,44 @@ const UserDetail = () => {
                 break
         }
     };
+
+    const handleEdit = async (fullname: string,gender:string,birthday:string,position:string,phoneNumber:string,email:string) => {
+        const res = await axios.post("http://localhost:5000/api/user/fix", {
+            username: localStorage.getItem("username"),
+            fullname: fullname,
+            gender: gender,
+            birthday: birthday,
+            position: position,
+            phoneNumber: phoneNumber,
+            email: email,
+        })
+        closeForm("profile")
+        resetData()
+    }
+
+    const handleChangePassword = async (password: string,passwordChange: string,confirmPasswordChange: string) => {
+        const username = localStorage.getItem("username")
+        const res = await axios.post("http://localhost:5000/api/findUser", {username: username, password: password})
+        if ( res.data.status == false) {
+            alert("sai mat khau")
+            return
+        } else {
+            if (passwordChange  != confirmPasswordChange) {
+                alert("xac nhan mat khau sai")
+            } else {
+                const res = await axios.post("http://localhost:5000/api/user/change_password", {passwordChange: passwordChange, username: username})
+                if (res.data.status == true) {
+                    let passStar = ""
+                    for ( let i =0; i < passwordChange.length; i++) {
+                        passStar += "*"
+                    }
+                    localStorage.setItem("password", passStar)
+                    closeForm("pass")
+                    resetData()
+                }
+            } 
+        }
+    }
 
     return (
         <div>
@@ -61,11 +139,23 @@ const UserDetail = () => {
 
 
                 {changePasswordStatus && (
-                    <ChangePassword closeForm={() => closeForm("pass")} />
+                    <ChangePassword
+                        closeForm={() => closeForm("pass")}
+                        handleChangePassword={handleChangePassword}
+                    />
                 )}
 
                 {editProfileStatus && (
-                    <FormEditProfile closeForm={() => closeForm("profile")}/>
+                    <FormEditProfile
+                        closeForm={() => closeForm("profile")}
+                        handleEdit={handleEdit}   
+                        fullname={fullname}
+                        gender={gender}
+                        birthday={birthday}
+                        position={position}
+                        phoneNumber={phoneNumber}
+                        email={email}
+                    />
                 )}
 
                 <div className="card-body bg-white">
@@ -118,22 +208,26 @@ const UserDetail = () => {
                                     </h5>
                                     <dl className="row mb-0">
                                         <dt className="col-sm-5">Họ và tên:</dt>
-                                        <dd className="col-sm-7">
-                                            
-                                        </dd>
+                                        <dd className="col-sm-7">{fullname}</dd>
 
                                         <dt className="col-sm-5">Giới tính:</dt>
-                                        <dd className="col-sm-7"></dd>
+                                        <dd className="col-sm-7">{gender}</dd>
 
                                         <dt className="col-sm-5">Ngày sinh:</dt>
-                                        <dd className="col-sm-7"></dd>
+                                        <dd className="col-sm-7">{birthday}</dd>
 
                                         <dt className="col-sm-5">
                                             Vị trí làm việc:
                                         </dt>
-                                        <dd className="col-sm-7">
+                                        <dd className="col-sm-7">{position}</dd>
+
+                                        <dt className="col-sm-5">Số điện thoại:</dt>
+                                        <dd className="col-sm-7">{phoneNumber}</dd>
+
+                                        <dt className="col-sm-5">Email:</dt>
+                                        <dd className="col-sm-7">{email}</dd>
                                             
-                                        </dd>
+                    
                                     </dl>
                                 </div>
                             </div>
