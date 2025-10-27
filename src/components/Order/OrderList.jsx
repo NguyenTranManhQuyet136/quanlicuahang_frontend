@@ -232,7 +232,7 @@ const OrderList = () => {
                                     </td>
                                     <td className="text-center">
                                         <button
-                                            className="btn btn-sm btn-outline-primary me-2"
+                                            className="btn btn-sm btn-outline-primary"
                                             onClick={() =>
                                                 setFixStatus({
                                                     statusSwitch: true,

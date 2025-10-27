@@ -1,6 +1,6 @@
 import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
-import OrderList from "../../components/Order/Order";
+import OrderList from "../../components/Order/OrderList";
 
 const Order = () => {
     return (

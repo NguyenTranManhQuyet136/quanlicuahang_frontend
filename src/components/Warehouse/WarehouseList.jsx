@@ -191,7 +191,7 @@ const WarehouseList = () => {
             )}
 
             <div
-                className="table-responsive shadow-sm rounded bg-white"
+                className="table-responsive shadow-sm rounded bg-warehouseite"
                 style={{ maxHeight: "800px", overflowY: "auto" }}
             >
                 <table className="table table-hover align-middle mb-0">
@@ -209,23 +209,23 @@ const WarehouseList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {dataWarehouse.map((wh) => (
-                            <tr key={wh.id}>
-                                <td>{wh.id}</td>
-                                <td>{wh.supplier_name}</td>
+                        {dataWarehouse.map((warehouse) => (
+                            <tr key={warehouse.id}>
+                                <td>{warehouse.id}</td>
+                                <td>{warehouse.supplier_name}</td>
                                 <td>
                                     {new Date(
-                                        wh.import_date,
+                                        warehouse.import_date,
                                     ).toLocaleDateString("vi-VN")}
                                 </td>
                                 <td>
-                                    {Number(wh.total_value).toLocaleString(
+                                    {Number(warehouse.total_value).toLocaleString(
                                         "vi-VN",
                                     )}{" "}
                                     VND
                                 </td>
                                 <td>
-                                    {wh.status === 1
+                                    {warehouse.status === 1
                                         ? "Hoàn tất"
                                         : "Đang xử lý"}
                                 </td>
@@ -236,12 +236,12 @@ const WarehouseList = () => {
                                             setFixStatus({
                                                 statusSwitch: true,
                                                 dataFix: {
-                                                    id: wh.id,
+                                                    id: warehouse.id,
                                                     supplier_name:
-                                                        wh.supplier_name,
-                                                    import_date: wh.import_date,
-                                                    total_value: wh.total_value,
-                                                    status: wh.status,
+                                                        warehouse.supplier_name,
+                                                    import_date: warehouse.import_date,
+                                                    total_value: warehouse.total_value,
+                                                    status: warehouse.status,
                                                 },
                                             })
                                         }
@@ -253,8 +253,8 @@ const WarehouseList = () => {
                                         onClick={() =>
                                             setRemoveStatus({
                                                 status: true,
-                                                id: wh.id,
-                                                supplier_name: wh.supplier_name,
+                                                id: warehouse.id,
+                                                supplier_name: warehouse.supplier_name,
                                             })
                                         }
                                     >

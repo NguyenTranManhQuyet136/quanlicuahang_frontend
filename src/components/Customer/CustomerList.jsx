@@ -225,15 +225,15 @@ const CustomerList = () => {
                                     <td>{customer.birthyear}</td>
                                     <td>{customer.address}</td>
                                     <td>
-                                        <span className="">
-                                            {customer.status == 1
+                                            {customer.status === 1
                                                 ? "Hiển thị"
                                                 : "Ẩn"}
-                                        </span>
+                                       
                                     </td>
                                     <td className="text-center">
                                         <button
-                                            className="btn btn-sm btn-outline-primary me-2"
+                                            className="btn btn-sm btn-outline-primary "
+                                                
                                             onClick={() =>
                                                 setFixStatus({
                                                     statusSwitch: true,

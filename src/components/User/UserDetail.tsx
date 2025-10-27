@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ChangePassword from "../Form/FormChangePassword";
 import FormEditProfile from "../Form/FormEditProfile";
 import axios from "axios";
-import { Console } from "console";
 
 interface setVari {
     closeForm: () => void;
@@ -23,6 +22,7 @@ const UserDetail:React.FC = () => {
     const [position, setPosition] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [email, setEmail] = useState("")  
+    const [image, setImage] = useState("")
 
     useEffect( () => {
         const getDataAccount = async () => {
@@ -120,6 +120,12 @@ const UserDetail:React.FC = () => {
         }
     }
 
+    const changeAvatar = (file: File) => {
+        const imageUrl = URL.createObjectURL(file);
+        console.log(imageUrl)
+        setImage(imageUrl);
+    }
+
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
@@ -160,17 +166,57 @@ const UserDetail:React.FC = () => {
 
                 <div className="card-body bg-white">
                     <div className="row g-3">
-                        <div className="col-md-4 text-center ">
+                        <div className="col-md-4 text-center">
                             <h5 className="text-primary mb-3">Ảnh đại diện</h5>
-                            <img
-                                src="https://via.placeholder.com/150"
+                            <div  className="rounded-circle border border-3 border-primary mb-3" style={{ width: "150px", height: "150px", display: "inline-block", overflow: "hidden"}}>
+                            <img 
+                                src={image}
                                 alt="Avatar"
-                                className="rounded-circle border border-3 border-primary mb-3"
+                                style={{width: "150px", minHeight: "150px"}}
                             />
+                            </div>
+                            <input onChange={(e) =>  {
+                                const files = e.target.files
+                                if (!files) {
+                                    return
+                                }
+
+                                const file = files[0]
+                                changeAvatar(file)
+                            }} className="form-control" type="file" />  
                         </div>
 
                         <div className="col-md-8">
-                            <div className="row">
+                            <div className="row">                                
+                                <div className="col-md-6 mb-4">
+                                    <h5 className="text-primary pb-1">
+                                        Thông tin cá nhân
+                                    </h5>
+                                    <dl className="row mb-0">
+                                        <dt className="col-sm-5">Họ và tên:</dt>
+                                        <dd className="col-sm-7">{fullname}</dd>
+
+                                        <dt className="col-sm-5">Giới tính:</dt>
+                                        <dd className="col-sm-7">{gender}</dd>
+
+                                        <dt className="col-sm-5">Ngày sinh:</dt>
+                                        <dd className="col-sm-7">{birthday}</dd>
+
+                                        <dt className="col-sm-5">
+                                            Vị trí làm việc:
+                                        </dt>
+                                        <dd className="col-sm-7">{position}</dd>
+
+                                        <dt className="col-sm-5">Số điện thoại:</dt>
+                                        <dd className="col-sm-7">{phoneNumber}</dd>
+
+                                        <dt className="col-sm-5">Email:</dt>
+                                        <dd className="col-sm-7">{email}</dd>
+                                            
+                    
+                                    </dl>
+                                </div>
+
                                 <div className="col-md-6 mb-4">
                                     <h5 className="text-primary pb-1">
                                         Thông tin tài khoản
@@ -199,35 +245,6 @@ const UserDetail:React.FC = () => {
                                                 Đổi mật khẩu
                                             </button>
                                         </dd>
-                                    </dl>
-                                </div>
-
-                                <div className="col-md-6 mb-4">
-                                    <h5 className="text-primary pb-1">
-                                        Thông tin cá nhân
-                                    </h5>
-                                    <dl className="row mb-0">
-                                        <dt className="col-sm-5">Họ và tên:</dt>
-                                        <dd className="col-sm-7">{fullname}</dd>
-
-                                        <dt className="col-sm-5">Giới tính:</dt>
-                                        <dd className="col-sm-7">{gender}</dd>
-
-                                        <dt className="col-sm-5">Ngày sinh:</dt>
-                                        <dd className="col-sm-7">{birthday}</dd>
-
-                                        <dt className="col-sm-5">
-                                            Vị trí làm việc:
-                                        </dt>
-                                        <dd className="col-sm-7">{position}</dd>
-
-                                        <dt className="col-sm-5">Số điện thoại:</dt>
-                                        <dd className="col-sm-7">{phoneNumber}</dd>
-
-                                        <dt className="col-sm-5">Email:</dt>
-                                        <dd className="col-sm-7">{email}</dd>
-                                            
-                    
                                     </dl>
                                 </div>
                             </div>
