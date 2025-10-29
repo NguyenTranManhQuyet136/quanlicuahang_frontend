@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import FormRemove from "../Form/FormRemove";
 import FormAdd from "../Form/FormAdd";
 import FormFix from "../Form/FormFix";
 import FormSearch from "../Form/FormSearch";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const labelPage = "đơn hàng";
 
@@ -29,6 +30,8 @@ const colInfoSearch = [
 ];
 
 const OrderList = () => {
+    const themeContext = useContext(ThemeContext)
+
     const [dataOrder, setDataOrder] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
@@ -203,34 +206,34 @@ const OrderList = () => {
                         style={{ position: "sticky", top: 0, zIndex: 2 }}
                     >
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Mã khách hàng</th>
-                            <th scope="col">Ngày đặt hàng</th>
-                            <th scope="col">Tổng tiền</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col" className="text-center"></th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">ID</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Mã khách hàng</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Ngày đặt hàng</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Tổng tiền</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Trạng thái</th>
+                            <th className={`thead ${themeContext.theme} center`} scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {dataOrder.map((order) => {
                             return (
                                 <tr key={order.id}>
-                                    <td>{order.id}</td>
-                                    <td>{order.customer_id}</td>
-                                    <td>{order.order_date}</td>
-                                    <td>
+                                    <td className={`${themeContext.theme}`}>{order.id}</td>
+                                    <td className={`${themeContext.theme}`}>{order.customer_id}</td>
+                                    <td className={`${themeContext.theme}`}>{order.order_date}</td>
+                                    <td className={`${themeContext.theme}`}>
                                         {order.total_price.toLocaleString(
                                             "vi-VN",
                                         ) + " VND"}
                                     </td>
-                                    <td>
+                                    <td className={`${themeContext.theme}`} >
                                         <span>
                                             {order.status == 1
                                                 ? "Hoàn tất"
                                                 : "Đang xử lý"}
                                         </span>
                                     </td>
-                                    <td className="text-center">
+                                    <td className={`${themeContext.theme} text-center`}>
                                         <button
                                             className="btn btn-sm btn-outline-primary"
                                             onClick={() =>

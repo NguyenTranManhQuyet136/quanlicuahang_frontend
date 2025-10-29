@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import FormRemove from "../Form/FormRemove";
 import FormAdd from "../Form/FormAdd";
 import FormFix from "../Form/FormFix";
 import FormSearch from "../Form/FormSearch";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const labelPage = "sản phẩm";
 
@@ -29,6 +30,8 @@ const colInfoSearch = [
 ];
 
 const ProductList = () => {
+    const themeContext = useContext(ThemeContext )
+    console.log(themeContext.theme)
     const [dataProduct, setDataProduct] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
@@ -205,38 +208,38 @@ const ProductList = () => {
                 <table className="table table-hover align-middle mb-0">
                     <thead
                         className="table-primary"
-                        style={{ position: "sticky", top: 0, zIndex: 2 }}
+                        style={{ position: "sticky", top: 0, zIndex: 2}}
                     >
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Tên sản phẩm</th>
-                            <th scope="col">Giá</th>
-                            <th scope="col">Tồn kho</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col" className="text-center"></th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">ID</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Tên sản phẩm</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Giá</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Tồn kho</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Trạng thái</th>
+                            <th  scope="col" className={`text-center thead ${themeContext.theme}`}></th>
                         </tr>
                     </thead>
                     <tbody>
                         {dataProduct.map((product) => {
                             return (
                                 <tr key={product.id}>
-                                    <td>{product.id}</td>
-                                    <td>{product.name}</td>
-                                    <td>
+                                    <td className={`${themeContext.theme}`}>{product.id}</td>
+                                    <td className={`${themeContext.theme}`}>{product.name}</td>
+                                    <td className={`${themeContext.theme}`}>
                                         {product.price.toLocaleString("vi-VN") +
                                             " VND"}
                                     </td>
-                                    <td>{product.quantity}</td>
-                                    <td>
+                                    <td className={`${themeContext.theme}`}>{product.quantity}</td>
+                                    <td className={`${themeContext.theme}`}>
                                         <span className="">
                                             {product.status == 1
                                                 ? "Hiển thị"
                                                 : "Ẩn"}
                                         </span>
                                     </td>
-                                    <td className="text-center">
+                                    <td  className={`text-center ${themeContext.theme}`}>
                                         <button
-                                            className="btn btn-sm btn-outline-primary me-2"
+                                            className="btn btn-sm btn-outline-primary"
                                             onClick={() =>
                                                 setFixStatus({
                                                     statusSwitch: true,

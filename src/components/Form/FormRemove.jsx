@@ -1,11 +1,16 @@
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeProvider";
+
 const FormRemove = (props) => {
+    const themeContext = useContext(ThemeContext)
+
     return (
         <div
             className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
             style={{ backgroundColor: "rgba(0,0,0,0.5)", zIndex: 1050 }}
         >
             <div
-                className="bg-white p-4 rounded shadow"
+                className={`bg-white p-4 rounded shadow ${themeContext.theme}`}
                 style={{ width: "400px" }}
             >
                 <h5 className="text-center text-danger mb-3 fw-bold">

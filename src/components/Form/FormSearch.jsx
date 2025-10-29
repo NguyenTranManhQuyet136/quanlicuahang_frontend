@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeProvider";
+
 
 const FormSearch = (props) => {
+    const themeContext = useContext(ThemeContext)
     const [dataForm, setDataForm] = useState({});
 
     return (
@@ -12,7 +15,7 @@ const FormSearch = (props) => {
                 <div className="card-header bg-primary text-white text-center">
                     <h5 className="mb-0">Tìm kiếm {props.typeData}</h5>
                 </div>
-                <div className="card-body">
+                <div className={`card-body ${themeContext.theme}`}>
                     <form>
                         {props.colInfo.map((col) => (
                             <div className="mb-3" key={col.key}>

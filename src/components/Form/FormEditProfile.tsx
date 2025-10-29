@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 interface SetVari {
     closeForm: () => void;
@@ -13,6 +14,7 @@ interface SetVari {
 
 
 const FormEditProfile: React.FC<SetVari> = (props) => {
+    const themeContext = useContext(ThemeContext)
 
     const [fullname, setFullname] = useState(props.fullname)
     const [gender, setGender] = useState(props.gender)
@@ -30,7 +32,7 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
                 <div className="card-header bg-primary text-white text-center">
                     <h5 className="mb-0">Chỉnh sửa thông tin</h5>
                 </div>
-                <div className="card-body">
+                <div className={`card-body ${themeContext.theme}`}>
                     <form>
                         <div className="mb-3">
                             <div className="mb-3">

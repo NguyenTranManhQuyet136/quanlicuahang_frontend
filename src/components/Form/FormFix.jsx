@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const FormFix = (props) => {
+    const themeContext = useContext(ThemeContext)
+
     const idOld = props.dataFix.id;
     const [dataForm, setDataForm] = useState(props.dataFix);
 
@@ -13,7 +16,7 @@ const FormFix = (props) => {
                 <div className="card-header bg-primary text-white text-center">
                     <h5 className="mb-0">Sửa {props.typeData}</h5>
                 </div>
-                <div className="card-body">
+                <div className={`card-body ${themeContext.theme}`}>
                     <form>
                         {props.colInfo.map((col) => (
                             <div className="mb-3" key={col.key}>

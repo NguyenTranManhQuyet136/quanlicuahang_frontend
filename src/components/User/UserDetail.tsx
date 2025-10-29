@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ChangePassword from "../Form/FormChangePassword";
 import FormEditProfile from "../Form/FormEditProfile";
 import axios from "axios";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 interface setVari {
     closeForm: () => void;
@@ -14,6 +15,8 @@ interface setVari {
 }
 
 const UserDetail:React.FC = () => {
+    const themeContext = useContext(ThemeContext)
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [fullname, setFullname] = useState("")
@@ -164,7 +167,7 @@ const UserDetail:React.FC = () => {
                     />
                 )}
 
-                <div className="card-body bg-white">
+                <div className={`card-body bg-white ${themeContext.theme}`}>
                     <div className="row g-3">
                         <div className="col-md-4 text-center">
                             <h5 className="text-primary mb-3">Ảnh đại diện</h5>

@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useContext } from "react";
 import FormRemove from "../Form/FormRemove";
 import FormAdd from "../Form/FormAdd";
 import FormFix from "../Form/FormFix";
 import FormSearch from "../Form/FormSearch";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const labelPage = "khách hàng";
 
@@ -29,6 +30,8 @@ const colInfoSearch = [
 ];
 
 const CustomerList = () => {
+    const themeContext = useContext(ThemeContext)
+
     const [dataCustomer, setDataCustomer] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
@@ -208,29 +211,29 @@ const CustomerList = () => {
                         style={{ position: "sticky", top: 0, zIndex: 2 }}
                     >
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Họ và tên khách hàng</th>
-                            <th scope="col">Năm sinh</th>
-                            <th scope="col">Địa chỉ</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col" className="text-center"></th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">ID</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Họ và tên khách hàng</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Năm sinh</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Địa chỉ</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Trạng thái</th>
+                            <th className={`thead ${themeContext.theme} text-center`} scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {dataCustomer.map((customer) => {
                             return (
                                 <tr key={customer.id}>
-                                    <td>{customer.id}</td>
-                                    <td>{customer.fullname}</td>
-                                    <td>{customer.birthyear}</td>
-                                    <td>{customer.address}</td>
-                                    <td>
+                                    <td className={`${themeContext.theme}`}>{customer.id}</td>
+                                    <td className={`${themeContext.theme}`}>{customer.fullname}</td>
+                                    <td className={`${themeContext.theme}`}>{customer.birthyear}</td>
+                                    <td className={`${themeContext.theme}`}>{customer.address}</td>
+                                    <td className={`${themeContext.theme}`}>
                                             {customer.status === 1
                                                 ? "Hiển thị"
                                                 : "Ẩn"}
                                        
                                     </td>
-                                    <td className="text-center">
+                                    <td className={`text-center ${themeContext.theme}`}>
                                         <button
                                             className="btn btn-sm btn-outline-primary "
                                                 

@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const FormAdd = (props  ) => {
+    const themeContext = useContext(ThemeContext)
+
     const [dataForm, setDataForm] = useState({
         status: 1,
     });
@@ -14,7 +17,7 @@ const FormAdd = (props  ) => {
                 <div className="card-header bg-primary text-white text-center">
                     <h5 className="mb-0">Thêm {props.typeData}</h5>
                 </div>
-                <div className="card-body">
+                <div className={`card-body ${themeContext.theme}`}>
                     <form>
                         {props.colInfo.map((col) => (
                             <div className="mb-3" key={col.key}>

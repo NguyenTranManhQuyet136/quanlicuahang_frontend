@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import FormRemove from "../Form/FormRemove";
 import FormAdd from "../Form/FormAdd";
 import FormFix from "../Form/FormFix";
 import FormSearch from "../Form/FormSearch";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const labelPage = "phiếu nhập kho";
 
@@ -29,6 +30,8 @@ const colInfoSearch = [
 ];
 
 const WarehouseList = () => {
+    const themeContext = useContext(ThemeContext)
+
     const [dataWarehouse, setDataWarehouse] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
@@ -200,38 +203,38 @@ const WarehouseList = () => {
                         style={{ position: "sticky", top: 0, zIndex: 2 }}
                     >
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Tên nhà cung cấp</th>
-                            <th scope="col">Ngày nhập hàng</th>
-                            <th scope="col">Tổng giá trị</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col" className="text-center"></th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">ID</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Tên nhà cung cấp</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Ngày nhập hàng</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Tổng giá trị</th>
+                            <th className={`thead ${themeContext.theme}`} scope="col">Trạng thái</th>
+                            <th className={`thead ${themeContext.theme} text-center`} scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {dataWarehouse.map((warehouse) => (
                             <tr key={warehouse.id}>
-                                <td>{warehouse.id}</td>
-                                <td>{warehouse.supplier_name}</td>
-                                <td>
+                                <td className={`${themeContext.theme}`}>{warehouse.id}</td>
+                                <td className={`${themeContext.theme}`}>{warehouse.supplier_name}</td>
+                                <td className={`${themeContext.theme}`}>
                                     {new Date(
                                         warehouse.import_date,
                                     ).toLocaleDateString("vi-VN")}
                                 </td>
-                                <td>
+                                <td className={`${themeContext.theme}`}>
                                     {Number(warehouse.total_value).toLocaleString(
                                         "vi-VN",
                                     )}{" "}
                                     VND
                                 </td>
-                                <td>
+                                <td className={`${themeContext.theme}`}>
                                     {warehouse.status === 1
                                         ? "Hoàn tất"
                                         : "Đang xử lý"}
                                 </td>
-                                <td className="text-center">
+                                <td className={`${themeContext.theme} text-center`}>
                                     <button
-                                        className="btn btn-sm btn-outline-primary me-2"
+                                        className="btn btn-sm btn-outline-primary"
                                         onClick={() =>
                                             setFixStatus({
                                                 statusSwitch: true,

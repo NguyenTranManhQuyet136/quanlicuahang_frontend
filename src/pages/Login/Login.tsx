@@ -20,6 +20,7 @@ const Login = () => {
             if (res.data.role == "user") {
                 localStorage.setItem("username",res.data.username)
                 localStorage.setItem("password",res.data.password)
+                localStorage.setItem("theme","")
                 navigate("/Dashboard");
             } else if (res.data.role == "admin") {
                 navigate("/Admin");
