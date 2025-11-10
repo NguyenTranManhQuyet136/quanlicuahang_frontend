@@ -1,8 +1,8 @@
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 
-const FormAdd = (props  ) => {
-    const themeContext = useContext(ThemeContext)
+const FormAdd = (props) => {
+    const themeContext = useContext(ThemeContext);
 
     const [dataForm, setDataForm] = useState({
         status: 1,
@@ -28,9 +28,7 @@ const FormAdd = (props  ) => {
                                     <input
                                         type={col.type}
                                         className="form-control"
-                                        placeholder={
-                                            "Nhập " + col.label.toLowerCase()
-                                        }
+                                        placeholder={"Nhập " + col.label.toLowerCase()} 
                                         onChange={(e) =>
                                             setDataForm((prev) => ({
                                                 ...prev,

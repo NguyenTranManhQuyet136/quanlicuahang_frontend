@@ -7,15 +7,14 @@ import FormAdd from "../../components/Form/FormAdd";
 import FormFix from "../../components/Form/FormFix";
 import FormSearch from "../../components/Form/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
-import { checkLogin } from "../../hooks/checkLogin";
 
-const labelPage = "khách hàng";
+const labelPage = "sản phẩm";
 
 const colInfo = [
     { key: "id", label: "ID", type: "number" },
-    { key: "fullname", label: "Họ tên khách hàng", type: "text" },
-    { key: "birthyear", label: "Năm sinh", type: "number" },
-    { key: "address", label: "Địa chỉ", type: "text" },
+    { key: "name", label: "Tên sản phẩm", type: "text" },
+    { key: "price", label: "Giá", type: "number" },
+    { key: "quantity", label: "Số lượng", type: "number" },
     {
         key: "status",
         label: "Trạng thái",
@@ -29,20 +28,19 @@ const colInfo = [
 
 const colInfoSearch = [
     { key: "id", label: "ID", type: "number" },
-    { key: "fullname", label: "Họ tên khách hàng", type: "text" },
+    { key: "name", label: "Tên sản phẩm", type: "text" },
 ];
 
-const Customer = () => {
-    checkLogin()
-
+const Product = () => {
     const themeContext = useContext(ThemeContext);
 
-    const [dataCustomer, setDataCustomer] = useState([]);
+    console.log(themeContext.theme);
+    const [dataProduct, setDataProduct] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
         status: false,
         id: "",
-        fullname: "",
+        name: "",
     });
 
     const [fixStatus, setFixStatus] = useState({
@@ -60,15 +58,15 @@ const Customer = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await axios.get("http://localhost:5000/api/customer");
-            setDataCustomer(res.data);
+            const res = await axios.get("http://localhost:5000/api/product");
+            setDataProduct(res.data);
         };
         fetchData();
     }, []);
 
     async function resetData() {
-        const res = await axios.get("http://localhost:5000/api/customer");
-        setDataCustomer(res.data);
+        const res = await axios.get("http://localhost:5000/api/product");
+        setDataProduct(res.data);
     }
 
     const closeForm = (type) => {
@@ -89,7 +87,7 @@ const Customer = () => {
     };
 
     const handleRemove = async (id) => {
-        await axios.post("http://localhost:5000/api/customer/remove", {
+        await axios.post("http://localhost:5000/api/product/remove", {
             id: id,
         });
         closeForm("remove");
@@ -97,11 +95,11 @@ const Customer = () => {
     };
 
     const handleFix = async (dataFix, idOld) => {
-        await axios.post("http://localhost:5000/api/customer/fix", {
+        await axios.post("http://localhost:5000/api/product/fix", {
             id: dataFix.id,
-            fullname: dataFix.fullname,
-            birthyear: dataFix.birthyear,
-            address: dataFix.address,
+            name: dataFix.name,
+            price: dataFix.price,
+            quantity: dataFix.quantity,
             status: dataFix.status,
             idOld: idOld,
         });
@@ -110,11 +108,11 @@ const Customer = () => {
     };
 
     const handleAdd = async (dataAdd) => {
-        await axios.post("http://localhost:5000/api/customer/add", {
+        await axios.post("http://localhost:5000/api/product/add", {
             id: dataAdd.id,
-            fullname: dataAdd.fullname,
-            birthyear: dataAdd.birthyear,
-            address: dataAdd.address,
+            name: dataAdd.name,
+            price: dataAdd.price,
+            quantity: dataAdd.quantity,
             status: dataAdd.status,
         });
         closeForm("add");
@@ -123,25 +121,25 @@ const Customer = () => {
 
     const handleSearch = async (dataSearch) => {
         const res = await axios.post(
-            "http://localhost:5000/api/customer/search",
+            "http://localhost:5000/api/product/search",
             {
                 id: dataSearch.id,
-                fullname: dataSearch.fullname,
+                name: dataSearch.name,
             },
         );
         if (res.data.length == 0) {
             resetData();
         } else {
-            setDataCustomer(res.data);
+            setDataProduct(res.data);
         }
         closeForm("search");
     };
 
     return (
         <div className="d-flex" style={{ minHeight: "100vh" }}>
-            <Menubar focus={"/Customer"} />
+            <Menubar focus={"/Product"} />
             <div className={`flex-grow-1 bg-light ${themeContext.theme}`}>
-                <Header name={"Quản lí khách hàng"} />
+                <Header name={"Quản lí sản phẩm"} />
                 <div className="p-4">
                     <div>
                         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -150,7 +148,7 @@ const Customer = () => {
                                 <button
                                     className="btn btn-primary px-4 "
                                     style={{
-                                        width: "220px",
+                                        width: "200px",
                                         marginRight: "5px",
                                     }}
                                     onClick={() =>
@@ -159,7 +157,7 @@ const Customer = () => {
                                         })
                                     }
                                 >
-                                    Tìm kiếm khách hàng
+                                    Tìm kiếm sản phẩm
                                 </button>
 
                                 <button
@@ -171,7 +169,7 @@ const Customer = () => {
                                         })
                                     }
                                 >
-                                    Thêm khách hàng
+                                    Thêm sản phẩm
                                 </button>
                             </div>
                         </div>
@@ -180,7 +178,7 @@ const Customer = () => {
                             <FormRemove
                                 id={removeStatus.id}
                                 typeData={labelPage}
-                                fullname={removeStatus.fullname}
+                                name={removeStatus.name}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
                                     handleRemove(removeStatus.id)
@@ -240,19 +238,19 @@ const Customer = () => {
                                             className={`thead ${themeContext.theme}`}
                                             scope="col"
                                         >
-                                            Họ và tên khách hàng
+                                            Tên sản phẩm
                                         </th>
                                         <th
                                             className={`thead ${themeContext.theme}`}
                                             scope="col"
                                         >
-                                            Năm sinh
+                                            Giá
                                         </th>
                                         <th
                                             className={`thead ${themeContext.theme}`}
                                             scope="col"
                                         >
-                                            Địa chỉ
+                                            Tồn kho
                                         </th>
                                         <th
                                             className={`thead ${themeContext.theme}`}
@@ -261,59 +259,61 @@ const Customer = () => {
                                             Trạng thái
                                         </th>
                                         <th
-                                            className={`thead ${themeContext.theme} text-center`}
                                             scope="col"
+                                            className={`text-center thead ${themeContext.theme}`}
                                         ></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {dataCustomer.map((customer) => {
+                                    {dataProduct.map((product) => {
                                         return (
-                                            <tr key={customer.id}>
+                                            <tr key={product.id}>
                                                 <td
                                                     className={`${themeContext.theme}`}
                                                 >
-                                                    {customer.id}
+                                                    {product.id}
                                                 </td>
                                                 <td
                                                     className={`${themeContext.theme}`}
                                                 >
-                                                    {customer.fullname}
+                                                    {product.name}
                                                 </td>
                                                 <td
                                                     className={`${themeContext.theme}`}
                                                 >
-                                                    {customer.birthyear}
+                                                    {product.price.toLocaleString(
+                                                        "vi-VN",
+                                                    ) + " VND"}
                                                 </td>
                                                 <td
                                                     className={`${themeContext.theme}`}
                                                 >
-                                                    {customer.address}
+                                                    {product.quantity}
                                                 </td>
                                                 <td
                                                     className={`${themeContext.theme}`}
                                                 >
-                                                    {customer.status === 1
-                                                        ? "Hiển thị"
-                                                        : "Ẩn"}
+                                                    <span className="">
+                                                        {product.status == 1
+                                                            ? "Hiển thị"
+                                                            : "Ẩn"}
+                                                    </span>
                                                 </td>
                                                 <td
                                                     className={`text-center ${themeContext.theme}`}
                                                 >
                                                     <button
-                                                        className="btn btn-sm btn-outline-primary "
+                                                        className="btn btn-sm btn-outline-primary"
                                                         onClick={() =>
                                                             setFixStatus({
                                                                 statusSwitch: true,
                                                                 dataFix: {
-                                                                    id: customer.id,
-                                                                    fullname:
-                                                                        customer.fullname,
-                                                                    birthyear:
-                                                                        customer.birthyear,
-                                                                    address:
-                                                                        customer.address,
-                                                                    status: customer.status,
+                                                                    id: product.id,
+                                                                    name: product.name,
+                                                                    price: product.price,
+                                                                    quantity:
+                                                                        product.quantity,
+                                                                    status: product.status,
                                                                 },
                                                             })
                                                         }
@@ -325,9 +325,8 @@ const Customer = () => {
                                                         onClick={() =>
                                                             setRemoveStatus({
                                                                 status: true,
-                                                                id: customer.id,
-                                                                fullname:
-                                                                    customer.fullname,
+                                                                id: product.id,
+                                                                name: product.name,
                                                             })
                                                         }
                                                     >
@@ -347,4 +346,4 @@ const Customer = () => {
     );
 };
 
-export default Customer;
+export default Product;

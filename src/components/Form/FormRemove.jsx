@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const FormRemove = (props) => {
-    const themeContext = useContext(ThemeContext)
+    const themeContext = useContext(ThemeContext);
 
     return (
         <div

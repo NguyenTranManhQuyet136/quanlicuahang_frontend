@@ -1,5 +1,10 @@
-*{
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
     transition: 0.5s;
+    font-family: inherit;
+    font-size: 16px;
 }
 
 body {
@@ -18,15 +23,20 @@ code {
 }
 
 .dark-mode {
-    background-color:#3b3a3a!important;
+    background-color: #3b3a3a !important;
     color: white !important;
 }
 
 .light-mode {
-    background-color:  white;
+    background-color: white;
 }
 
 .thead.dark-mode {
     background-color: #0d6efd !important;
-    color: white !important
+    color: white !important;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border: var(--bs-border-width) solid var(--bs-border-color);
 }

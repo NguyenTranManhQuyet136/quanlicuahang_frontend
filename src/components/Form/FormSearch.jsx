@@ -1,9 +1,8 @@
 import { useState, useContext } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 
-
 const FormSearch = (props) => {
-    const themeContext = useContext(ThemeContext)
+    const themeContext = useContext(ThemeContext);
     const [dataForm, setDataForm] = useState({});
 
     return (

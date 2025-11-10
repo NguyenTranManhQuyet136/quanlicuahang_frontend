@@ -9,40 +9,40 @@ import FormSearch from "../../components/Form/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
 
-const labelPage = "khách hàng";
+const labelPage = "phiếu nhập kho";
 
 const colInfo = [
     { key: "id", label: "ID", type: "number" },
-    { key: "fullname", label: "Họ tên khách hàng", type: "text" },
-    { key: "birthyear", label: "Năm sinh", type: "number" },
-    { key: "address", label: "Địa chỉ", type: "text" },
+    { key: "supplier_name", label: "Tên nhà cung cấp", type: "text" },
+    { key: "import_date", label: "Ngày nhập hàng", type: "date" },
+    { key: "total_value", label: "Tổng giá trị", type: "number" },
     {
         key: "status",
         label: "Trạng thái",
         type: "select",
         options: [
-            { value: 1, label: "Hiển thị" },
-            { value: 0, label: "Ẩn" },
+            { value: 1, label: "Hoàn tất" },
+            { value: 0, label: "Đang xử lý" },
         ],
     },
 ];
 
 const colInfoSearch = [
     { key: "id", label: "ID", type: "number" },
-    { key: "fullname", label: "Họ tên khách hàng", type: "text" },
+    { key: "supplier_name", label: "Tên nhà cung cấp", type: "text" },
 ];
 
-const Customer = () => {
+const Warehouse = () => {
     checkLogin()
 
     const themeContext = useContext(ThemeContext);
 
-    const [dataCustomer, setDataCustomer] = useState([]);
+    const [dataWarehouse, setDataWarehouse] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
         status: false,
         id: "",
-        fullname: "",
+        supplier_name: "",
     });
 
     const [fixStatus, setFixStatus] = useState({
@@ -60,15 +60,15 @@ const Customer = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await axios.get("http://localhost:5000/api/customer");
-            setDataCustomer(res.data);
+            const res = await axios.get("http://localhost:5000/api/warehouse");
+            setDataWarehouse(res.data);
         };
         fetchData();
     }, []);
 
     async function resetData() {
-        const res = await axios.get("http://localhost:5000/api/customer");
-        setDataCustomer(res.data);
+        const res = await axios.get("http://localhost:5000/api/warehouse");
+        setDataWarehouse(res.data);
     }
 
     const closeForm = (type) => {
@@ -89,7 +89,7 @@ const Customer = () => {
     };
 
     const handleRemove = async (id) => {
-        await axios.post("http://localhost:5000/api/customer/remove", {
+        await axios.post("http://localhost:5000/api/warehouse/remove", {
             id: id,
         });
         closeForm("remove");
@@ -97,11 +97,11 @@ const Customer = () => {
     };
 
     const handleFix = async (dataFix, idOld) => {
-        await axios.post("http://localhost:5000/api/customer/fix", {
+        await axios.post("http://localhost:5000/api/warehouse/fix", {
             id: dataFix.id,
-            fullname: dataFix.fullname,
-            birthyear: dataFix.birthyear,
-            address: dataFix.address,
+            supplier_name: dataFix.supplier_name,
+            import_date: dataFix.import_date,
+            total_value: dataFix.total_value,
             status: dataFix.status,
             idOld: idOld,
         });
@@ -110,11 +110,11 @@ const Customer = () => {
     };
 
     const handleAdd = async (dataAdd) => {
-        await axios.post("http://localhost:5000/api/customer/add", {
+        await axios.post("http://localhost:5000/api/warehouse/add", {
             id: dataAdd.id,
-            fullname: dataAdd.fullname,
-            birthyear: dataAdd.birthyear,
-            address: dataAdd.address,
+            supplier_name: dataAdd.supplier_name,
+            import_date: dataAdd.import_date,
+            total_value: dataAdd.total_value,
             status: dataAdd.status,
         });
         closeForm("add");
@@ -123,55 +123,51 @@ const Customer = () => {
 
     const handleSearch = async (dataSearch) => {
         const res = await axios.post(
-            "http://localhost:5000/api/customer/search",
+            "http://localhost:5000/api/warehouse/search",
             {
                 id: dataSearch.id,
-                fullname: dataSearch.fullname,
+                supplier_name: dataSearch.supplier_name,
             },
         );
-        if (res.data.length == 0) {
+        if (res.data.length === 0) {
             resetData();
         } else {
-            setDataCustomer(res.data);
+            setDataWarehouse(res.data);
         }
         closeForm("search");
     };
 
     return (
         <div className="d-flex" style={{ minHeight: "100vh" }}>
-            <Menubar focus={"/Customer"} />
+            <Menubar focus={"/Warehouse"} />
             <div className={`flex-grow-1 bg-light ${themeContext.theme}`}>
-                <Header name={"Quản lí khách hàng"} />
+                <Header name={"Quản lí nguồn cung"} />
                 <div className="p-4">
                     <div>
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <div></div>
                             <div>
                                 <button
-                                    className="btn btn-primary px-4 "
+                                    className="btn btn-primary px-4"
                                     style={{
                                         width: "220px",
                                         marginRight: "5px",
                                     }}
                                     onClick={() =>
-                                        setSearchStatus({
-                                            status: true,
-                                        })
+                                        setSearchStatus({ status: true })
                                     }
                                 >
-                                    Tìm kiếm khách hàng
+                                    Tìm kiếm phiếu nhập
                                 </button>
 
                                 <button
-                                    className="btn btn-primary px-4 "
+                                    className="btn btn-primary px-4"
                                     style={{ width: "200px" }}
                                     onClick={() =>
-                                        setAddStatus({
-                                            status: true,
-                                        })
+                                        setAddStatus({ status: true })
                                     }
                                 >
-                                    Thêm khách hàng
+                                    Thêm phiếu nhập
                                 </button>
                             </div>
                         </div>
@@ -180,7 +176,7 @@ const Customer = () => {
                             <FormRemove
                                 id={removeStatus.id}
                                 typeData={labelPage}
-                                fullname={removeStatus.fullname}
+                                fullname={removeStatus.supplier_name}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
                                     handleRemove(removeStatus.id)
@@ -217,7 +213,7 @@ const Customer = () => {
                         )}
 
                         <div
-                            className="table-responsive shadow-sm rounded bg-white"
+                            className="table-responsive shadow-sm rounded bg-warehouseite"
                             style={{ maxHeight: "800px", overflowY: "auto" }}
                         >
                             <table className="table table-hover align-middle mb-0">
@@ -240,19 +236,19 @@ const Customer = () => {
                                             className={`thead ${themeContext.theme}`}
                                             scope="col"
                                         >
-                                            Họ và tên khách hàng
+                                            Tên nhà cung cấp
                                         </th>
                                         <th
                                             className={`thead ${themeContext.theme}`}
                                             scope="col"
                                         >
-                                            Năm sinh
+                                            Ngày nhập hàng
                                         </th>
                                         <th
                                             className={`thead ${themeContext.theme}`}
                                             scope="col"
                                         >
-                                            Địa chỉ
+                                            Tổng giá trị
                                         </th>
                                         <th
                                             className={`thead ${themeContext.theme}`}
@@ -267,76 +263,79 @@ const Customer = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {dataCustomer.map((customer) => {
-                                        return (
-                                            <tr key={customer.id}>
-                                                <td
-                                                    className={`${themeContext.theme}`}
+                                    {dataWarehouse.map((warehouse) => (
+                                        <tr key={warehouse.id}>
+                                            <td
+                                                className={`${themeContext.theme}`}
+                                            >
+                                                {warehouse.id}
+                                            </td>
+                                            <td
+                                                className={`${themeContext.theme}`}
+                                            >
+                                                {warehouse.supplier_name}
+                                            </td>
+                                            <td
+                                                className={`${themeContext.theme}`}
+                                            >
+                                                {new Date(
+                                                    warehouse.import_date,
+                                                ).toLocaleDateString("vi-VN")}
+                                            </td>
+                                            <td
+                                                className={`${themeContext.theme}`}
+                                            >
+                                                {Number(
+                                                    warehouse.total_value,
+                                                ).toLocaleString("vi-VN")}{" "}
+                                                VND
+                                            </td>
+                                            <td
+                                                className={`${themeContext.theme}`}
+                                            >
+                                                {warehouse.status === 1
+                                                    ? "Hoàn tất"
+                                                    : "Đang xử lý"}
+                                            </td>
+                                            <td
+                                                className={`${themeContext.theme} text-center`}
+                                            >
+                                                <button
+                                                    className="btn btn-sm btn-outline-primary"
+                                                    onClick={() =>
+                                                        setFixStatus({
+                                                            statusSwitch: true,
+                                                            dataFix: {
+                                                                id: warehouse.id,
+                                                                supplier_name:
+                                                                    warehouse.supplier_name,
+                                                                import_date:
+                                                                    warehouse.import_date,
+                                                                total_value:
+                                                                    warehouse.total_value,
+                                                                status: warehouse.status,
+                                                            },
+                                                        })
+                                                    }
                                                 >
-                                                    {customer.id}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
+                                                    Sửa
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-danger"
+                                                    onClick={() =>
+                                                        setRemoveStatus({
+                                                            status: true,
+                                                            id: warehouse.id,
+                                                            supplier_name:
+                                                                warehouse.supplier_name,
+                                                        })
+                                                    }
                                                 >
-                                                    {customer.fullname}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {customer.birthyear}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {customer.address}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {customer.status === 1
-                                                        ? "Hiển thị"
-                                                        : "Ẩn"}
-                                                </td>
-                                                <td
-                                                    className={`text-center ${themeContext.theme}`}
-                                                >
-                                                    <button
-                                                        className="btn btn-sm btn-outline-primary "
-                                                        onClick={() =>
-                                                            setFixStatus({
-                                                                statusSwitch: true,
-                                                                dataFix: {
-                                                                    id: customer.id,
-                                                                    fullname:
-                                                                        customer.fullname,
-                                                                    birthyear:
-                                                                        customer.birthyear,
-                                                                    address:
-                                                                        customer.address,
-                                                                    status: customer.status,
-                                                                },
-                                                            })
-                                                        }
-                                                    >
-                                                        Sửa
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        onClick={() =>
-                                                            setRemoveStatus({
-                                                                status: true,
-                                                                id: customer.id,
-                                                                fullname:
-                                                                    customer.fullname,
-                                                            })
-                                                        }
-                                                    >
-                                                        Xóa
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
+                                                    Xóa
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
@@ -347,4 +346,4 @@ const Customer = () => {
     );
 };
 
-export default Customer;
+export default Warehouse;

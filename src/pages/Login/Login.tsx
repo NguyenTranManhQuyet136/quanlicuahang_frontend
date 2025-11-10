@@ -15,12 +15,12 @@ const Login = () => {
             password,
         });
 
-        console.log(res)
+        console.log(res);
         if (res.data) {
             if (res.data.role == "user") {
-                localStorage.setItem("username",res.data.username)
-                localStorage.setItem("password",res.data.password)
-                localStorage.setItem("theme","")
+                localStorage.setItem("username", res.data.username);
+                localStorage.setItem("password", res.data.password);
+                localStorage.setItem("theme", "");
                 navigate("/Dashboard");
             } else if (res.data.role == "admin") {
                 navigate("/Admin");
@@ -64,7 +64,7 @@ const Login = () => {
                                 >
                                     Đăng nhập
                                 </button>
-                                <button type="reset" className="btn btn-cancel">
+                                <button type="reset" className="btn btn-cancel">    
                                     Xóa
                                 </button>
                             </div>

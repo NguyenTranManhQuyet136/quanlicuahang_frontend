@@ -3,15 +3,19 @@ import { ThemeContext } from "../../contexts/ThemeProvider";
 
 interface SetVari {
     closeForm: () => void;
-    handleChangePassword: (password:string,passwordChange:string,confirmPasswordChange:string) => void
+    handleChangePassword: (
+        password: string,
+        passwordChange: string,
+        confirmPasswordChange: string,
+    ) => void;
 }
 
 const ChangePassword: React.FC<SetVari> = (props) => {
-    const themeContext = useContext(ThemeContext)
+    const themeContext = useContext(ThemeContext);
 
-    const [password, setPassword] = useState("")
-    const [passwordChange, setPasswordChange] = useState("")
-    const [confirmPasswordChange, setConfirmPasswordChange] = useState("")
+    const [password, setPassword] = useState("");
+    const [passwordChange, setPasswordChange] = useState("");
+    const [confirmPasswordChange, setConfirmPasswordChange] = useState("");
 
     return (
         <div
@@ -32,7 +36,9 @@ const ChangePassword: React.FC<SetVari> = (props) => {
                                 <input
                                     className="form-control"
                                     placeholder="Mật khẩu hiện tại"
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                 />
                             </div>
                             <div className="mb-3">
@@ -43,7 +49,9 @@ const ChangePassword: React.FC<SetVari> = (props) => {
                                     className="form-control"
                                     placeholder="Mật khẩu mới"
                                     type="password"
-                                    onChange={(e) => setPasswordChange(e.target.value)}
+                                    onChange={(e) =>
+                                        setPasswordChange(e.target.value)
+                                    }
                                 />
                             </div>
                             <div className="mb-3">
@@ -54,7 +62,9 @@ const ChangePassword: React.FC<SetVari> = (props) => {
                                     className="form-control"
                                     placeholder="Mật khẩu xác nhận"
                                     type="password"
-                                    onChange={(e) => setConfirmPasswordChange(e.target.value)}
+                                    onChange={(e) =>
+                                        setConfirmPasswordChange(e.target.value)
+                                    }
                                 />
                             </div>
                         </div>
@@ -67,7 +77,17 @@ const ChangePassword: React.FC<SetVari> = (props) => {
                             >
                                 Hủy
                             </button>
-                            <button type="button" className="btn btn-primary" onClick={() => props.handleChangePassword(password,passwordChange,confirmPasswordChange)}> 
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() =>
+                                    props.handleChangePassword(
+                                        password,
+                                        passwordChange,
+                                        confirmPasswordChange,
+                                    )
+                                }
+                            >
                                 Xác nhận
                             </button>
                         </div>

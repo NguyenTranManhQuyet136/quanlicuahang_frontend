@@ -4,88 +4,86 @@ import FormEditProfile from "../Form/FormEditProfile";
 import axios from "axios";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 
-interface setVari {
-    closeForm: () => void;
-    fullname: string
-    gender: string
-    birthday: string
-    position: string
-    phoneNumber: string
-    email: string
-}
+const UserDetail: React.FC = () => {
+    const themeContext = useContext(ThemeContext);
 
-const UserDetail:React.FC = () => {
-    const themeContext = useContext(ThemeContext)
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [fullname, setFullname] = useState("");
+    const [gender, setGender] = useState("");
+    const [birthday, setBirthday] = useState("");
+    const [position, setPosition] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [email, setEmail] = useState("");
+    const [image, setImage] = useState("");
 
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [fullname, setFullname] = useState("")
-    const [gender, setGender] = useState("")
-    const [birthday, setBirthday] = useState("")
-    const [position, setPosition] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [email, setEmail] = useState("")  
-    const [image, setImage] = useState("")
-
-    useEffect( () => {
+    useEffect(() => {
         const getDataAccount = async () => {
-            const username = localStorage.getItem("username") || ""
-            const password = localStorage.getItem("password") || ""
+            const username = localStorage.getItem("username") || "";
+            const password = localStorage.getItem("password") || "";
 
-            const res = await axios.post("http://localhost:5000/api/users_detail",{
-                username: username
-            })
-            const profile = (res.data)[0]
-            setFullname(profile.fullname)
-            setGender(profile.gender)
-            setBirthday(profile.birthday.slice(0,10))
-            setPosition(profile.position)
-            setPhoneNumber(profile.phone_number)
-            setEmail(profile.email)
+            const res = await axios.post(
+                "http://localhost:5000/api/users_detail",
+                {
+                    username: username,
+                },
+            );
+            const profile = res.data[0];
+            setFullname(profile.fullname);
+            setGender(profile.gender);
+            setBirthday(profile.birthday.slice(0, 10));
+            setPosition(profile.position);
+            setPhoneNumber(profile.phone_number);
+            setEmail(profile.email);
 
-            setUsername(username)
-            setPassword(password)
-        }
-        getDataAccount()
-    },[])
+            setUsername(username);
+            setPassword(password);
+        };
+        getDataAccount();
+    }, []);
 
     async function resetData() {
-        console.log("123")
-        const username = localStorage.getItem("username") || ""
-        const password = localStorage.getItem("password") || ""
-        const res = await axios.post("http://localhost:5000/api/users_detail",{
-            username: username
-        })
-        const profile = (res.data)[0]
-        setFullname(profile.fullname)
-        setGender(profile.gender)
-        setBirthday(profile.birthday.slice(0,10))   
-        setPosition(profile.position)
-        setPhoneNumber(profile.phone_number)
-        setEmail(profile.email)
+        console.log("123");
+        const username = localStorage.getItem("username") || "";
+        const password = localStorage.getItem("password") || "";
+        const res = await axios.post("http://localhost:5000/api/users_detail", {
+            username: username,
+        });
+        const profile = res.data[0];
+        setFullname(profile.fullname);
+        setGender(profile.gender);
+        setBirthday(profile.birthday.slice(0, 10));
+        setPosition(profile.position);
+        setPhoneNumber(profile.phone_number);
+        setEmail(profile.email);
 
-        setUsername(username)
-        setPassword(password)
+        setUsername(username);
+        setPassword(password);
     }
-    
-
 
     const [changePasswordStatus, setChangePasswordStatus] = useState(false);
 
-    const [editProfileStatus, setEditProfileStatus] = useState(false)
+    const [editProfileStatus, setEditProfileStatus] = useState(false);
 
     const closeForm = (type: string) => {
         switch (type) {
-            case "pass" :
-                setChangePasswordStatus(false)
-                break
-            case "profile" :
-                setEditProfileStatus(false)
-                break
+            case "pass":
+                setChangePasswordStatus(false);
+                break;
+            case "profile":
+                setEditProfileStatus(false);
+                break;
         }
     };
 
-    const handleEdit = async (fullname: string,gender:string,birthday:string,position:string,phoneNumber:string,email:string) => {
+    const handleEdit = async (
+        fullname: string,
+        gender: string,
+        birthday: string,
+        position: string,
+        phoneNumber: string,
+        email: string,
+    ) => {
         const res = await axios.post("http://localhost:5000/api/user/fix", {
             username: localStorage.getItem("username"),
             fullname: fullname,
@@ -94,40 +92,50 @@ const UserDetail:React.FC = () => {
             position: position,
             phoneNumber: phoneNumber,
             email: email,
-        })
-        closeForm("profile")
-        resetData()
-    }
+        });
+        closeForm("profile");
+        resetData();
+    };
 
-    const handleChangePassword = async (password: string,passwordChange: string,confirmPasswordChange: string) => {
-        const username = localStorage.getItem("username")
-        const res = await axios.post("http://localhost:5000/api/findUser", {username: username, password: password})
-        if ( res.data.status == false) {
-            alert("sai mat khau")
-            return
+    const handleChangePassword = async (
+        password: string,
+        passwordChange: string,
+        confirmPasswordChange: string,
+    ) => {
+        const username = localStorage.getItem("username");
+        const res = await axios.post("http://localhost:5000/api/findUser", {
+            username: username,
+            password: password,
+        });
+        if (res.data.status == false) {
+            alert("sai mat khau");
+            return;
         } else {
-            if (passwordChange  != confirmPasswordChange) {
-                alert("xac nhan mat khau sai")
+            if (passwordChange != confirmPasswordChange) {
+                alert("xac nhan mat khau sai");
             } else {
-                const res = await axios.post("http://localhost:5000/api/user/change_password", {passwordChange: passwordChange, username: username})
+                const res = await axios.post(
+                    "http://localhost:5000/api/user/change_password",
+                    { passwordChange: passwordChange, username: username },
+                );
                 if (res.data.status == true) {
-                    let passStar = ""
-                    for ( let i =0; i < passwordChange.length; i++) {
-                        passStar += "*"
+                    let passStar = "";
+                    for (let i = 0; i < passwordChange.length; i++) {
+                        passStar += "*";
                     }
-                    localStorage.setItem("password", passStar)
-                    closeForm("pass")
-                    resetData()
+                    localStorage.setItem("password", passStar);
+                    closeForm("pass");
+                    resetData();
                 }
-            } 
+            }
         }
-    }
+    };
 
     const changeAvatar = (file: File) => {
         const imageUrl = URL.createObjectURL(file);
-        console.log(imageUrl)
+        console.log(imageUrl);
         setImage(imageUrl);
-    }
+    };
 
     return (
         <div>
@@ -144,9 +152,6 @@ const UserDetail:React.FC = () => {
                 </div>
             </div>
             <div className="card shadow mx-auto">
-
-
-
                 {changePasswordStatus && (
                     <ChangePassword
                         closeForm={() => closeForm("pass")}
@@ -157,7 +162,7 @@ const UserDetail:React.FC = () => {
                 {editProfileStatus && (
                     <FormEditProfile
                         closeForm={() => closeForm("profile")}
-                        handleEdit={handleEdit}   
+                        handleEdit={handleEdit}
                         fullname={fullname}
                         gender={gender}
                         birthday={birthday}
@@ -171,26 +176,41 @@ const UserDetail:React.FC = () => {
                     <div className="row g-3">
                         <div className="col-md-4 text-center">
                             <h5 className="text-primary mb-3">Ảnh đại diện</h5>
-                            <div  className="rounded-circle border border-3 border-primary mb-3" style={{ width: "150px", height: "150px", display: "inline-block", overflow: "hidden"}}>
-                            <img 
-                                src={image}
-                                alt="Avatar"
-                                style={{width: "150px", minHeight: "150px"}}
-                            />
+                            <div
+                                className="rounded-circle border border-3 border-primary mb-3"
+                                style={{
+                                    width: "150px",
+                                    height: "150px",
+                                    display: "inline-block",
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <img
+                                    src={image}
+                                    alt="Avatar"
+                                    style={{
+                                        width: "150px",
+                                        minHeight: "150px",
+                                    }}
+                                />
                             </div>
-                            <input onChange={(e) =>  {
-                                const files = e.target.files
-                                if (!files) {
-                                    return
-                                }
+                            <input
+                                onChange={(e) => {
+                                    const files = e.target.files;
+                                    if (!files) {
+                                        return;
+                                    }
 
-                                const file = files[0]
-                                changeAvatar(file)
-                            }} className="form-control" type="file" />  
+                                    const file = files[0];
+                                    changeAvatar(file);
+                                }}
+                                className="form-control"
+                                type="file"
+                            />
                         </div>
 
                         <div className="col-md-8">
-                            <div className="row">                                
+                            <div className="row">
                                 <div className="col-md-6 mb-4">
                                     <h5 className="text-primary pb-1">
                                         Thông tin cá nhân
@@ -210,13 +230,15 @@ const UserDetail:React.FC = () => {
                                         </dt>
                                         <dd className="col-sm-7">{position}</dd>
 
-                                        <dt className="col-sm-5">Số điện thoại:</dt>
-                                        <dd className="col-sm-7">{phoneNumber}</dd>
+                                        <dt className="col-sm-5">
+                                            Số điện thoại:
+                                        </dt>
+                                        <dd className="col-sm-7">
+                                            {phoneNumber}
+                                        </dd>
 
                                         <dt className="col-sm-5">Email:</dt>
                                         <dd className="col-sm-7">{email}</dd>
-                                            
-                    
                                     </dl>
                                 </div>
 
@@ -228,9 +250,7 @@ const UserDetail:React.FC = () => {
                                         <dt className="col-sm-5">
                                             Tên tài khoản:
                                         </dt>
-                                        <dd className="col-sm-7">
-                                            {username}
-                                        </dd>
+                                        <dd className="col-sm-7">{username}</dd>
 
                                         <dt className="col-sm-5">Mật khẩu:</dt>
                                         <dd className="col-sm-7">{password}</dd>

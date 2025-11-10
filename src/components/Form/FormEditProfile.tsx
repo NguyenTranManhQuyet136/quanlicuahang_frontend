@@ -3,26 +3,32 @@ import { ThemeContext } from "../../contexts/ThemeProvider";
 
 interface SetVari {
     closeForm: () => void;
-    handleEdit: (fullname: string, gerder: string, birthday: string, position: string, phoneNumber: string, email: string) => void
-    fullname: string
-    gender: string
-    birthday: string
-    position: string
-    phoneNumber: string
-    email: string
+    handleEdit: (
+        fullname: string,
+        gerder: string,
+        birthday: string,
+        position: string,
+        phoneNumber: string,
+        email: string,
+    ) => void;
+    fullname: string;
+    gender: string;
+    birthday: string;
+    position: string;
+    phoneNumber: string;
+    email: string;
 }
 
-
 const FormEditProfile: React.FC<SetVari> = (props) => {
-    const themeContext = useContext(ThemeContext)
+    const themeContext = useContext(ThemeContext);
 
-    const [fullname, setFullname] = useState(props.fullname)
-    const [gender, setGender] = useState(props.gender)
-    const [birthday, setBirthday] = useState(props.birthday.slice(0,10))
-    const [position, setPosition] = useState(props.position)
-    const [phoneNumber, setPhoneNumber] = useState(props.phoneNumber)
-    const [email, setEmail] = useState(props.email)  
- 
+    const [fullname, setFullname] = useState(props.fullname);
+    const [gender, setGender] = useState(props.gender);
+    const [birthday, setBirthday] = useState(props.birthday.slice(0, 10));
+    const [position, setPosition] = useState(props.position);
+    const [phoneNumber, setPhoneNumber] = useState(props.phoneNumber);
+    const [email, setEmail] = useState(props.email);
+
     return (
         <div
             className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
@@ -41,13 +47,20 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
                                     value={fullname}
                                     className="form-control"
                                     placeholder="Nhập họ và tên"
-                                    onChange={(e) => setFullname(e.target.value)}
+                                    onChange={(e) =>
+                                        setFullname(e.target.value)
+                                    }
                                 />
-                                
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Giới tính</label>
-                                <select value={gender} name="" id="" className="form-control" onChange={(e) => setGender(e.target.value)}>
+                                <select
+                                    value={gender}
+                                    name=""
+                                    id=""
+                                    className="form-control"
+                                    onChange={(e) => setGender(e.target.value)}
+                                >
                                     <option value="">--Chọn giới tính</option>
                                     <option value="Nam">Nam</option>
                                     <option value="Nữ">Nữ</option>
@@ -60,29 +73,46 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
                                     type="date"
                                     className="form-control"
                                     placeholder="Nhập ngày sinh"
-                                    onChange={(e) => setBirthday(e.target.value)}
+                                    onChange={(e) =>
+                                        setBirthday(e.target.value)
+                                    }
                                 />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">
                                     Vị trí làm việc
                                 </label>
-                                <select value={position} name="" id="" className="form-control" onChange={(e) => setPosition(e.target.value)}>
+                                <select
+                                    value={position}
+                                    name=""
+                                    id=""
+                                    className="form-control"
+                                    onChange={(e) =>
+                                        setPosition(e.target.value)
+                                    }
+                                >
                                     <option value="">--Vị trí làm việc</option>
-                                    <option value="Nhân viên thu ngân">Nhân viên thu ngân</option>
-                                    <option value="Nhân viên CSKH">Nhân viên CSKH</option>
+                                    <option value="Nhân viên thu ngân">
+                                        Nhân viên thu ngân
+                                    </option>
+                                    <option value="Nhân viên CSKH">
+                                        Nhân viên CSKH
+                                    </option>
                                     <option value="Quản lí">Quản lí</option>
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Số điện thoại</label>
+                                <label className="form-label">
+                                    Số điện thoại
+                                </label>
                                 <input
                                     value={phoneNumber}
                                     className="form-control"
                                     placeholder="Nhập số điện thoại"
-                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    onChange={(e) =>
+                                        setPhoneNumber(e.target.value)
+                                    }
                                 />
-                                
                             </div>
                             <div className="mb-3">
                                 <label className="form-label">Email</label>
@@ -92,7 +122,6 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
                                     placeholder="Nhập email"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                
                             </div>
                         </div>
 
@@ -104,7 +133,20 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
                             >
                                 Hủy
                             </button>
-                            <button type="button" className="btn btn-primary" onClick={() => props.handleEdit(fullname,gender,birthday,position,phoneNumber, email)}>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() =>
+                                    props.handleEdit(
+                                        fullname,
+                                        gender,
+                                        birthday,
+                                        position,
+                                        phoneNumber,
+                                        email,
+                                    )
+                                }
+                            >
                                 Cập nhật
                             </button>
                         </div>

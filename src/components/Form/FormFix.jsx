@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 
 const FormFix = (props) => {
-    const themeContext = useContext(ThemeContext)
+    const themeContext = useContext(ThemeContext);
 
     const idOld = props.dataFix.id;
     const [dataForm, setDataForm] = useState(props.dataFix);

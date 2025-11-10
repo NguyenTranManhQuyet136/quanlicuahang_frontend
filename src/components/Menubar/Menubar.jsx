@@ -16,8 +16,13 @@ const Menubar = (props) => {
         { icon: <FaWarehouse />, label: "Nhập kho", ref: "/Warehouse" },
     ];
 
+    const target_color = "linear-gradient(90deg, #5a9bff 0%, #337aff 100%)"
+
     return (
-        <div className="bg-primary text-white p-3" style={{ minWidth: "250px" }}>
+        <div
+            className="bg-primary text-white p-3"
+            style={{ minWidth: "250px" }}
+        >
             <h4 className="text-center fw-bold mb-4">
                 Quản Lý
                 <br />
@@ -27,7 +32,10 @@ const Menubar = (props) => {
                 {menu.map((item, id) => (
                     <li
                         key={id}
-                        className={`product-items nav-item mb-2 ${item.ref == props.focus ? "gray" : ""}`}
+                        className={`product-items nav-item mb-2`}
+                        style= {{borderRadius: "8px", background : item.ref == props.focus ? "linear-gradient(90deg, #5a9bff 0%, #337aff 100%)" : 
+                            "none"
+                         }}
                     >
                         <a
                             href={item.ref}
