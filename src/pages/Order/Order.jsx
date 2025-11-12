@@ -8,14 +8,15 @@ import FormFix from "../../components/Form/FormFix";
 import FormSearch from "../../components/Form/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
+import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
 
 const labelPage = "đơn hàng";
 
 const colInfo = [
     { key: "id", label: "ID", type: "number" },
-    { key: "customer_id", label: "Mã khách hàng", type: "number" },
+    { key: "customer_id", label: "ID khách hàng", type: "number" },
     { key: "order_date", label: "Ngày đặt hàng", type: "date" },
-    { key: "total_price", label: "Tổng tiền", type: "number" },
+    { key: "total_price", label: "Tổng giá trị", type: "number" },
     {
         key: "status",
         label: "Trạng thái",
@@ -29,33 +30,18 @@ const colInfo = [
 
 const colInfoSearch = [
     { key: "id", label: "ID", type: "number" },
-    { key: "customer_id", label: "Mã khách hàng", type: "number" },
+    { key: "customer_id", label: "ID khách hàng", type: "number" },
 ];
 
 const Order = () => {
     checkLogin()
 
     const themeContext = useContext(ThemeContext);
-
     const [dataOrder, setDataOrder] = useState([]);
-
-    const [removeStatus, setRemoveStatus] = useState({
-        status: false,
-        id: "",
-    });
-
-    const [fixStatus, setFixStatus] = useState({
-        statusSwitch: false,
-        dataFix: {},
-    });
-
-    const [addStatus, setAddStatus] = useState({
-        status: false,
-    });
-
-    const [searchStatus, setSearchStatus] = useState({
-        status: false,
-    });
+    const [removeStatus, setRemoveStatus] = useState({ status: false, id: "", customer_id: "" });
+    const [fixStatus, setFixStatus] = useState({ statusSwitch: false, dataFix: {} });
+    const [addStatus, setAddStatus] = useState({ status: false });
+    const [searchStatus, setSearchStatus] = useState({ status: false });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -123,7 +109,7 @@ const Order = () => {
             id: dataSearch.id,
             customer_id: dataSearch.customer_id,
         });
-        if (res.data.length == 0) {
+        if (res.data.length === 0) {
             resetData();
         } else {
             setDataOrder(res.data);
@@ -131,50 +117,23 @@ const Order = () => {
         closeForm("search");
     };
 
-    console.log(dataOrder[0]);
     return (
-        <div className="d-flex" style={{ minHeight: "100vh" }}>
+        <div className="d-flex" style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
             <Menubar focus={"/Order"} />
-            <div className={`flex-grow-1 bg-light ${themeContext.theme}`}>
+            <div className={`flex-grow-1 ${themeContext.theme}`} style={{ backgroundColor: "#f8f9fa" }}>
                 <Header name={"Quản lí đơn hàng"} />
                 <div className="p-4">
                     <div>
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <div></div>
-                            <div>
-                                <button
-                                    className="btn btn-primary px-4"
-                                    style={{
-                                        width: "220px",
-                                        marginRight: "5px",
-                                    }}
-                                    onClick={() =>
-                                        setSearchStatus({
-                                            status: true,
-                                        })
-                                    }
-                                >
-                                    Tìm kiếm đơn hàng
-                                </button>
-
-                                <button
-                                    className="btn btn-primary px-4"
-                                    style={{ width: "200px" }}
-                                    onClick={() =>
-                                        setAddStatus({
-                                            status: true,
-                                        })
-                                    }
-                                >
-                                    Thêm đơn hàng
-                                </button>
-                            </div>
+                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginBottom: "16px" }}>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setSearchStatus({ status: true })}><FiSearch size={18} />Tìm kiếm</button>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setAddStatus({ status: true })}><FiPlus size={18} />Thêm đơn</button>
                         </div>
 
                         {removeStatus.status && (
                             <FormRemove
                                 id={removeStatus.id}
                                 typeData={labelPage}
+                                name={removeStatus.customer_id}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
                                     handleRemove(removeStatus.id)
@@ -210,132 +169,163 @@ const Order = () => {
                             />
                         )}
 
-                        <div
-                            className="table-responsive shadow-sm rounded bg-white"
-                            style={{ maxHeight: "800px", overflowY: "auto" }}
-                        >
-                            <table className="table table-hover align-middle mb-0">
-                                <thead
-                                    className="table-primary"
-                                    style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        zIndex: 2,
-                                    }}
-                                >
-                                    <tr>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            ID
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Mã khách hàng
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Ngày đặt hàng
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Tổng tiền
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Trạng thái
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme} center`}
-                                            scope="col"
-                                        ></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dataOrder.map((order) => {
-                                        return (
-                                            <tr key={order.id}>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {order.id}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {order.customer_id}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {order.order_date}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {order.total_price.toLocaleString(
-                                                        "vi-VN",
-                                                    ) + " VND"}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    <span>
-                                                        {order.status == 1
-                                                            ? "Hoàn tất"
-                                                            : "Đang xử lý"}
-                                                    </span>
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme} text-center`}
-                                                >
-                                                    <button
-                                                        className="btn btn-sm btn-outline-primary"
-                                                        onClick={() =>
-                                                            setFixStatus({
-                                                                statusSwitch: true,
-                                                                dataFix: {
-                                                                    id: order.id,
-                                                                    customer_id:
-                                                                        order.customer_id,
-                                                                    order_date:
-                                                                        order.order_date,
-                                                                    total_price:
-                                                                        order.total_price,
-                                                                    status: order.status,
-                                                                },
-                                                            })
-                                                        }
-                                                    >
-                                                        Sửa
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        onClick={() =>
-                                                            setRemoveStatus({
-                                                                status: true,
-                                                                id: order.id,
-                                                            })
-                                                        }
-                                                    >
-                                                        Xóa
-                                                    </button>
-                                                </td>
+                        <div className="bg-white rounded-3" style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)", maxHeight: "calc(100vh - 250px)", overflowY: "auto" }}>
+                            {dataOrder.length === 0 ? (
+                                <div className="d-flex flex-column align-items-center justify-content-center p-5" style={{ minHeight: "400px" }}>
+                                    <div style={{ fontSize: "3rem", marginBottom: "1rem", opacity: 0.5 }}>🛒</div>
+                                    <h5 className="text-muted">Chưa có đơn hàng nào</h5>
+                                    <p className="text-muted">Hãy thêm đơn hàng đầu tiên</p>
+                                </div>
+                            ) : (
+                                <div style={{ overflowX: "auto" }}>
+                                    <table className="table table-hover align-middle mb-0" style={{ minWidth: "100%" }}>
+                                        <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 10 }}>
+                                            <tr style={{ backgroundColor: "#f8f9fa", borderBottom: "2px solid #e9ecef" }}>
+                                                <th className="ps-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    ID
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    ID khách hàng
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Ngày đặt hàng
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Tổng giá trị
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Trạng thái
+                                                </th>
+                                                <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Hành động
+                                                </th>
                                             </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                                        </thead>
+                                        <tbody>
+                                            {dataOrder.map((order) => {
+                                                return (
+                                                    <tr
+                                                        key={order.id}
+                                                        style={{
+                                                            borderBottom: "1px solid #e9ecef",
+                                                        }}
+                                                    >
+                                                        <td className="ps-4" style={{ color: "#495057" }}>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "32px",
+                                                                    height: "32px",
+                                                                    backgroundColor: "#e7f1ff",
+                                                                    color: "#0d6efd",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "600",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {order.id}
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {order.customer_id}
+                                                        </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {new Date(order.order_date).toLocaleDateString("vi-VN")}
+                                                        </td>
+                                                        <td style={{ color: "#0d6efd", fontWeight: "600" }}>
+                                                            {Number(order.total_price).toLocaleString("vi-VN")} ₫
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-block",
+                                                                    padding: "4px 12px",
+                                                                    backgroundColor: order.status === 1 ? "#cfe2ff" : "#e2e3e5",
+                                                                    color: order.status === 1 ? "#084298" : "#383d41",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "500",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {order.status === 1 ? "Hoàn tất" : "Đang xử lý"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="text-center pe-4">
+                                                            <div className="d-flex gap-2 justify-content-center">
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#cfe2ff",
+                                                                        color: "#0d6efd",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setFixStatus({
+                                                                            statusSwitch: true,
+                                                                            dataFix: {
+                                                                                id: order.id,
+                                                                                customer_id: order.customer_id,
+                                                                                order_date: order.order_date,
+                                                                                total_price: order.total_price,
+                                                                                status: order.status,
+                                                                            },
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <FiEdit2 size={16} />
+                                                                    Sửa
+                                                                </button>
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#f8d7da",
+                                                                        color: "#842029",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setRemoveStatus({
+                                                                            status: true,
+                                                                            id: order.id,
+                                                                            customer_id: order.customer_id,
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <FiTrash2 size={16} />
+                                                                    Xóa
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            )}
                         </div>
+
+                        {dataOrder.length > 0 && (
+                            <div className="mt-3 d-flex justify-content-between align-items-center px-3" style={{ color: "#6c757d" }}>
+                                <small>
+                                    <strong>Tổng cộng:</strong> {dataOrder.length} đơn
+                                </small>
+                                <small>
+                                    <strong>Giá trị:</strong> {dataOrder.reduce((sum, o) => sum + (Number(o.total_price)), 0).toLocaleString("vi-VN")} ₫
+                                </small>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

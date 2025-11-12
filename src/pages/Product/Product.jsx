@@ -7,6 +7,7 @@ import FormAdd from "../../components/Form/FormAdd";
 import FormFix from "../../components/Form/FormFix";
 import FormSearch from "../../components/Form/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
+import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
 
 const labelPage = "sản phẩm";
 
@@ -136,44 +137,18 @@ const Product = () => {
     };
 
     return (
-        <div className="d-flex" style={{ minHeight: "100vh" }}>
+        <div className="d-flex" style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
             <Menubar focus={"/Product"} />
-            <div className={`flex-grow-1 bg-light ${themeContext.theme}`}>
-                <Header name={"Quản lí sản phẩm"} />
+            <div className={`flex-grow-1 ${themeContext.theme}`} style={{ backgroundColor: "#f8f9fa" }}>
+                <Header name={"Quản lý sản phẩm"} />
                 <div className="p-4">
                     <div>
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <div></div>
-                            <div>
-                                <button
-                                    className="btn btn-primary px-4 "
-                                    style={{
-                                        width: "200px",
-                                        marginRight: "5px",
-                                    }}
-                                    onClick={() =>
-                                        setSearchStatus({
-                                            status: true,
-                                        })
-                                    }
-                                >
-                                    Tìm kiếm sản phẩm
-                                </button>
-
-                                <button
-                                    className="btn btn-primary px-4 "
-                                    style={{ width: "200px" }}
-                                    onClick={() =>
-                                        setAddStatus({
-                                            status: true,
-                                        })
-                                    }
-                                >
-                                    Thêm sản phẩm
-                                </button>
-                            </div>
+                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginBottom: "16px" }}>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setSearchStatus({ status: true })}><FiSearch size={18} />Tìm kiếm</button>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setAddStatus({ status: true })}><FiPlus size={18} />Thêm sản phẩm</button>
                         </div>
 
+                        {/* Forms */}
                         {removeStatus.status && (
                             <FormRemove
                                 id={removeStatus.id}
@@ -214,131 +189,178 @@ const Product = () => {
                             />
                         )}
 
-                        <div
-                            className="table-responsive shadow-sm rounded bg-white"
-                            style={{ maxHeight: "800px", overflowY: "auto" }}
-                        >
-                            <table className="table table-hover align-middle mb-0">
-                                <thead
-                                    className="table-primary"
-                                    style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        zIndex: 2,
-                                    }}
-                                >
-                                    <tr>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            ID
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Tên sản phẩm
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Giá
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Tồn kho
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Trạng thái
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className={`text-center thead ${themeContext.theme}`}
-                                        ></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dataProduct.map((product) => {
-                                        return (
-                                            <tr key={product.id}>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {product.id}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {product.name}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {product.price.toLocaleString(
-                                                        "vi-VN",
-                                                    ) + " VND"}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    {product.quantity}
-                                                </td>
-                                                <td
-                                                    className={`${themeContext.theme}`}
-                                                >
-                                                    <span className="">
-                                                        {product.status == 1
-                                                            ? "Hiển thị"
-                                                            : "Ẩn"}
-                                                    </span>
-                                                </td>
-                                                <td
-                                                    className={`text-center ${themeContext.theme}`}
-                                                >
-                                                    <button
-                                                        className="btn btn-sm btn-outline-primary"
-                                                        onClick={() =>
-                                                            setFixStatus({
-                                                                statusSwitch: true,
-                                                                dataFix: {
-                                                                    id: product.id,
-                                                                    name: product.name,
-                                                                    price: product.price,
-                                                                    quantity:
-                                                                        product.quantity,
-                                                                    status: product.status,
-                                                                },
-                                                            })
-                                                        }
-                                                    >
-                                                        Sửa
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-sm btn-outline-danger"
-                                                        onClick={() =>
-                                                            setRemoveStatus({
-                                                                status: true,
-                                                                id: product.id,
-                                                                name: product.name,
-                                                            })
-                                                        }
-                                                    >
-                                                        Xóa
-                                                    </button>
-                                                </td>
+                        {/* Table Section */}
+                        <div className="bg-white rounded-3" style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)", maxHeight: "calc(100vh - 250px)", overflowY: "auto" }}>
+                            {dataProduct.length === 0 ? (
+                                <div className="d-flex flex-column align-items-center justify-content-center p-5" style={{ minHeight: "400px" }}>
+                                    <div style={{ fontSize: "3rem", marginBottom: "1rem", opacity: 0.5 }}>📦</div>
+                                    <h5 className="text-muted">Chưa có sản phẩm nào</h5>
+                                    <p className="text-muted">Hãy thêm sản phẩm đầu tiên</p>
+                                </div>
+                            ) : (
+                                <div style={{ overflowX: "auto" }}>
+                                    <table className="table table-hover align-middle mb-0" style={{ minWidth: "100%" }}>
+                                        <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 10 }}>
+                                            <tr style={{ backgroundColor: "#f8f9fa", borderBottom: "2px solid #e9ecef" }}>
+                                                <th className="ps-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    ID
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Tên sản phẩm
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Giá
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Tồn kho
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Trạng thái
+                                                </th>
+                                                <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Hành động
+                                                </th>
                                             </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                                        </thead>
+                                        <tbody>
+                                            {dataProduct.map((product, index) => {
+                                                return (
+                                                    <tr
+                                                        key={product.id}
+                                                        style={{
+                                                            borderBottom: "1px solid #e9ecef",
+                                                        }}
+                                                    >
+                                                        <td className="ps-4" style={{ color: "#495057" }}>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "32px",
+                                                                    height: "32px",
+                                                                    backgroundColor: "#e7f1ff",
+                                                                    color: "#0d6efd",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "600",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {product.id}
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {product.name}
+                                                        </td>
+                                                        <td style={{ color: "#0d6efd", fontWeight: "600" }}>
+                                                            {product.price.toLocaleString("vi-VN")} ₫
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-block",
+                                                                    padding: "4px 12px",
+                                                                    backgroundColor: product.quantity > 0 ? "#d4edda" : "#f8d7da",
+                                                                    color: product.quantity > 0 ? "#155724" : "#856404",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "500",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {product.quantity} {product.quantity > 0 ? "cái" : "hết"}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-block",
+                                                                    padding: "4px 12px",
+                                                                    backgroundColor: product.status === 1 ? "#cfe2ff" : "#e2e3e5",
+                                                                    color: product.status === 1 ? "#084298" : "#383d41",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "500",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {product.status === 1 ? "Hiển thị" : "Ẩn"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="text-center pe-4">
+                                                            <div className="d-flex gap-2 justify-content-center">
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#cfe2ff",
+                                                                        color: "#0d6efd",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setFixStatus({
+                                                                            statusSwitch: true,
+                                                                            dataFix: {
+                                                                                id: product.id,
+                                                                                name: product.name,
+                                                                                price: product.price,
+                                                                                quantity:
+                                                                                    product.quantity,
+                                                                                status: product.status,
+                                                                            },
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <FiEdit2 size={16} />
+                                                                    Sửa
+                                                                </button>
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#f8d7da",
+                                                                        color: "#842029",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setRemoveStatus({
+                                                                            status: true,
+                                                                            id: product.id,
+                                                                            name: product.name,
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <FiTrash2 size={16} />
+                                                                    Xóa
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            )}
                         </div>
+
+                        {/* Stats Footer */}
+                        {dataProduct.length > 0 && (
+                            <div className="mt-3 d-flex justify-content-between align-items-center px-3" style={{ color: "#6c757d" }}>
+                                <small>
+                                    <strong>Tổng cộng:</strong> {dataProduct.length} sản phẩm
+                                </small>
+                                <small>
+                                    <strong>Giá trị:</strong> {dataProduct.reduce((sum, p) => sum + (p.price * p.quantity), 0).toLocaleString("vi-VN")} ₫
+                                </small>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

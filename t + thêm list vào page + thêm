@@ -1,0 +1,53 @@
+[33mcommit 0fde0c0b1dea9f2a0dc6851c687f8faaff0fb82c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Manh Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Mon Nov 10 22:55:29 2025 +0700
+
+    xóa các component list + thêm list vào page + thêm chuc năng thoát ra ngoài neu chưa login
+
+[33mcommit 7c951ce9c3109a7b69a42d45e37b238e5374edfa[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Wed Oct 29 15:14:15 2025 +0700
+
+    hoan thien user va them chuc nang doi theme (chua hoan thanh)
+
+[33mcommit f0c14b648361336621e0327c55d7c32c9e6148f1[m
+Author: Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Tue Oct 28 06:29:38 2025 +0700
+
+    hoan thien user
+
+[33mcommit 701f8271c37a2caf08ea75897324ebefa576e216[m
+Author: Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Thu Oct 23 22:13:49 2025 +0700
+
+    hoan thien user
+
+[33mcommit c9830619b5fd6095a041caa05200cb30cae9970f[m
+Author: Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Sat Oct 18 23:02:17 2025 +0700
+
+    thêm thư viện format code prettier + hiển thị username và pass khi đăng nhập thành công
+
+[33mcommit 6c7426be2a1e115e677065dcece3c53d826c0ef3[m
+Author: Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Sat Oct 18 15:43:33 2025 +0700
+
+    them phan quan li thong tin ca nhan
+
+[33mcommit 245262d243ca61df0f67c83f5ad0bf3a1b41bfce[m
+Author: Manh Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Sat Oct 11 18:15:42 2025 +0700
+
+    test
+
+[33mcommit 9f73e486fd4d048d13ecceaf4e17d732e46b6b88[m
+Author: Manh Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Sat Oct 11 10:43:24 2025 +0700
+
+    upload frontend
+
+[33mcommit 4084869a516ae2246f7bed2d38fcd6712f8cd806[m
+Author: Manh Quyet <c3lttrong.0a9.ntmquyet@gmail.com>
+Date:   Sat Oct 11 10:04:42 2025 +0700
+
+    hoan thien core web

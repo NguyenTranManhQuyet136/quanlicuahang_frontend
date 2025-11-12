@@ -8,6 +8,7 @@ import FormFix from "../../components/Form/FormFix";
 import FormSearch from "../../components/Form/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
+import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
 
 const labelPage = "phiếu nhập kho";
 
@@ -36,27 +37,11 @@ const Warehouse = () => {
     checkLogin()
 
     const themeContext = useContext(ThemeContext);
-
     const [dataWarehouse, setDataWarehouse] = useState([]);
-
-    const [removeStatus, setRemoveStatus] = useState({
-        status: false,
-        id: "",
-        supplier_name: "",
-    });
-
-    const [fixStatus, setFixStatus] = useState({
-        statusSwitch: false,
-        dataFix: {},
-    });
-
-    const [addStatus, setAddStatus] = useState({
-        status: false,
-    });
-
-    const [searchStatus, setSearchStatus] = useState({
-        status: false,
-    });
+    const [removeStatus, setRemoveStatus] = useState({ status: false, id: "", supplier_name: "" });
+    const [fixStatus, setFixStatus] = useState({ statusSwitch: false, dataFix: {} });
+    const [addStatus, setAddStatus] = useState({ status: false });
+    const [searchStatus, setSearchStatus] = useState({ status: false });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -89,9 +74,7 @@ const Warehouse = () => {
     };
 
     const handleRemove = async (id) => {
-        await axios.post("http://localhost:5000/api/warehouse/remove", {
-            id: id,
-        });
+        await axios.post("http://localhost:5000/api/warehouse/remove", { id: id });
         closeForm("remove");
         resetData();
     };
@@ -122,13 +105,10 @@ const Warehouse = () => {
     };
 
     const handleSearch = async (dataSearch) => {
-        const res = await axios.post(
-            "http://localhost:5000/api/warehouse/search",
-            {
-                id: dataSearch.id,
-                supplier_name: dataSearch.supplier_name,
-            },
-        );
+        const res = await axios.post("http://localhost:5000/api/warehouse/search", {
+            id: dataSearch.id,
+            supplier_name: dataSearch.supplier_name,
+        });
         if (res.data.length === 0) {
             resetData();
         } else {
@@ -138,45 +118,22 @@ const Warehouse = () => {
     };
 
     return (
-        <div className="d-flex" style={{ minHeight: "100vh" }}>
+        <div className="d-flex" style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
             <Menubar focus={"/Warehouse"} />
-            <div className={`flex-grow-1 bg-light ${themeContext.theme}`}>
+            <div className={`flex-grow-1 ${themeContext.theme}`} style={{ backgroundColor: "#f8f9fa" }}>
                 <Header name={"Quản lí nguồn cung"} />
                 <div className="p-4">
                     <div>
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <div></div>
-                            <div>
-                                <button
-                                    className="btn btn-primary px-4"
-                                    style={{
-                                        width: "220px",
-                                        marginRight: "5px",
-                                    }}
-                                    onClick={() =>
-                                        setSearchStatus({ status: true })
-                                    }
-                                >
-                                    Tìm kiếm phiếu nhập
-                                </button>
-
-                                <button
-                                    className="btn btn-primary px-4"
-                                    style={{ width: "200px" }}
-                                    onClick={() =>
-                                        setAddStatus({ status: true })
-                                    }
-                                >
-                                    Thêm phiếu nhập
-                                </button>
-                            </div>
+                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginBottom: "16px" }}>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setSearchStatus({ status: true })}><FiSearch size={18} />Tìm kiếm</button>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setAddStatus({ status: true })}><FiPlus size={18} />Thêm phiếu</button>
                         </div>
 
                         {removeStatus.status && (
                             <FormRemove
                                 id={removeStatus.id}
                                 typeData={labelPage}
-                                fullname={removeStatus.supplier_name}
+                                name={removeStatus.supplier_name}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
                                     handleRemove(removeStatus.id)
@@ -212,133 +169,163 @@ const Warehouse = () => {
                             />
                         )}
 
-                        <div
-                            className="table-responsive shadow-sm rounded bg-warehouseite"
-                            style={{ maxHeight: "800px", overflowY: "auto" }}
-                        >
-                            <table className="table table-hover align-middle mb-0">
-                                <thead
-                                    className="table-primary"
-                                    style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        zIndex: 2,
-                                    }}
-                                >
-                                    <tr>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            ID
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Tên nhà cung cấp
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Ngày nhập hàng
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Tổng giá trị
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme}`}
-                                            scope="col"
-                                        >
-                                            Trạng thái
-                                        </th>
-                                        <th
-                                            className={`thead ${themeContext.theme} text-center`}
-                                            scope="col"
-                                        ></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dataWarehouse.map((warehouse) => (
-                                        <tr key={warehouse.id}>
-                                            <td
-                                                className={`${themeContext.theme}`}
-                                            >
-                                                {warehouse.id}
-                                            </td>
-                                            <td
-                                                className={`${themeContext.theme}`}
-                                            >
-                                                {warehouse.supplier_name}
-                                            </td>
-                                            <td
-                                                className={`${themeContext.theme}`}
-                                            >
-                                                {new Date(
-                                                    warehouse.import_date,
-                                                ).toLocaleDateString("vi-VN")}
-                                            </td>
-                                            <td
-                                                className={`${themeContext.theme}`}
-                                            >
-                                                {Number(
-                                                    warehouse.total_value,
-                                                ).toLocaleString("vi-VN")}{" "}
-                                                VND
-                                            </td>
-                                            <td
-                                                className={`${themeContext.theme}`}
-                                            >
-                                                {warehouse.status === 1
-                                                    ? "Hoàn tất"
-                                                    : "Đang xử lý"}
-                                            </td>
-                                            <td
-                                                className={`${themeContext.theme} text-center`}
-                                            >
-                                                <button
-                                                    className="btn btn-sm btn-outline-primary"
-                                                    onClick={() =>
-                                                        setFixStatus({
-                                                            statusSwitch: true,
-                                                            dataFix: {
-                                                                id: warehouse.id,
-                                                                supplier_name:
-                                                                    warehouse.supplier_name,
-                                                                import_date:
-                                                                    warehouse.import_date,
-                                                                total_value:
-                                                                    warehouse.total_value,
-                                                                status: warehouse.status,
-                                                            },
-                                                        })
-                                                    }
-                                                >
-                                                    Sửa
-                                                </button>
-                                                <button
-                                                    className="btn btn-sm btn-outline-danger"
-                                                    onClick={() =>
-                                                        setRemoveStatus({
-                                                            status: true,
-                                                            id: warehouse.id,
-                                                            supplier_name:
-                                                                warehouse.supplier_name,
-                                                        })
-                                                    }
-                                                >
-                                                    Xóa
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                        <div className="bg-white rounded-3" style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)", maxHeight: "calc(100vh - 250px)", overflowY: "auto" }}>
+                            {dataWarehouse.length === 0 ? (
+                                <div className="d-flex flex-column align-items-center justify-content-center p-5" style={{ minHeight: "400px" }}>
+                                    <div style={{ fontSize: "3rem", marginBottom: "1rem", opacity: 0.5 }}>📦</div>
+                                    <h5 className="text-muted">Chưa có phiếu nhập nào</h5>
+                                    <p className="text-muted">Hãy thêm phiếu nhập đầu tiên</p>
+                                </div>
+                            ) : (
+                                <div style={{ overflowX: "auto" }}>
+                                    <table className="table table-hover align-middle mb-0" style={{ minWidth: "100%" }}>
+                                        <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 10 }}>
+                                            <tr style={{ backgroundColor: "#f8f9fa", borderBottom: "2px solid #e9ecef" }}>
+                                                <th className="ps-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    ID
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Tên nhà cung cấp
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Ngày nhập
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Tổng giá trị
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Trạng thái
+                                                </th>
+                                                <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Hành động
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {dataWarehouse.map((warehouse) => {
+                                                return (
+                                                    <tr
+                                                        key={warehouse.id}
+                                                        style={{
+                                                            borderBottom: "1px solid #e9ecef",
+                                                        }}
+                                                    >
+                                                        <td className="ps-4" style={{ color: "#495057" }}>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "32px",
+                                                                    height: "32px",
+                                                                    backgroundColor: "#e7f1ff",
+                                                                    color: "#0d6efd",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "600",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {warehouse.id}
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {warehouse.supplier_name}
+                                                        </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {new Date(warehouse.import_date).toLocaleDateString("vi-VN")}
+                                                        </td>
+                                                        <td style={{ color: "#0d6efd", fontWeight: "600" }}>
+                                                            {Number(warehouse.total_value).toLocaleString("vi-VN")} ₫
+                                                        </td>
+                                                        <td>
+                                                            <span
+                                                                style={{
+                                                                    display: "inline-block",
+                                                                    padding: "4px 12px",
+                                                                    backgroundColor: warehouse.status === 1 ? "#cfe2ff" : "#e2e3e5",
+                                                                    color: warehouse.status === 1 ? "#084298" : "#383d41",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "500",
+                                                                    fontSize: "0.9rem",
+                                                                }}
+                                                            >
+                                                                {warehouse.status === 1 ? "Hoàn tất" : "Đang xử lý"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="text-center pe-4">
+                                                            <div className="d-flex gap-2 justify-content-center">
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#cfe2ff",
+                                                                        color: "#0d6efd",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setFixStatus({
+                                                                            statusSwitch: true,
+                                                                            dataFix: {
+                                                                                id: warehouse.id,
+                                                                                supplier_name: warehouse.supplier_name,
+                                                                                import_date: warehouse.import_date,
+                                                                                total_value: warehouse.total_value,
+                                                                                status: warehouse.status,
+                                                                            },
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <FiEdit2 size={16} />
+                                                                    Sửa
+                                                                </button>
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#f8d7da",
+                                                                        color: "#842029",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setRemoveStatus({
+                                                                            status: true,
+                                                                            id: warehouse.id,
+                                                                            supplier_name: warehouse.supplier_name,
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <FiTrash2 size={16} />
+                                                                    Xóa
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                            )}
                         </div>
+
+                        {dataWarehouse.length > 0 && (
+                            <div className="mt-3 d-flex justify-content-between align-items-center px-3" style={{ color: "#6c757d" }}>
+                                <small>
+                                    <strong>Tổng cộng:</strong> {dataWarehouse.length} phiếu
+                                </small>
+                                <small>
+                                    <strong>Giá trị:</strong> {dataWarehouse.reduce((sum, w) => sum + (Number(w.total_value)), 0).toLocaleString("vi-VN")} ₫
+                                </small>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

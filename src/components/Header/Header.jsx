@@ -7,6 +7,8 @@ const Header = (props) => {
     const dropdownRef = useRef(null);
     const themeContext = useContext(ThemeContext);
 
+    const sizeIcon = 28;
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -32,24 +34,28 @@ const Header = (props) => {
             <h4 className="text-primary m-0">{props.name}</h4>
 
             <button
-                style={{ right: "0", marginRight: "220px", backgroundColor: "rgba(var(--bs-primary-rgb)", border: "none", borderRadius: "8px", color: "white", padding: "8px 16px 8px 16px"}}
-                className="position-absolute"
+                // style={{right: "0", marginRight: "220px", backgroundColor: "rgba(var(--bs-primary-rgb)", border: "none", borderRadius: "8px", color: "white", padding: "8px 16px 8px 16px"}}
+                style={{width: "110px", right: 0, marginRight: "220px"}}
+                className="position-absolute btn btn-primary px-4"
                 onClick={themeContext.toggleTheme}
             >
                 {themeContext.theme == "" ? "☀️ Sáng" : "🌙 Tối"}
             </button>
 
-            <div className="position-absolute" style={{ marginRight: "155px", right: "0"}}>
+            <div className="position-absolute position-relative" style={{ marginRight: "155px", right: "0"}}>
                 <FaBell 
-                    size={30}
+                    size={sizeIcon}
                     className="text-primary cursor-pointer"
                 />
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{fontSize: "11px", padding: "3px 6px"}}>
+                    3
+                </span>
             </div>
 
             <div className="position-relative cursor-pointer" ref={dropdownRef} onClick={() => setOpenStatus(!openStatus)} >
                 <div className="d-flex align-items-center">
                     <FaUserCircle 
-                        size={35}
+                        size={sizeIcon}
                         className="text-primary cursor-pointer"
 
                     />
