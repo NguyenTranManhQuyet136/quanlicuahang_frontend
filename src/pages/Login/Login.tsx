@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../contexts/ThemeProvider";
 import "./Login.css";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const themeContext = useContext(ThemeContext);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -15,15 +17,11 @@ const Login = () => {
             password,
         });
 
-        console.log(res);
         if (res.data) {
-            if (res.data.role == "user") {
+            if (res.data.statusCheck == true) {
                 localStorage.setItem("username", res.data.username);
                 localStorage.setItem("password", res.data.password);
-                localStorage.setItem("theme", "");
                 navigate("/Dashboard");
-            } else if (res.data.role == "admin") {
-                navigate("/Admin");
             } else {
                 alert("sai tai khoan va mat khau");
             }
@@ -33,7 +31,7 @@ const Login = () => {
     };
 
     return (
-        <div className="Login">
+        <div className={`Login ${themeContext.theme}`}>
             <div className="background-login">
                 <div className="login-box">
                     <div className="navbar">Đăng nhập</div>
@@ -64,14 +62,9 @@ const Login = () => {
                                 >
                                     Đăng nhập
                                 </button>
-                                <button type="reset" className="btn btn-cancel">    
+                                <button type="reset" className="btn btn-cancel">
                                     Xóa
                                 </button>
-                            </div>
-
-                            <div className="signup">
-                                Chưa có tài khoản?{" "}
-                                <a href="/Register">Đăng ký ngay</a>
                             </div>
                         </form>
                     </div>

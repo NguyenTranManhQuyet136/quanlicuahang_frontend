@@ -2,18 +2,19 @@ import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import FormRemove from "../../components/Form/FormRemove";
-import FormAdd from "../../components/Form/FormAdd";
-import FormFix from "../../components/Form/FormFix";
-import FormSearch from "../../components/Form/FormSearch";
+import FormRemove from "../../components/Form/FormRemove/FormRemove";
+import FormAdd from "../../components/Form/FormAdd/FormAdd";
+import FormFix from "../../components/Form/FormFix/FormFix";
+import FormSearch from "../../components/Form/FormSearch/FormSearch";
+import FormDetail from "../../components/Form/FormDetail/FormDetail";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
-import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye } from "react-icons/fi";
 
 const labelPage = "đơn hàng";
 
 const colInfo = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "order_id", label: "ID", type: "text" },
     { key: "customer_id", label: "ID khách hàng", type: "number" },
     { key: "order_date", label: "Ngày đặt hàng", type: "date" },
     { key: "total_price", label: "Tổng giá trị", type: "number" },
@@ -29,7 +30,7 @@ const colInfo = [
 ];
 
 const colInfoSearch = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "order_id", label: "ID", type: "text" },
     { key: "customer_id", label: "ID khách hàng", type: "number" },
 ];
 
@@ -38,10 +39,11 @@ const Order = () => {
 
     const themeContext = useContext(ThemeContext);
     const [dataOrder, setDataOrder] = useState([]);
-    const [removeStatus, setRemoveStatus] = useState({ status: false, id: "", customer_id: "" });
+    const [removeStatus, setRemoveStatus] = useState({ status: false, order_id: "", customer_id: "" });
     const [fixStatus, setFixStatus] = useState({ statusSwitch: false, dataFix: {} });
     const [addStatus, setAddStatus] = useState({ status: false });
-    const [searchStatus, setSearchStatus] = useState({ status: false });
+    const [searchStatus, setSearchStatus] = useState({ status: false, });
+    const [detailStatus, setDetailStatus] = useState({ status: false });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,18 +72,21 @@ const Order = () => {
             case "search":
                 setSearchStatus({ status: false });
                 break;
+            case "detail":
+                setDetailStatus({ status: false });
+                break;
         }
     };
 
-    const handleRemove = async (id) => {
-        await axios.post("http://localhost:5000/api/order/remove", { id: id });
+    const handleRemove = async (order_id) => {
+        await axios.post("http://localhost:5000/api/order/remove", { order_id: order_id });
         closeForm("remove");
         resetData();
     };
 
     const handleFix = async (dataFix, idOld) => {
         await axios.post("http://localhost:5000/api/order/fix", {
-            id: dataFix.id,
+            order_id: dataFix.order_id,
             customer_id: dataFix.customer_id,
             order_date: dataFix.order_date,
             total_price: dataFix.total_price,
@@ -94,7 +99,7 @@ const Order = () => {
 
     const handleAdd = async (dataAdd) => {
         await axios.post("http://localhost:5000/api/order/add", {
-            id: dataAdd.id,
+            order_id: dataAdd.order_id,
             customer_id: dataAdd.customer_id,
             order_date: dataAdd.order_date,
             total_price: dataAdd.total_price,
@@ -106,9 +111,10 @@ const Order = () => {
 
     const handleSearch = async (dataSearch) => {
         const res = await axios.post("http://localhost:5000/api/order/search", {
-            id: dataSearch.id,
+            order_id: dataSearch.order_id,
             customer_id: dataSearch.customer_id,
         });
+        console.log(res.data)
         if (res.data.length === 0) {
             resetData();
         } else {
@@ -131,12 +137,12 @@ const Order = () => {
 
                         {removeStatus.status && (
                             <FormRemove
-                                id={removeStatus.id}
+                                id={removeStatus.order_id}
                                 typeData={labelPage}
                                 name={removeStatus.customer_id}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
-                                    handleRemove(removeStatus.id)
+                                    handleRemove(removeStatus.order_id)
                                 }
                             />
                         )}
@@ -166,6 +172,15 @@ const Order = () => {
                                 colInfo={colInfoSearch}
                                 closeForm={() => closeForm("search")}
                                 handleSearch={handleSearch}
+                            />
+                        )}
+
+                        {detailStatus.status && (
+                            <FormDetail
+                                typeData={labelPage}
+                                type_target={"order"}
+                                id_target={detailStatus.id_target}
+                                closeForm={() => {closeForm("detail")}}
                             />
                         )}
 
@@ -205,7 +220,7 @@ const Order = () => {
                                             {dataOrder.map((order) => {
                                                 return (
                                                     <tr
-                                                        key={order.id}
+                                                        key={order.order_id}
                                                         style={{
                                                             borderBottom: "1px solid #e9ecef",
                                                         }}
@@ -225,7 +240,7 @@ const Order = () => {
                                                                     fontSize: "0.9rem",
                                                                 }}
                                                             >
-                                                                {order.id}
+                                                                {order.order_id}
                                                             </span>
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
@@ -270,7 +285,7 @@ const Order = () => {
                                                                         setFixStatus({
                                                                             statusSwitch: true,
                                                                             dataFix: {
-                                                                                id: order.id,
+                                                                                order_id: order.order_id,
                                                                                 customer_id: order.customer_id,
                                                                                 order_date: order.order_date,
                                                                                 total_price: order.total_price,
@@ -281,6 +296,27 @@ const Order = () => {
                                                                 >
                                                                     <FiEdit2 size={16} />
                                                                     Sửa
+                                                                </button>
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#cfe2ff",
+                                                                        color: "#0d6efd",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                        transition: "all 0.3s ease",
+                                                                        cursor: "pointer",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setDetailStatus({status: true, id_target: order.order_id})
+                                                                    }
+                                                                >
+                                                                    <FiEye size={16} />
+                                                                    Xem chi tiết
                                                                 </button>
                                                                 <button
                                                                     style={{
@@ -297,7 +333,7 @@ const Order = () => {
                                                                     onClick={() =>
                                                                         setRemoveStatus({
                                                                             status: true,
-                                                                            id: order.id,
+                                                                            order_id: order.order_id,
                                                                             customer_id: order.customer_id,
                                                                         })
                                                                     }
@@ -331,6 +367,6 @@ const Order = () => {
             </div>
         </div>
     );
-};
+};  
 
 export default Order;

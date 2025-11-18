@@ -1,8 +1,8 @@
 import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import { useEffect, useState, useContext } from "react";
-import ChangePassword from "../../components/Form/FormChangePassword";
-import FormEditProfile from "../../components/Form/FormEditProfile";
+import FormChangePassword from "../../components/Form/FormChangePassword/FormChangePassword";
+import FormEditProfile from "../../components/Form/FormEditProfile/FormEditProfile";
 import axios from "axios";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
@@ -653,7 +653,7 @@ const User = () => {
                 </div>
 
                 {changePasswordStatus && (
-                    <ChangePassword
+                    <FormChangePassword
                         closeForm={() => closeForm("pass")}
                         handleChangePassword={handleChangePassword}
                     />

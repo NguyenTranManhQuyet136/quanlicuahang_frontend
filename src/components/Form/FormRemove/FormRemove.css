@@ -1,0 +1,163 @@
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.form-remove-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(128, 128, 128, 0.5);
+    backdrop-filter: none;
+    z-index: 1050;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.form-remove-modal {
+    width: 500px;
+    max-width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    animation: slideIn 0.4s ease-out;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    background: #ffffff;
+}
+
+.form-remove-header {
+    background: #dc3545;
+    border-radius: 20px 20px 0 0;
+    padding: 1.5rem;
+    color: #fff;
+    border-bottom: none;
+}
+
+.form-remove-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-remove-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.form-remove-icon-box {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-remove-header-title h4 {
+    margin-bottom: 0;
+    font-weight: bold;
+}
+
+.form-remove-header-title small {
+    opacity: 0.9;
+}
+
+.form-remove-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s;
+}
+
+.form-remove-close-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.form-remove-body {
+    padding: 2rem;
+}
+
+.form-remove-message {
+    font-size: 1rem;
+    color: #000000;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-remove-warning {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-remove-highlight {
+    font-weight: 600;
+    color: #dc3545;
+}
+
+.form-remove-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.form-remove-btn-cancel {
+    border-radius: 12px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    color: #666666;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.form-remove-btn-cancel:hover {
+    background: #f8f9fa;
+    border-color: #dee2e6;
+    transform: translateY(-2px);
+}
+
+.form-remove-btn-submit {
+    background: #dc3545;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.form-remove-btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
+}

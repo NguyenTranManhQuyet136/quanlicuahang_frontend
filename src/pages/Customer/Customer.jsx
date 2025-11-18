@@ -2,10 +2,10 @@ import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import FormRemove from "../../components/Form/FormRemove";
-import FormAdd from "../../components/Form/FormAdd";
-import FormFix from "../../components/Form/FormFix";
-import FormSearch from "../../components/Form/FormSearch";
+import FormRemove from "../../components/Form/FormRemove/FormRemove";
+import FormAdd from "../../components/Form/FormAdd/FormAdd";
+import FormFix from "../../components/Form/FormFix/FormFix";
+import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
@@ -13,7 +13,7 @@ import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
 const labelPage = "khách hàng";
 
 const colInfo = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "customer_id", label: "ID", type: "text" },
     { key: "fullname", label: "Tên khách hàng", type: "text" },
     { key: "birthyear", label: "Năm sinh", type: "number" },
     { key: "address", label: "Địa chỉ", type: "text" },
@@ -29,7 +29,7 @@ const colInfo = [
 ];
 
 const colInfoSearch = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "customer_id", label: "ID", type: "text" },
     { key: "fullname", label: "Tên khách hàng", type: "text" },
 ];
 
@@ -38,7 +38,7 @@ const Customer = () => {
 
     const themeContext = useContext(ThemeContext);
     const [dataCustomer, setDataCustomer] = useState([]);
-    const [removeStatus, setRemoveStatus] = useState({ status: false, id: "", fullname: "" });
+    const [removeStatus, setRemoveStatus] = useState({ status: false, customer_id: "", fullname: "" });
     const [fixStatus, setFixStatus] = useState({ statusSwitch: false, dataFix: {} });
     const [addStatus, setAddStatus] = useState({ status: false });
     const [searchStatus, setSearchStatus] = useState({ status: false });
@@ -73,15 +73,15 @@ const Customer = () => {
         }
     };
 
-    const handleRemove = async (id) => {
-        await axios.post("http://localhost:5000/api/customer/remove", { id: id });
+    const handleRemove = async (customer_id) => {
+        await axios.post("http://localhost:5000/api/customer/remove", { customer_id: customer_id });
         closeForm("remove");
         resetData();
     };
 
     const handleFix = async (dataFix, idOld) => {
         await axios.post("http://localhost:5000/api/customer/fix", {
-            id: dataFix.id,
+            customer_id: dataFix.customer_id,
             fullname: dataFix.fullname,
             birthyear: dataFix.birthyear,
             address: dataFix.address,
@@ -94,7 +94,7 @@ const Customer = () => {
 
     const handleAdd = async (dataAdd) => {
         await axios.post("http://localhost:5000/api/customer/add", {
-            id: dataAdd.id,
+            customer_id: dataAdd.customer_id,
             fullname: dataAdd.fullname,
             birthyear: dataAdd.birthyear,
             address: dataAdd.address,
@@ -106,7 +106,7 @@ const Customer = () => {
 
     const handleSearch = async (dataSearch) => {
         const res = await axios.post("http://localhost:5000/api/customer/search", {
-            id: dataSearch.id,
+            customer_id: dataSearch.customer_id,
             fullname: dataSearch.fullname,
         });
         if (res.data.length === 0) {
@@ -131,12 +131,12 @@ const Customer = () => {
 
                         {removeStatus.status && (
                             <FormRemove
-                                id={removeStatus.id}
+                                id={removeStatus.customer_id}
                                 typeData={labelPage}
                                 name={removeStatus.fullname}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
-                                    handleRemove(removeStatus.id)
+                                    handleRemove(removeStatus.customer_id)
                                 }
                             />
                         )}
@@ -205,7 +205,7 @@ const Customer = () => {
                                             {dataCustomer.map((customer) => {
                                                 return (
                                                     <tr
-                                                        key={customer.id}
+                                                        key={customer.customer_id}
                                                         style={{
                                                             borderBottom: "1px solid #e9ecef",
                                                         }}
@@ -225,7 +225,7 @@ const Customer = () => {
                                                                     fontSize: "0.9rem",
                                                                 }}
                                                             >
-                                                                {customer.id}
+                                                                {customer.customer_id}
                                                             </span>
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
@@ -270,7 +270,7 @@ const Customer = () => {
                                                                         setFixStatus({
                                                                             statusSwitch: true,
                                                                             dataFix: {
-                                                                                id: customer.id,
+                                                                                customer_id: customer.customer_id,
                                                                                 fullname: customer.fullname,
                                                                                 birthyear: customer.birthyear,
                                                                                 address: customer.address,
@@ -297,7 +297,7 @@ const Customer = () => {
                                                                     onClick={() =>
                                                                         setRemoveStatus({
                                                                             status: true,
-                                                                            id: customer.id,
+                                                                            customer_id: customer.customer_id,
                                                                             fullname: customer.fullname,
                                                                         })
                                                                     }

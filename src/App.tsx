@@ -7,6 +7,7 @@ import Customer from "./pages/Customer/Customer";
 import Order from "./pages/Order/Order";
 import Warehouse from "./pages/Warehouse/Warehouse";
 import User from "./pages/User/User";
+import CreateInvoice from "./pages/CreateInvoice/CreateInvoice";
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/Order" element={<Order />} />
                     <Route path="/Warehouse" element={<Warehouse />} />
                     <Route path="/User" element={<User />}></Route>
+                    <Route path="create-invoice" element={<CreateInvoice/>}></Route>
                     <Route
                         path="/"
                         element={<Navigate to="/login" replace />}

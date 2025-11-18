@@ -2,17 +2,17 @@ import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import FormRemove from "../../components/Form/FormRemove";
-import FormAdd from "../../components/Form/FormAdd";
-import FormFix from "../../components/Form/FormFix";
-import FormSearch from "../../components/Form/FormSearch";
+import FormRemove from "../../components/Form/FormRemove/FormRemove";
+import FormAdd from "../../components/Form/FormAdd/FormAdd";
+import FormFix from "../../components/Form/FormFix/FormFix";
+import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
 
 const labelPage = "sản phẩm";
 
 const colInfo = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "product_id", label: "ID", type: "text" },
     { key: "name", label: "Tên sản phẩm", type: "text" },
     { key: "price", label: "Giá", type: "number" },
     { key: "quantity", label: "Số lượng", type: "number" },
@@ -28,7 +28,7 @@ const colInfo = [
 ];
 
 const colInfoSearch = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "product_id", label: "ID", type: "text" },
     { key: "name", label: "Tên sản phẩm", type: "text" },
 ];
 
@@ -40,7 +40,7 @@ const Product = () => {
 
     const [removeStatus, setRemoveStatus] = useState({
         status: false,
-        id: "",
+        product_id: "",
         name: "",
     });
 
@@ -87,9 +87,9 @@ const Product = () => {
         }
     };
 
-    const handleRemove = async (id) => {
+    const handleRemove = async (product_id) => {
         await axios.post("http://localhost:5000/api/product/remove", {
-            id: id,
+            product_id: product_id,
         });
         closeForm("remove");
         resetData();
@@ -97,7 +97,7 @@ const Product = () => {
 
     const handleFix = async (dataFix, idOld) => {
         await axios.post("http://localhost:5000/api/product/fix", {
-            id: dataFix.id,
+            product_id: dataFix.product_id,
             name: dataFix.name,
             price: dataFix.price,
             quantity: dataFix.quantity,
@@ -110,7 +110,7 @@ const Product = () => {
 
     const handleAdd = async (dataAdd) => {
         await axios.post("http://localhost:5000/api/product/add", {
-            id: dataAdd.id,
+            product_id: dataAdd.product_id,
             name: dataAdd.name,
             price: dataAdd.price,
             quantity: dataAdd.quantity,
@@ -124,7 +124,7 @@ const Product = () => {
         const res = await axios.post(
             "http://localhost:5000/api/product/search",
             {
-                id: dataSearch.id,
+                product_id: dataSearch.product_id,
                 name: dataSearch.name,
             },
         );
@@ -151,12 +151,12 @@ const Product = () => {
                         {/* Forms */}
                         {removeStatus.status && (
                             <FormRemove
-                                id={removeStatus.id}
+                                id={removeStatus.product_id}
                                 typeData={labelPage}
                                 name={removeStatus.name}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
-                                    handleRemove(removeStatus.id)
+                                    handleRemove(removeStatus.product_id)
                                 }
                             />
                         )}
@@ -226,7 +226,7 @@ const Product = () => {
                                             {dataProduct.map((product, index) => {
                                                 return (
                                                     <tr
-                                                        key={product.id}
+                                                        key={product.product_id}
                                                         style={{
                                                             borderBottom: "1px solid #e9ecef",
                                                         }}
@@ -246,7 +246,7 @@ const Product = () => {
                                                                     fontSize: "0.9rem",
                                                                 }}
                                                             >
-                                                                {product.id}
+                                                                {product.product_id}
                                                             </span>
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
@@ -303,7 +303,7 @@ const Product = () => {
                                                                         setFixStatus({
                                                                             statusSwitch: true,
                                                                             dataFix: {
-                                                                                id: product.id,
+                                                                                product_id: product.product_id,
                                                                                 name: product.name,
                                                                                 price: product.price,
                                                                                 quantity:

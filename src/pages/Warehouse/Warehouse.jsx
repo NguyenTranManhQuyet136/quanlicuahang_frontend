@@ -2,18 +2,19 @@ import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
-import FormRemove from "../../components/Form/FormRemove";
-import FormAdd from "../../components/Form/FormAdd";
-import FormFix from "../../components/Form/FormFix";
-import FormSearch from "../../components/Form/FormSearch";
+import FormRemove from "../../components/Form/FormRemove/FormRemove";
+import FormAdd from "../../components/Form/FormAdd/FormAdd";
+import FormFix from "../../components/Form/FormFix/FormFix";
+import FormSearch from "../../components/Form/FormSearch/FormSearch";
+import FormDetail from "../../components/Form/FormDetail/FormDetail";
 import { ThemeContext } from "../../contexts/ThemeProvider";
 import { checkLogin } from "../../hooks/checkLogin";
-import { FiEdit2, FiTrash2, FiPlus, FiSearch } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye } from "react-icons/fi";
 
 const labelPage = "phiếu nhập kho";
 
 const colInfo = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "warehouse_id", label: "ID", type: "text" },
     { key: "supplier_name", label: "Tên nhà cung cấp", type: "text" },
     { key: "import_date", label: "Ngày nhập hàng", type: "date" },
     { key: "total_value", label: "Tổng giá trị", type: "number" },
@@ -29,7 +30,7 @@ const colInfo = [
 ];
 
 const colInfoSearch = [
-    { key: "id", label: "ID", type: "number" },
+    { key: "warehouse_id", label: "ID", type: "text" },
     { key: "supplier_name", label: "Tên nhà cung cấp", type: "text" },
 ];
 
@@ -38,10 +39,11 @@ const Warehouse = () => {
 
     const themeContext = useContext(ThemeContext);
     const [dataWarehouse, setDataWarehouse] = useState([]);
-    const [removeStatus, setRemoveStatus] = useState({ status: false, id: "", supplier_name: "" });
+    const [removeStatus, setRemoveStatus] = useState({ status: false, warehouse_id: "", supplier_name: "" });
     const [fixStatus, setFixStatus] = useState({ statusSwitch: false, dataFix: {} });
     const [addStatus, setAddStatus] = useState({ status: false });
     const [searchStatus, setSearchStatus] = useState({ status: false });
+    const [detailStatus, setDetailStatus] = useState({ status: false})
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,18 +72,20 @@ const Warehouse = () => {
             case "search":
                 setSearchStatus({ status: false });
                 break;
+            case "detail":
+                setDetailStatus({ status: false});
         }
     };
 
-    const handleRemove = async (id) => {
-        await axios.post("http://localhost:5000/api/warehouse/remove", { id: id });
+    const handleRemove = async (warehouse_id) => {
+        await axios.post("http://localhost:5000/api/warehouse/remove", { warehouse_id: warehouse_id });
         closeForm("remove");
         resetData();
     };
 
     const handleFix = async (dataFix, idOld) => {
         await axios.post("http://localhost:5000/api/warehouse/fix", {
-            id: dataFix.id,
+            warehouse_id: dataFix.warehouse_id,
             supplier_name: dataFix.supplier_name,
             import_date: dataFix.import_date,
             total_value: dataFix.total_value,
@@ -94,7 +98,7 @@ const Warehouse = () => {
 
     const handleAdd = async (dataAdd) => {
         await axios.post("http://localhost:5000/api/warehouse/add", {
-            id: dataAdd.id,
+            warehouse_id: dataAdd.warehouse_id,
             supplier_name: dataAdd.supplier_name,
             import_date: dataAdd.import_date,
             total_value: dataAdd.total_value,
@@ -106,7 +110,7 @@ const Warehouse = () => {
 
     const handleSearch = async (dataSearch) => {
         const res = await axios.post("http://localhost:5000/api/warehouse/search", {
-            id: dataSearch.id,
+            warehouse_id: dataSearch.warehouse_id,
             supplier_name: dataSearch.supplier_name,
         });
         if (res.data.length === 0) {
@@ -131,12 +135,12 @@ const Warehouse = () => {
 
                         {removeStatus.status && (
                             <FormRemove
-                                id={removeStatus.id}
+                                id={removeStatus.warehouse_id}
                                 typeData={labelPage}
                                 name={removeStatus.supplier_name}
                                 closeForm={() => closeForm("remove")}
                                 handleRemove={() =>
-                                    handleRemove(removeStatus.id)
+                                    handleRemove(removeStatus.warehouse_id)
                                 }
                             />
                         )}
@@ -166,6 +170,15 @@ const Warehouse = () => {
                                 colInfo={colInfoSearch}
                                 closeForm={() => closeForm("search")}
                                 handleSearch={handleSearch}
+                            />
+                        )}
+
+                        {detailStatus.status && (
+                            <FormDetail
+                                typeData={labelPage}
+                                type_target={"warehouse"}
+                                id_target={detailStatus.id_target}
+                                closeForm={() => {closeForm("detail")}}
                             />
                         )}
 
@@ -205,7 +218,7 @@ const Warehouse = () => {
                                             {dataWarehouse.map((warehouse) => {
                                                 return (
                                                     <tr
-                                                        key={warehouse.id}
+                                                        key={warehouse.warehouse_id}
                                                         style={{
                                                             borderBottom: "1px solid #e9ecef",
                                                         }}
@@ -225,7 +238,7 @@ const Warehouse = () => {
                                                                     fontSize: "0.9rem",
                                                                 }}
                                                             >
-                                                                {warehouse.id}
+                                                                {warehouse.warehouse_id}
                                                             </span>
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
@@ -270,7 +283,7 @@ const Warehouse = () => {
                                                                         setFixStatus({
                                                                             statusSwitch: true,
                                                                             dataFix: {
-                                                                                id: warehouse.id,
+                                                                                warehouse_id: warehouse.warehouse_id,
                                                                                 supplier_name: warehouse.supplier_name,
                                                                                 import_date: warehouse.import_date,
                                                                                 total_value: warehouse.total_value,
@@ -281,6 +294,27 @@ const Warehouse = () => {
                                                                 >
                                                                     <FiEdit2 size={16} />
                                                                     Sửa
+                                                                </button>
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#cfe2ff",
+                                                                        color: "#0d6efd",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                        transition: "all 0.3s ease",
+                                                                        cursor: "pointer",
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        setDetailStatus({status: true, id_target: warehouse.warehouse_id})
+                                                                    }
+                                                                >
+                                                                    <FiEye size={16} />
+                                                                    Xem chi tiết
                                                                 </button>
                                                                 <button
                                                                     style={{
@@ -297,7 +331,7 @@ const Warehouse = () => {
                                                                     onClick={() =>
                                                                         setRemoveStatus({
                                                                             status: true,
-                                                                            id: warehouse.id,
+                                                                            warehouse_id: warehouse.warehouse_id,
                                                                             supplier_name: warehouse.supplier_name,
                                                                         })
                                                                     }
