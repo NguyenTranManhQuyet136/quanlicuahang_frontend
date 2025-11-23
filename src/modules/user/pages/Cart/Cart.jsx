@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { FiTrash2, FiPlus, FiMinus, FiTruck } from 'react-icons/fi';
 import Header from '../../components/Header/Header';
 import './Cart.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+    const navigate = useNavigate();
     // Cart State
     const [cartItems, setCartItems] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
@@ -71,6 +74,41 @@ const Cart = () => {
     const shipping = 0;
     const total = subtotal + shipping;
 
+    const handleCheckout = async () => {
+        const username = localStorage.getItem('username');
+        if (!username) {
+            alert("Vui lòng đăng nhập để thanh toán!");
+            navigate('/Login');
+            return;
+        }
+
+        if (cartItems.length === 0) {
+            alert("Giỏ hàng trống!");
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/checkout', {
+                customer_id: username,
+                total_price: total,
+                cart_items: cartItems,
+                note: '' // Optional: Add note field input later if needed
+            });
+
+            if (response.data.status) {
+                alert("Đặt hàng thành công! Mã đơn hàng: " + response.data.order_id);
+                localStorage.removeItem('shopping_cart');
+                window.dispatchEvent(new Event('cartUpdated'));
+                navigate('/History');
+            } else {
+                alert("Đặt hàng thất bại: " + response.data.message);
+            }
+        } catch (error) {
+            console.error("Checkout error:", error);
+            alert("Lỗi khi thanh toán. Vui lòng thử lại sau.");
+        }
+    };
+
     return (
         <div className="cart-page">
             <Header />
@@ -96,7 +134,7 @@ const Cart = () => {
                             {cartItems.length === 0 ? (
                                 <div className="empty-cart">
                                     <p>Giỏ hàng của bạn đang trống</p>
-                                    <button className="btn btn-primary">Tiếp tục mua sắm</button>
+                                    <button className="btn btn-primary" onClick={() => navigate('/Store')}>Tiếp tục mua sắm</button>
                                 </div>
                             ) : (
                                 <div className="cart-items-list">
@@ -181,7 +219,7 @@ const Cart = () => {
                             </div>
 
                             {/* Checkout Button */}
-                            <button className="checkout-btn">
+                            <button className="checkout-btn" onClick={handleCheckout}>
                                 Thanh Toán
                             </button>
 
