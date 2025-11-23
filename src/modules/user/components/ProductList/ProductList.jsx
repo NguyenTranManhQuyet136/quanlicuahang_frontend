@@ -4,7 +4,7 @@ import './ProductList.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductList = () => {
+const ProductList = ({ selectedCategory }) => {
     const [dataProduct, setDataProduct] = useState([]);
 
     useEffect(() => {
@@ -15,6 +15,10 @@ const ProductList = () => {
         fetchData();
     }, []);
 
+    const filteredProducts = selectedCategory === 'all'
+        ? dataProduct
+        : dataProduct.filter(product => product.type === selectedCategory);
+
     return (
         <div className="product-list-container">
             <div className="product-list-header">
@@ -23,7 +27,7 @@ const ProductList = () => {
             </div>
 
             <div className="product-grid">
-                {dataProduct.map(product => (
+                {filteredProducts.map(product => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>
