@@ -1,16 +1,16 @@
-.cart-page {
+.profile-page {
     min-height: 100vh;
     background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
 }
 
-.cart-header {
+.profile-header {
     background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
     padding: 3rem 0;
     margin-bottom: 2rem;
     box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
 }
 
-.cart-title {
+.profile-title {
     font-size: 2.5rem;
     font-weight: 800;
     color: white;
@@ -18,33 +18,33 @@
     text-align: center;
 }
 
-.cart-subtitle {
+.profile-subtitle {
     font-size: 1.1rem;
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
     margin: 0;
 }
 
-.cart-container {
+.profile-container {
     padding: 2rem 0;
     padding-bottom: 4rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .cart-header {
+    .profile-header {
         padding: 2rem 0;
     }
 
-    .cart-title {
+    .profile-title {
         font-size: 2rem;
     }
 
-    .cart-subtitle {
+    .profile-subtitle {
         font-size: 1rem;
     }
 
-    .cart-container {
+    .profile-container {
         padding: 1rem 0;
     }
 }

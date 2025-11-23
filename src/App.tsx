@@ -10,6 +10,9 @@ import User from "./modules/admin/pages/User/User";
 import CreateInvoice from "./modules/admin/pages/CreateInvoice/CreateInvoice";
 
 import Store from "./modules/user/pages/Store/Store";
+import Cart from "./modules/user/pages/Cart/Cart";
+import Profile from "./modules/user/pages/Profile/Profile";
+import History from "./modules/user/pages/History/History";
 
 function App() {
     return (
@@ -17,22 +20,25 @@ function App() {
             <title>Quản lí cửa hàng</title>
 
             <BrowserRouter>
-                    <Routes>
-                        <Route path="/Login" element={<Login />} />
-                        <Route path="/Dashboard" element={<Dashboard />} />
-                        <Route path="/Product" element={<Product />} />
-                        <Route path="/Customer" element={<Customer />} />
-                        <Route path="/Order" element={<Order />} />
-                        <Route path="/Warehouse" element={<Warehouse />} />
-                        <Route path="/User" element={<User />}></Route>
-                        <Route path="/create-invoice" element={<CreateInvoice/>}></Route>
+                <Routes>
+                    <Route path="/Login" element={<Login />} />
+                    <Route path="/Dashboard" element={<Dashboard />} />
+                    <Route path="/Product" element={<Product />} />
+                    <Route path="/Customer" element={<Customer />} />
+                    <Route path="/Order" element={<Order />} />
+                    <Route path="/Warehouse" element={<Warehouse />} />
+                    <Route path="/User" element={<User />}></Route>
+                    <Route path="/create-invoice" element={<CreateInvoice />}></Route>
 
-                        <Route path="/Store" element={<Store/>}></Route>
-                        <Route
-                            path="/"
-                            element={<Navigate to="/login" replace />}
-                        ></Route>
-                    </Routes>
+                    <Route path="/Store" element={<Store />}></Route>
+                    <Route path="/Cart" element={<Cart />}></Route>
+                    <Route path="/Profile" element={<Profile />}></Route>
+                    <Route path="/History" element={<History />}></Route>
+                    <Route
+                        path="/"
+                        element={<Navigate to="/login" replace />}
+                    ></Route>
+                </Routes>
             </BrowserRouter>
         </div>
     );

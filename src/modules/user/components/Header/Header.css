@@ -9,6 +9,10 @@
   height: 40px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 /* Custom lại input của Bootstrap để bỏ viền xanh khi click */
 .form-control:focus,
 .input-group-text {
