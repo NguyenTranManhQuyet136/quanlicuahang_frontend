@@ -1,0 +1,50 @@
+/* Category Nav Wrapper - Sticky positioning */
+.category-nav-wrapper {
+  position: sticky;
+  top: 73px;
+  /* Height of header + some padding */
+  background: white;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.category-nav-wrapper.scrolled {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Button styles with blue theme */
+.btn-purple-custom {
+  background-color: #0d6efd;
+  color: white;
+  border: 1px solid #0d6efd;
+}
+
+.btn-purple-custom:hover {
+  background-color: #0b5ed7;
+  color: white;
+}
+
+.btn-light-custom {
+  background-color: white;
+  color: #555;
+  border: 1px solid #eee;
+}
+
+.btn-light-custom:hover {
+  background-color: #f8f9fa;
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

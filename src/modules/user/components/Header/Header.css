@@ -1,0 +1,32 @@
+/* Header wrapper with enhanced shadow */
+.header-wrapper {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+}
+
+.logo-box {
+  width: 40px;
+  height: 40px;
+}
+
+/* Custom lại input của Bootstrap để bỏ viền xanh khi click */
+.form-control:focus,
+.input-group-text {
+  box-shadow: none;
+  border-color: #dee2e6;
+  background-color: #f8f9fa;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
