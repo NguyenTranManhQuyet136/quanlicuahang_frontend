@@ -1,25 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfileInfo.css';
 import FormChangePassword from '../Form/FormChangePassword/FormChangePassword';
+import axios from 'axios';
 
 const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [changePasswordStatus, setChangePasswordStatus] = useState(false);
 
-    // Sample user data
+    // User data state
     const [userData, setUserData] = useState({
-        name: 'Nguyễn Văn An',
-        email: 'nguyenvanan@email.com',
-        phone: '0123 456 789',
-        address: '123 Đường ABC, Quận 1, TP.HCM',
-        birthday: '1995-03-15',
+        customer_id: '',
+        fullname: '',
+        email: '',
+        phone_number: '',
+        address: '',
+        birthday: '',
         gender: 'Nam',
         avatar: ''
     });
 
-    const handleSave = () => {
-        setIsEditing(false);
-        // Here you would typically save to backend
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const username = localStorage.getItem('username');
+            if (username) {
+                try {
+                    const res = await axios.post('http://localhost:5000/api/customer/get', {
+                        customer_id: username
+                    });
+                    if (res.data) {
+                        setUserData({
+                            ...res.data,
+                            birthday: res.data.birthday ? new Date(res.data.birthday).toISOString().split('T')[0] : ''
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    // If not found in customers table, might want to initialize with defaults or fetch from users_detail if needed
+                    setUserData(prev => ({ ...prev, customer_id: username }));
+                }
+            }
+        };
+        fetchUserData();
+    }, []);
+
+    const handleSave = async () => {
+        try {
+            await axios.post('http://localhost:5000/api/customer/fix', {
+                ...userData,
+                idOld: userData.customer_id
+            });
+            setIsEditing(false);
+            alert("Cập nhật thông tin thành công!");
+        } catch (error) {
+            console.error("Error saving user data:", error);
+            alert("Lỗi khi cập nhật thông tin!");
+        }
     };
 
     const changeAvatar = (file) => {
@@ -85,7 +120,7 @@ const ProfileInfo = () => {
                                 />
                             </div>
 
-                            <h3 className="user-name">{userData.name}</h3>
+                            <h3 className="user-name">{userData.fullname || userData.customer_id}</h3>
                             <p className="user-role">Khách hàng</p>
                             <p className="user-status">
                                 <span className="status-dot"></span>
@@ -96,12 +131,12 @@ const ProfileInfo = () => {
                                 <div className="stat-box">
                                     <i className="bi bi-box-seam"></i>
                                     <p className="stat-label">Đơn hàng</p>
-                                    <p className="stat-value">12</p>
+                                    <p className="stat-value">0</p>
                                 </div>
                                 <div className="stat-box">
                                     <i className="bi bi-heart"></i>
                                     <p className="stat-label">Yêu thích</p>
-                                    <p className="stat-value">5</p>
+                                    <p className="stat-value">0</p>
                                 </div>
                             </div>
 
@@ -136,12 +171,12 @@ const ProfileInfo = () => {
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    value={userData.name}
-                                                    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                    value={userData.fullname || ''}
+                                                    onChange={(e) => setUserData({ ...userData, fullname: e.target.value })}
                                                     className="form-control form-control-sm"
                                                 />
                                             ) : (
-                                                <strong>{userData.name}</strong>
+                                                <strong>{userData.fullname || 'Chưa cập nhật'}</strong>
                                             )}
                                         </div>
                                     </div>
@@ -156,7 +191,7 @@ const ProfileInfo = () => {
                                             <small>Giới tính</small>
                                             {isEditing ? (
                                                 <select
-                                                    value={userData.gender}
+                                                    value={userData.gender || 'Nam'}
                                                     onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
                                                     className="form-select form-select-sm"
                                                 >
@@ -165,7 +200,7 @@ const ProfileInfo = () => {
                                                     <option value="Khác">Khác</option>
                                                 </select>
                                             ) : (
-                                                <strong>{userData.gender}</strong>
+                                                <strong>{userData.gender || 'Chưa cập nhật'}</strong>
                                             )}
                                         </div>
                                     </div>
@@ -181,12 +216,12 @@ const ProfileInfo = () => {
                                             {isEditing ? (
                                                 <input
                                                     type="date"
-                                                    value={userData.birthday}
+                                                    value={userData.birthday || ''}
                                                     onChange={(e) => setUserData({ ...userData, birthday: e.target.value })}
                                                     className="form-control form-control-sm"
                                                 />
                                             ) : (
-                                                <strong>{new Date(userData.birthday).toLocaleDateString('vi-VN')}</strong>
+                                                <strong>{userData.birthday ? new Date(userData.birthday).toLocaleDateString('vi-VN') : 'Chưa cập nhật'}</strong>
                                             )}
                                         </div>
                                     </div>
@@ -202,12 +237,12 @@ const ProfileInfo = () => {
                                             {isEditing ? (
                                                 <input
                                                     type="tel"
-                                                    value={userData.phone}
-                                                    onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+                                                    value={userData.phone_number || ''}
+                                                    onChange={(e) => setUserData({ ...userData, phone_number: e.target.value })}
                                                     className="form-control form-control-sm"
                                                 />
                                             ) : (
-                                                <strong>{userData.phone}</strong>
+                                                <strong>{userData.phone_number || 'Chưa cập nhật'}</strong>
                                             )}
                                         </div>
                                     </div>
@@ -223,12 +258,12 @@ const ProfileInfo = () => {
                                             {isEditing ? (
                                                 <input
                                                     type="email"
-                                                    value={userData.email}
+                                                    value={userData.email || ''}
                                                     onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                                                     className="form-control form-control-sm"
                                                 />
                                             ) : (
-                                                <strong>{userData.email}</strong>
+                                                <strong>{userData.email || 'Chưa cập nhật'}</strong>
                                             )}
                                         </div>
                                     </div>
@@ -244,12 +279,12 @@ const ProfileInfo = () => {
                                             {isEditing ? (
                                                 <input
                                                     type="text"
-                                                    value={userData.address}
+                                                    value={userData.address || ''}
                                                     onChange={(e) => setUserData({ ...userData, address: e.target.value })}
                                                     className="form-control form-control-sm"
                                                 />
                                             ) : (
-                                                <strong>{userData.address}</strong>
+                                                <strong>{userData.address || 'Chưa cập nhật'}</strong>
                                             )}
                                         </div>
                                     </div>

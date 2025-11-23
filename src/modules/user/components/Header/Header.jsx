@@ -1,4 +1,4 @@
-import { FiSearch, FiShoppingCart, FiUser, FiFileText, FiShoppingBag } from 'react-icons/fi';
+import { FiSearch, FiShoppingCart, FiUser, FiFileText, FiShoppingBag, FiLogOut } from 'react-icons/fi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
@@ -20,6 +20,11 @@ const Header = () => {
 
   const handleHistoryClick = () => {
     navigate('/History');
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/Login');
   };
 
   // Check if current path matches
@@ -66,14 +71,6 @@ const Header = () => {
           </button>
 
           <button
-            className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/History') ? 'active' : 'text-dark'}`}
-            onClick={handleHistoryClick}
-            title="Lịch sử đơn hàng"
-          >
-            <FiFileText />
-          </button>
-
-          <button
             className={`btn btn-outline-light border rounded-circle icon-btn position-relative ${isActive('/Cart') ? 'active' : 'text-dark'}`}
             onClick={handleCartClick}
             title="Giỏ hàng"
@@ -85,11 +82,28 @@ const Header = () => {
           </button>
 
           <button
-            className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/Profile') ? 'active' : 'text-dark'}`}
+            className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/History') ? 'active' : 'text-dark'}`}
+            onClick={handleHistoryClick}
+            title="Lịch sử đơn hàng"
+          >
+            <FiFileText />
+          </button>
+
+          <button
+            className={`btn btn-outline-light border rounded-pill user-btn ${isActive('/Profile') ? 'active' : 'text-dark'}`}
             onClick={handleProfileClick}
             title="Tài khoản"
           >
             <FiUser />
+            <span className="ms-2 fw-medium">{localStorage.getItem('username') || 'Tài khoản'}</span>
+          </button>
+
+          <button
+            className="btn btn-outline-light border rounded-circle icon-btn logout-btn text-dark"
+            onClick={handleLogout}
+            title="Đăng xuất"
+          >
+            <FiLogOut />
           </button>
         </div>
       </div>
