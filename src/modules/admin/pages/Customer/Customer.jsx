@@ -15,17 +15,21 @@ const labelPage = "khách hàng";
 const colInfo = [
     { key: "customer_id", label: "ID", type: "text" },
     { key: "fullname", label: "Tên khách hàng", type: "text" },
-    { key: "birthyear", label: "Năm sinh", type: "number" },
-    { key: "address", label: "Địa chỉ", type: "text" },
+    { key: "birthday", label: "Ngày sinh", type: "date" },
     {
-        key: "status",
-        label: "Trạng thái",
+        key: "gender",
+        label: "Giới tính",
         type: "select",
         options: [
-            { value: 1, label: "Hoạt động" },
-            { value: 0, label: "Vô hiệu" },
+            { value: "Nam", label: "Nam" },
+            { value: "Nữ", label: "Nữ" },
+            { value: "Khác", label: "Khác" },
         ],
     },
+    { key: "address", label: "Địa chỉ", type: "text" },
+    { key: "phone_number", label: "Số điện thoại", type: "text" },
+    { key: "email", label: "Email", type: "email" },
+
 ];
 
 const colInfoSearch = [
@@ -83,9 +87,11 @@ const Customer = () => {
         await axios.post("http://localhost:5000/api/customer/fix", {
             customer_id: dataFix.customer_id,
             fullname: dataFix.fullname,
-            birthyear: dataFix.birthyear,
+            birthday: dataFix.birthday,
+            gender: dataFix.gender,
             address: dataFix.address,
-            status: dataFix.status,
+            phone_number: dataFix.phone_number,
+            email: dataFix.email,
             idOld: idOld,
         });
         closeForm("fix");
@@ -96,9 +102,11 @@ const Customer = () => {
         await axios.post("http://localhost:5000/api/customer/add", {
             customer_id: dataAdd.customer_id,
             fullname: dataAdd.fullname,
-            birthyear: dataAdd.birthyear,
+            birthday: dataAdd.birthday,
+            gender: dataAdd.gender,
             address: dataAdd.address,
-            status: dataAdd.status,
+            phone_number: dataAdd.phone_number,
+            email: dataAdd.email,
         });
         closeForm("add");
         resetData();
@@ -188,13 +196,19 @@ const Customer = () => {
                                                     Tên khách hàng
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Năm sinh
+                                                    Ngày sinh
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Giới tính
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Địa chỉ
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Trạng thái
+                                                    SĐT
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Email
                                                 </th>
                                                 <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Hành động
@@ -232,26 +246,21 @@ const Customer = () => {
                                                             {customer.fullname}
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
-                                                            {customer.birthyear}
+                                                            {new Date(customer.birthday).toLocaleDateString('vi-VN')}
+                                                        </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {customer.gender}
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
                                                             {customer.address}
                                                         </td>
-                                                        <td>
-                                                            <span
-                                                                style={{
-                                                                    display: "inline-block",
-                                                                    padding: "4px 12px",
-                                                                    backgroundColor: customer.status === 1 ? "#cfe2ff" : "#e2e3e5",
-                                                                    color: customer.status === 1 ? "#084298" : "#383d41",
-                                                                    borderRadius: "6px",
-                                                                    fontWeight: "500",
-                                                                    fontSize: "0.9rem",
-                                                                }}
-                                                            >
-                                                                {customer.status === 1 ? "Hoạt động" : "Vô hiệu"}
-                                                            </span>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {customer.phone_number}
                                                         </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            {customer.email}
+                                                        </td>
+
                                                         <td className="text-center pe-4">
                                                             <div className="d-flex gap-2 justify-content-center">
                                                                 <button
@@ -272,9 +281,11 @@ const Customer = () => {
                                                                             dataFix: {
                                                                                 customer_id: customer.customer_id,
                                                                                 fullname: customer.fullname,
-                                                                                birthyear: customer.birthyear,
+                                                                                birthday: customer.birthday,
+                                                                                gender: customer.gender,
                                                                                 address: customer.address,
-                                                                                status: customer.status,
+                                                                                phone_number: customer.phone_number,
+                                                                                email: customer.email,
                                                                             },
                                                                         })
                                                                     }
@@ -310,9 +321,9 @@ const Customer = () => {
                                                     </tr>
                                                 );
                                             })}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                </div>
                             )}
                         </div>
 

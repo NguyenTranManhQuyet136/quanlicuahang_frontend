@@ -19,9 +19,16 @@ const Login = () => {
 
         if (res.data) {
             if (res.data.statusCheck == true) {
-                localStorage.setItem("username", res.data.username);
-                localStorage.setItem("password", res.data.password);
-                navigate("/Dashboard");
+                if (res.data.role == "admin") {
+                    localStorage.setItem("username", res.data.username);
+                    localStorage.setItem("password", res.data.password);
+                    navigate("/Dashboard");
+                }
+                if (res.data.role == "user") {
+                    localStorage.setItem("username", res.data.username);
+                    localStorage.setItem("password", res.data.password);
+                    navigate("/Store");
+                }
             } else {
                 alert("sai tai khoan va mat khau");
             }

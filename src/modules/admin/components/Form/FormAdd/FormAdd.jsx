@@ -5,7 +5,7 @@ import "./FormAdd.css";
 
 const FormAdd = (props) => {
     const themeContext = useContext(ThemeContext);
-    const [dataForm, setDataForm] = useState({ status: 1 });
+    const [dataForm, setDataForm] = useState({ status: "Hiển thị" });
 
     return (
         <div className="form-add-overlay" onClick={props.closeForm}>

@@ -15,14 +15,18 @@ const colInfo = [
     { key: "product_id", label: "ID", type: "text" },
     { key: "name", label: "Tên sản phẩm", type: "text" },
     { key: "price", label: "Giá", type: "number" },
+    { key: "description", label: "Mô tả", type: "text" },
+    { key: "type", label: "Loại", type: "text" },
+    { key: "image", label: "Hình ảnh", type: "text" },
     { key: "quantity", label: "Số lượng", type: "number" },
+    { key: "warehouse_id", label: "Mã kho", type: "text" },
     {
         key: "status",
         label: "Trạng thái",
         type: "select",
         options: [
-            { value: 1, label: "Hiển thị" },
-            { value: 0, label: "Ẩn" },
+            { value: "Hiển thị", label: "Hiển thị" },
+            { value: "Ẩn", label: "Ẩn" },
         ],
     },
 ];
@@ -34,8 +38,7 @@ const colInfoSearch = [
 
 const Product = () => {
     const themeContext = useContext(ThemeContext);
-
-    console.log(themeContext.theme);
+    
     const [dataProduct, setDataProduct] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
@@ -100,7 +103,11 @@ const Product = () => {
             product_id: dataFix.product_id,
             name: dataFix.name,
             price: dataFix.price,
+            description: dataFix.description,
+            type: dataFix.type,
+            image: dataFix.image,
             quantity: dataFix.quantity,
+            warehouse_id: dataFix.warehouse_id,
             status: dataFix.status,
             idOld: idOld,
         });
@@ -113,7 +120,11 @@ const Product = () => {
             product_id: dataAdd.product_id,
             name: dataAdd.name,
             price: dataAdd.price,
+            description: dataAdd.description,
+            type: dataAdd.type,
+            image: dataAdd.image,
             quantity: dataAdd.quantity,
+            warehouse_id: dataAdd.warehouse_id,
             status: dataAdd.status,
         });
         closeForm("add");
@@ -212,7 +223,19 @@ const Product = () => {
                                                     Giá
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Mô tả
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Loại
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Hình ảnh
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Tồn kho
+                                                </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Mã kho
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Trạng thái
@@ -255,6 +278,13 @@ const Product = () => {
                                                         <td style={{ color: "#0d6efd", fontWeight: "600" }}>
                                                             {product.price.toLocaleString("vi-VN")} ₫
                                                         </td>
+                                                        <td style={{ maxWidth: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={product.description}>
+                                                            {product.description}
+                                                        </td>
+                                                        <td>{product.type}</td>
+                                                        <td>
+                                                            {product.image && <img src={product.image} alt={product.name} style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "4px" }} />}
+                                                        </td>
                                                         <td>
                                                             <span
                                                                 style={{
@@ -270,19 +300,20 @@ const Product = () => {
                                                                 {product.quantity} {product.quantity > 0 ? "cái" : "hết"}
                                                             </span>
                                                         </td>
+                                                        <td>{product.warehouse_id}</td>
                                                         <td>
                                                             <span
                                                                 style={{
                                                                     display: "inline-block",
                                                                     padding: "4px 12px",
-                                                                    backgroundColor: product.status === 1 ? "#cfe2ff" : "#e2e3e5",
-                                                                    color: product.status === 1 ? "#084298" : "#383d41",
+                                                                    backgroundColor: product.status === "Hiển thị" ? "#cfe2ff" : "#e2e3e5",
+                                                                    color: product.status === "Hiển thị" ? "#084298" : "#383d41",
                                                                     borderRadius: "6px",
                                                                     fontWeight: "500",
                                                                     fontSize: "0.9rem",
                                                                 }}
                                                             >
-                                                                {product.status === 1 ? "Hiển thị" : "Ẩn"}
+                                                                {product.status}
                                                             </span>
                                                         </td>
                                                         <td className="text-center pe-4">
@@ -306,8 +337,12 @@ const Product = () => {
                                                                                 product_id: product.product_id,
                                                                                 name: product.name,
                                                                                 price: product.price,
+                                                                                description: product.description,
+                                                                                type: product.type,
+                                                                                image: product.image,
                                                                                 quantity:
                                                                                     product.quantity,
+                                                                                warehouse_id: product.warehouse_id,
                                                                                 status: product.status,
                                                                             },
                                                                         })
@@ -331,7 +366,7 @@ const Product = () => {
                                                                     onClick={() =>
                                                                         setRemoveStatus({
                                                                             status: true,
-                                                                            id: product.id,
+                                                                            product_id: product.product_id,
                                                                             name: product.name,
                                                                         })
                                                                     }
@@ -344,9 +379,9 @@ const Product = () => {
                                                     </tr>
                                                 );
                                             })}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                </div>
                             )}
                         </div>
 

@@ -15,18 +15,9 @@ const labelPage = "đơn hàng";
 
 const colInfo = [
     { key: "order_id", label: "ID", type: "text" },
-    { key: "customer_id", label: "ID khách hàng", type: "number" },
+    { key: "customer_id", label: "ID khách hàng", type: "text" },
     { key: "order_date", label: "Ngày đặt hàng", type: "date" },
     { key: "total_price", label: "Tổng giá trị", type: "number" },
-    {
-        key: "status",
-        label: "Trạng thái",
-        type: "select",
-        options: [
-            { value: 1, label: "Hoàn tất" },
-            { value: 0, label: "Đang xử lý" },
-        ],
-    },
 ];
 
 const colInfoSearch = [
@@ -90,7 +81,6 @@ const Order = () => {
             customer_id: dataFix.customer_id,
             order_date: dataFix.order_date,
             total_price: dataFix.total_price,
-            status: dataFix.status,
             idOld: idOld,
         });
         closeForm("fix");
@@ -103,7 +93,7 @@ const Order = () => {
             customer_id: dataAdd.customer_id,
             order_date: dataAdd.order_date,
             total_price: dataAdd.total_price,
-            status: dataAdd.status,
+            created_by: localStorage.getItem("username")
         });
         closeForm("add");
         resetData();
@@ -180,7 +170,7 @@ const Order = () => {
                                 typeData={labelPage}
                                 type_target={"order"}
                                 id_target={detailStatus.id_target}
-                                closeForm={() => {closeForm("detail")}}
+                                closeForm={() => { closeForm("detail") }}
                             />
                         )}
 
@@ -207,9 +197,6 @@ const Order = () => {
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Tổng giá trị
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Trạng thái
                                                 </th>
                                                 <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Hành động
@@ -252,21 +239,7 @@ const Order = () => {
                                                         <td style={{ color: "#0d6efd", fontWeight: "600" }}>
                                                             {Number(order.total_price).toLocaleString("vi-VN")} ₫
                                                         </td>
-                                                        <td>
-                                                            <span
-                                                                style={{
-                                                                    display: "inline-block",
-                                                                    padding: "4px 12px",
-                                                                    backgroundColor: order.status === 1 ? "#cfe2ff" : "#e2e3e5",
-                                                                    color: order.status === 1 ? "#084298" : "#383d41",
-                                                                    borderRadius: "6px",
-                                                                    fontWeight: "500",
-                                                                    fontSize: "0.9rem",
-                                                                }}
-                                                            >
-                                                                {order.status === 1 ? "Hoàn tất" : "Đang xử lý"}
-                                                            </span>
-                                                        </td>
+
                                                         <td className="text-center pe-4">
                                                             <div className="d-flex gap-2 justify-content-center">
                                                                 <button
@@ -289,7 +262,6 @@ const Order = () => {
                                                                                 customer_id: order.customer_id,
                                                                                 order_date: order.order_date,
                                                                                 total_price: order.total_price,
-                                                                                status: order.status,
                                                                             },
                                                                         })
                                                                     }
@@ -312,7 +284,7 @@ const Order = () => {
                                                                         cursor: "pointer",
                                                                     }}
                                                                     onClick={() =>
-                                                                        setDetailStatus({status: true, id_target: order.order_id})
+                                                                        setDetailStatus({ status: true, id_target: order.order_id })
                                                                     }
                                                                 >
                                                                     <FiEye size={16} />
@@ -346,9 +318,9 @@ const Order = () => {
                                                     </tr>
                                                 );
                                             })}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
+                                </div>
                             )}
                         </div>
 
@@ -367,6 +339,6 @@ const Order = () => {
             </div>
         </div>
     );
-};  
+};
 
 export default Order;
