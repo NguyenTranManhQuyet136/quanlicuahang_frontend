@@ -3,55 +3,6 @@
     margin: 0 auto;
 }
 
-/* Filters Section */
-.history-filters {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.filter-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #2d3748;
-    margin: 0 0 1rem 0;
-}
-
-.filter-tabs {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 0.75rem 1.5rem;
-    background: #f8f9fa;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    color: #4a5568;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.filter-btn:hover {
-    background: #e2e8f0;
-    transform: translateY(-2px);
-}
-
-.filter-btn.active {
-    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
-    color: white;
-    border-color: #0d6efd;
-    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-}
-
 /* Orders Grid */
 .orders-grid {
     display: grid;
@@ -111,21 +62,6 @@
 .order-status.delivered {
     background: #d1fae5;
     color: #065f46;
-}
-
-.order-status.shipping {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.order-status.processing {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.order-status.cancelled {
-    background: #fee2e2;
-    color: #991b1b;
 }
 
 /* Order Items */
@@ -288,15 +224,6 @@
 @media (max-width: 768px) {
     .orders-grid {
         grid-template-columns: 1fr;
-    }
-
-    .filter-tabs {
-        flex-direction: column;
-    }
-
-    .filter-btn {
-        width: 100%;
-        justify-content: center;
     }
 
     .order-header {

@@ -1,9 +1,10 @@
-import { FiSearch, FiShoppingCart, FiUser, FiHeart, FiFileText } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { FiSearch, FiShoppingCart, FiUser, FiFileText, FiShoppingBag } from 'react-icons/fi';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleCartClick = () => {
     navigate('/Cart');
@@ -19,6 +20,11 @@ const Header = () => {
 
   const handleHistoryClick = () => {
     navigate('/History');
+  };
+
+  // Check if current path matches
+  const isActive = (path) => {
+    return location.pathname === path;
   };
 
   return (
@@ -52,16 +58,25 @@ const Header = () => {
         {/* Actions */}
         <div className="d-flex align-items-center gap-3">
           <button
-            className="btn btn-outline-light text-dark border rounded-circle icon-btn"
+            className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/Store') ? 'active' : 'text-dark'}`}
+            onClick={handleLogoClick}
+            title="Cửa hàng"
+          >
+            <FiShoppingBag />
+          </button>
+
+          <button
+            className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/History') ? 'active' : 'text-dark'}`}
             onClick={handleHistoryClick}
+            title="Lịch sử đơn hàng"
           >
             <FiFileText />
           </button>
-          <button className="btn btn-outline-light text-dark border rounded-circle icon-btn"><FiHeart /></button>
 
           <button
-            className="btn btn-primary rounded-circle icon-btn position-relative"
+            className={`btn btn-outline-light border rounded-circle icon-btn position-relative ${isActive('/Cart') ? 'active' : 'text-dark'}`}
             onClick={handleCartClick}
+            title="Giỏ hàng"
           >
             <FiShoppingCart />
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -70,8 +85,9 @@ const Header = () => {
           </button>
 
           <button
-            className="btn btn-outline-light text-dark border rounded-circle icon-btn"
+            className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/Profile') ? 'active' : 'text-dark'}`}
             onClick={handleProfileClick}
+            title="Tài khoản"
           >
             <FiUser />
           </button>

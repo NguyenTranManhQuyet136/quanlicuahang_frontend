@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { FiEdit2, FiMail, FiPhone, FiMapPin, FiCalendar, FiUser } from 'react-icons/fi';
 import './ProfileInfo.css';
+import FormChangePassword from '../Form/FormChangePassword/FormChangePassword';
 
 const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
+    const [changePasswordStatus, setChangePasswordStatus] = useState(false);
 
     // Sample user data
     const [userData, setUserData] = useState({
@@ -11,153 +12,262 @@ const ProfileInfo = () => {
         email: 'nguyenvanan@email.com',
         phone: '0123 456 789',
         address: '123 Đường ABC, Quận 1, TP.HCM',
-        birthday: '15/03/1995',
+        birthday: '1995-03-15',
         gender: 'Nam',
-        avatar: 'https://ui-avatars.com/api/?name=Nguyen+Van+An&background=0d6efd&color=fff&size=200'
+        avatar: ''
     });
 
+    const handleSave = () => {
+        setIsEditing(false);
+        // Here you would typically save to backend
+    };
+
+    const changeAvatar = (file) => {
+        const imageUrl = URL.createObjectURL(file);
+        setUserData({ ...userData, avatar: imageUrl });
+    };
+
+    const handleChangePassword = (password, passwordChange, confirmPasswordChange) => {
+        // Mock validation and API call
+        if (passwordChange !== confirmPasswordChange) {
+            alert("Mật khẩu xác nhận không khớp!");
+            return;
+        }
+        console.log("Changing password:", { password, passwordChange });
+        alert("Đổi mật khẩu thành công!");
+        setChangePasswordStatus(false);
+    };
+
     return (
-        <div className="profile-info-wrapper">
-            {/* Avatar Section */}
-            <div className="profile-avatar-section">
-                <div className="avatar-container">
-                    <img src={userData.avatar} alt={userData.name} className="profile-avatar" />
-                    <button className="avatar-edit-btn">
-                        <FiEdit2 />
-                    </button>
-                </div>
-                <h3 className="profile-name">{userData.name}</h3>
-                <p className="profile-member-since">Thành viên từ 2024</p>
-            </div>
-
-            {/* Info Section */}
-            <div className="profile-info-section">
-                <div className="info-header">
-                    <h4>Thông Tin Chi Tiết</h4>
+        <div className="profile-info-container">
+            {/* Edit Button */}
+            <div className="row mb-4">
+                <div className="col-12 text-end">
                     <button
-                        className="edit-btn"
-                        onClick={() => setIsEditing(!isEditing)}
+                        className="btn btn-lg shadow-sm edit-profile-btn"
+                        onClick={() => isEditing ? handleSave() : setIsEditing(true)}
                     >
-                        <FiEdit2 /> {isEditing ? 'Lưu' : 'Chỉnh sửa'}
+                        <i className={`bi ${isEditing ? 'bi-check-circle' : 'bi-pencil-square'} me-2`}></i>
+                        {isEditing ? 'Lưu thông tin' : 'Chỉnh sửa thông tin'}
                     </button>
                 </div>
+            </div>
 
-                <div className="info-list">
-                    <div className="info-item">
-                        <div className="info-icon">
-                            <FiMail />
-                        </div>
-                        <div className="info-content">
-                            <label>Email</label>
-                            {isEditing ? (
+            <div className="row">
+                {/* Left Column - Avatar Card */}
+                <div className="col-lg-4 mb-4">
+                    <div className="avatar-card">
+                        <div className="avatar-header"></div>
+
+                        <div className="avatar-body">
+                            <div className="avatar-wrapper">
+                                <div className="avatar-circle">
+                                    {userData.avatar ? (
+                                        <img src={userData.avatar} alt="Avatar" />
+                                    ) : (
+                                        <i className="bi bi-person-fill"></i>
+                                    )}
+                                </div>
+                                <label htmlFor="avatarUpload" className="avatar-edit-btn">
+                                    <i className="bi bi-camera"></i>
+                                </label>
                                 <input
-                                    type="email"
-                                    value={userData.email}
-                                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-                                    className="info-input"
+                                    id="avatarUpload"
+                                    type="file"
+                                    accept="image/*"
+                                    className="d-none"
+                                    onChange={(e) => {
+                                        const files = e.target.files;
+                                        if (files && files[0]) {
+                                            changeAvatar(files[0]);
+                                        }
+                                    }}
                                 />
-                            ) : (
-                                <p>{userData.email}</p>
-                            )}
+                            </div>
+
+                            <h3 className="user-name">{userData.name}</h3>
+                            <p className="user-role">Khách hàng</p>
+                            <p className="user-status">
+                                <span className="status-dot"></span>
+                                Đang hoạt động
+                            </p>
+
+                            <div className="stats-row mb-4">
+                                <div className="stat-box">
+                                    <i className="bi bi-box-seam"></i>
+                                    <p className="stat-label">Đơn hàng</p>
+                                    <p className="stat-value">12</p>
+                                </div>
+                                <div className="stat-box">
+                                    <i className="bi bi-heart"></i>
+                                    <p className="stat-label">Yêu thích</p>
+                                    <p className="stat-value">5</p>
+                                </div>
+                            </div>
+
+                            <button
+                                className="btn btn-danger w-100 change-password-btn"
+                                onClick={() => setChangePasswordStatus(true)}
+                            >
+                                <i className="bi bi-lock me-2"></i>
+                                Đổi mật khẩu
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <div className="info-item">
-                        <div className="info-icon">
-                            <FiPhone />
-                        </div>
-                        <div className="info-content">
-                            <label>Số điện thoại</label>
-                            {isEditing ? (
-                                <input
-                                    type="tel"
-                                    value={userData.phone}
-                                    onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
-                                    className="info-input"
-                                />
-                            ) : (
-                                <p>{userData.phone}</p>
-                            )}
-                        </div>
-                    </div>
+                {/* Right Column - Info Details */}
+                <div className="col-lg-8">
+                    <div className="info-card">
+                        <div className="info-card-body">
+                            <h4 className="info-title">
+                                <i className="bi bi-person-lines-fill text-primary me-2"></i>
+                                Thông tin chi tiết
+                            </h4>
 
-                    <div className="info-item">
-                        <div className="info-icon">
-                            <FiMapPin />
-                        </div>
-                        <div className="info-content">
-                            <label>Địa chỉ</label>
-                            {isEditing ? (
-                                <textarea
-                                    value={userData.address}
-                                    onChange={(e) => setUserData({ ...userData, address: e.target.value })}
-                                    className="info-input"
-                                    rows="2"
-                                />
-                            ) : (
-                                <p>{userData.address}</p>
-                            )}
-                        </div>
-                    </div>
+                            <div className="row g-3">
+                                <div className="col-md-6">
+                                    <div className="info-item">
+                                        <div className="info-icon">
+                                            <i className="bi bi-person"></i>
+                                        </div>
+                                        <div className="info-content">
+                                            <small>Họ và tên</small>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    value={userData.name}
+                                                    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                                                    className="form-control form-control-sm"
+                                                />
+                                            ) : (
+                                                <strong>{userData.name}</strong>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div className="info-item">
-                        <div className="info-icon">
-                            <FiCalendar />
-                        </div>
-                        <div className="info-content">
-                            <label>Ngày sinh</label>
-                            {isEditing ? (
-                                <input
-                                    type="text"
-                                    value={userData.birthday}
-                                    onChange={(e) => setUserData({ ...userData, birthday: e.target.value })}
-                                    className="info-input"
-                                />
-                            ) : (
-                                <p>{userData.birthday}</p>
-                            )}
-                        </div>
-                    </div>
+                                <div className="col-md-6">
+                                    <div className="info-item">
+                                        <div className="info-icon">
+                                            <i className="bi bi-gender-ambiguous"></i>
+                                        </div>
+                                        <div className="info-content">
+                                            <small>Giới tính</small>
+                                            {isEditing ? (
+                                                <select
+                                                    value={userData.gender}
+                                                    onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
+                                                    className="form-select form-select-sm"
+                                                >
+                                                    <option value="Nam">Nam</option>
+                                                    <option value="Nữ">Nữ</option>
+                                                    <option value="Khác">Khác</option>
+                                                </select>
+                                            ) : (
+                                                <strong>{userData.gender}</strong>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
 
-                    <div className="info-item">
-                        <div className="info-icon">
-                            <FiUser />
-                        </div>
-                        <div className="info-content">
-                            <label>Giới tính</label>
-                            {isEditing ? (
-                                <select
-                                    value={userData.gender}
-                                    onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
-                                    className="info-input"
-                                >
-                                    <option value="Nam">Nam</option>
-                                    <option value="Nữ">Nữ</option>
-                                    <option value="Khác">Khác</option>
-                                </select>
-                            ) : (
-                                <p>{userData.gender}</p>
-                            )}
+                                <div className="col-md-6">
+                                    <div className="info-item">
+                                        <div className="info-icon">
+                                            <i className="bi bi-calendar"></i>
+                                        </div>
+                                        <div className="info-content">
+                                            <small>Ngày sinh</small>
+                                            {isEditing ? (
+                                                <input
+                                                    type="date"
+                                                    value={userData.birthday}
+                                                    onChange={(e) => setUserData({ ...userData, birthday: e.target.value })}
+                                                    className="form-control form-control-sm"
+                                                />
+                                            ) : (
+                                                <strong>{new Date(userData.birthday).toLocaleDateString('vi-VN')}</strong>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className="info-item">
+                                        <div className="info-icon">
+                                            <i className="bi bi-telephone"></i>
+                                        </div>
+                                        <div className="info-content">
+                                            <small>Số điện thoại</small>
+                                            {isEditing ? (
+                                                <input
+                                                    type="tel"
+                                                    value={userData.phone}
+                                                    onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+                                                    className="form-control form-control-sm"
+                                                />
+                                            ) : (
+                                                <strong>{userData.phone}</strong>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className="info-item">
+                                        <div className="info-icon">
+                                            <i className="bi bi-envelope"></i>
+                                        </div>
+                                        <div className="info-content">
+                                            <small>Email</small>
+                                            {isEditing ? (
+                                                <input
+                                                    type="email"
+                                                    value={userData.email}
+                                                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                                                    className="form-control form-control-sm"
+                                                />
+                                            ) : (
+                                                <strong>{userData.email}</strong>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className="info-item">
+                                        <div className="info-icon">
+                                            <i className="bi bi-geo-alt"></i>
+                                        </div>
+                                        <div className="info-content">
+                                            <small>Địa chỉ</small>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    value={userData.address}
+                                                    onChange={(e) => setUserData({ ...userData, address: e.target.value })}
+                                                    className="form-control form-control-sm"
+                                                />
+                                            ) : (
+                                                <strong>{userData.address}</strong>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Stats Section */}
-            <div className="profile-stats">
-                <div className="stat-item">
-                    <h4>12</h4>
-                    <p>Đơn hàng</p>
-                </div>
-                <div className="stat-item">
-                    <h4>5</h4>
-                    <p>Yêu thích</p>
-                </div>
-                <div className="stat-item">
-                    <h4>3</h4>
-                    <p>Đánh giá</p>
-                </div>
-            </div>
+            {changePasswordStatus && (
+                <FormChangePassword
+                    closeForm={() => setChangePasswordStatus(false)}
+                    handleChangePassword={handleChangePassword}
+                />
+            )}
+
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
         </div>
     );
 };

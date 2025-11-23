@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
-import { FiPackage, FiTruck, FiCheckCircle, FiXCircle, FiClock } from 'react-icons/fi';
+import React from 'react';
+import { FiPackage, FiCheckCircle } from 'react-icons/fi';
 import './OrderHistory.css';
 
 const OrderHistory = () => {
-    const [activeTab, setActiveTab] = useState('all');
-
-    // Sample orders data
+    // Sample orders data - only delivered orders
     const orders = [
         {
             id: 'DH001',
             date: '20/11/2024',
-            status: 'delivered',
-            statusText: 'Đã giao',
             total: 45990000,
             items: [
                 {
@@ -25,8 +21,6 @@ const OrderHistory = () => {
         {
             id: 'DH002',
             date: '18/11/2024',
-            status: 'shipping',
-            statusText: 'Đang giao',
             total: 56980000,
             items: [
                 {
@@ -46,8 +40,6 @@ const OrderHistory = () => {
         {
             id: 'DH003',
             date: '15/11/2024',
-            status: 'processing',
-            statusText: 'Đang xử lý',
             total: 42990000,
             items: [
                 {
@@ -61,8 +53,6 @@ const OrderHistory = () => {
         {
             id: 'DH004',
             date: '12/11/2024',
-            status: 'delivered',
-            statusText: 'Đã giao',
             total: 38990000,
             items: [
                 {
@@ -76,8 +66,6 @@ const OrderHistory = () => {
         {
             id: 'DH005',
             date: '10/11/2024',
-            status: 'delivered',
-            statusText: 'Đã giao',
             total: 18990000,
             items: [
                 {
@@ -90,81 +78,27 @@ const OrderHistory = () => {
         }
     ];
 
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case 'delivered':
-                return <FiCheckCircle className="status-icon delivered" />;
-            case 'shipping':
-                return <FiTruck className="status-icon shipping" />;
-            case 'processing':
-                return <FiClock className="status-icon processing" />;
-            case 'cancelled':
-                return <FiXCircle className="status-icon cancelled" />;
-            default:
-                return <FiPackage className="status-icon" />;
-        }
-    };
-
-    const getStatusClass = (status) => {
-        return `order-status ${status}`;
-    };
-
-    const filteredOrders = orders.filter(order =>
-        activeTab === 'all' || order.status === activeTab
-    );
-
     return (
         <div className="order-history-wrapper">
-            {/* Filter Tabs */}
-            <div className="history-filters">
-                <h3 className="filter-title">Lọc đơn hàng</h3>
-                <div className="filter-tabs">
-                    <button
-                        className={`filter-btn ${activeTab === 'all' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('all')}
-                    >
-                        <FiPackage /> Tất cả ({orders.length})
-                    </button>
-                    <button
-                        className={`filter-btn ${activeTab === 'processing' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('processing')}
-                    >
-                        <FiClock /> Đang xử lý
-                    </button>
-                    <button
-                        className={`filter-btn ${activeTab === 'shipping' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('shipping')}
-                    >
-                        <FiTruck /> Đang giao
-                    </button>
-                    <button
-                        className={`filter-btn ${activeTab === 'delivered' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('delivered')}
-                    >
-                        <FiCheckCircle /> Đã giao
-                    </button>
-                </div>
-            </div>
-
-            {/* Orders List */}
+            {/* Orders Grid */}
             <div className="orders-grid">
-                {filteredOrders.length === 0 ? (
+                {orders.length === 0 ? (
                     <div className="empty-orders">
                         <FiPackage size={64} />
-                        <h3>Không có đơn hàng nào</h3>
-                        <p>Bạn chưa có đơn hàng nào trong danh mục này</p>
+                        <h3>Chưa có đơn hàng nào</h3>
+                        <p>Bạn chưa có đơn hàng nào</p>
                     </div>
                 ) : (
-                    filteredOrders.map(order => (
+                    orders.map(order => (
                         <div key={order.id} className="order-card">
                             <div className="order-header">
                                 <div className="order-info">
                                     <h4>Đơn hàng #{order.id}</h4>
                                     <p className="order-date">{order.date}</p>
                                 </div>
-                                <div className={getStatusClass(order.status)}>
-                                    {getStatusIcon(order.status)}
-                                    <span>{order.statusText}</span>
+                                <div className="order-status delivered">
+                                    <FiCheckCircle className="status-icon" />
+                                    <span>Đã giao</span>
                                 </div>
                             </div>
 
@@ -192,12 +126,8 @@ const OrderHistory = () => {
                                 </div>
                                 <div className="order-actions">
                                     <button className="btn-view">Xem chi tiết</button>
-                                    {order.status === 'delivered' && (
-                                        <button className="btn-review">Đánh giá</button>
-                                    )}
-                                    {order.status === 'delivered' && (
-                                        <button className="btn-reorder">Mua lại</button>
-                                    )}
+                                    <button className="btn-review">Đánh giá</button>
+                                    <button className="btn-reorder">Mua lại</button>
                                 </div>
                             </div>
                         </div>

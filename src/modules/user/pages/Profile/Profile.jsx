@@ -18,12 +18,7 @@ const Profile = () => {
 
             {/* Profile Content */}
             <div className="container profile-container">
-                <div className="row justify-content-center">
-                    {/* Profile Info - Centered */}
-                    <div className="col-lg-6 col-md-8">
-                        <ProfileInfo />
-                    </div>
-                </div>
+                <ProfileInfo />
             </div>
         </div>
     );
