@@ -88,6 +88,19 @@ const Cart = () => {
         }
 
         try {
+            // Validate user info
+            const userRes = await axios.post('http://localhost:5000/api/customer/get', {
+                customer_id: username
+            });
+
+            const userData = userRes.data;
+            // Check if any required field is missing
+            if (!userData || !userData.fullname || !userData.email || !userData.phone_number || !userData.address || !userData.birthday || !userData.gender) {
+                alert("Vui lòng cập nhật đầy đủ thông tin cá nhân (Họ tên, Email, SĐT, Địa chỉ, Ngày sinh, Giới tính) trước khi thanh toán!");
+                navigate('/Profile');
+                return;
+            }
+
             const response = await axios.post('http://localhost:5000/api/checkout', {
                 customer_id: username,
                 total_price: total,

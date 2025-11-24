@@ -15,7 +15,7 @@ const ProfileInfo = () => {
         phone_number: '',
         address: '',
         birthday: '',
-        gender: 'Nam',
+        gender: '',
         avatar: ''
     });
 
@@ -30,7 +30,8 @@ const ProfileInfo = () => {
                     if (res.data) {
                         setUserData({
                             ...res.data,
-                            birthday: res.data.birthday ? new Date(res.data.birthday).toISOString().split('T')[0] : ''
+                            birthday: res.data.birthday ? new Date(res.data.birthday).toISOString().split('T')[0] : '',
+                            gender: res.data.gender || ''
                         });
                     }
                 } catch (error) {
@@ -47,6 +48,7 @@ const ProfileInfo = () => {
         try {
             await axios.post('http://localhost:5000/api/customer/fix', {
                 ...userData,
+                birthday: userData.birthday === '' ? null : userData.birthday,
                 idOld: userData.customer_id
             });
             setIsEditing(false);
@@ -191,10 +193,11 @@ const ProfileInfo = () => {
                                             <small>Giới tính</small>
                                             {isEditing ? (
                                                 <select
-                                                    value={userData.gender || 'Nam'}
+                                                    value={userData.gender || ''}
                                                     onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
                                                     className="form-select form-select-sm"
                                                 >
+                                                    <option value="">Chưa cập nhật</option>
                                                     <option value="Nam">Nam</option>
                                                     <option value="Nữ">Nữ</option>
                                                     <option value="Khác">Khác</option>
