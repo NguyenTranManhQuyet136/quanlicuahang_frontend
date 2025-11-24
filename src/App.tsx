@@ -17,7 +17,7 @@ import History from "./modules/user/pages/History/History";
 function App() {
     return (
         <div className="App">
-            <title>Quản lí cửa hàng</title>
+            <title>Aero Tech</title>
 
             <BrowserRouter>
                 <Routes>

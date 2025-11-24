@@ -34,7 +34,7 @@ const Menubar = (props) => {
                 <h4 className="text-center fw-bold mb-4">
                     Quản Lý
                     <br />
-                    Cửa Hàng
+                    Aero Tech
                 </h4>
 
                 {}

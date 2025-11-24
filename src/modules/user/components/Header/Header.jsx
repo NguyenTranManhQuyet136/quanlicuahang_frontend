@@ -23,7 +23,8 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem('username_user');
+    localStorage.removeItem('password_user');
     navigate('/Login');
   };
 
@@ -95,7 +96,7 @@ const Header = () => {
             title="Tài khoản"
           >
             <FiUser />
-            <span className="ms-2 fw-medium">{localStorage.getItem('username') || 'Tài khoản'}</span>
+            <span className="ms-2 fw-medium">{localStorage.getItem('username_user') || 'Tài khoản'}</span>
           </button>
 
           <button

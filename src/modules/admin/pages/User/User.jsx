@@ -24,8 +24,8 @@ const User = () => {
 
     useEffect(() => {
         const getDataAccount = async () => {
-            const username = localStorage.getItem("username") || "";
-            const password = localStorage.getItem("password") || "";
+            const username = localStorage.getItem("username_admin") || "";
+            const password = localStorage.getItem("password_admin") || "";
 
             const res = await axios.post(
                 "http://localhost:5000/api/users_detail",
@@ -48,9 +48,8 @@ const User = () => {
     }, []);
 
     async function resetData() {
-        console.log("123");
-        const username = localStorage.getItem("username") || "";
-        const password = localStorage.getItem("password") || "";
+        const username = localStorage.getItem("username_admin") || "";
+        const password = localStorage.getItem("password_admin") || "";
         const res = await axios.post("http://localhost:5000/api/users_detail", {
             username: username,
         });
@@ -90,7 +89,7 @@ const User = () => {
         email
     ) => {
         const res = await axios.post("http://localhost:5000/api/user/fix", {
-            username: localStorage.getItem("username"),
+            username: localStorage.getItem("username_admin"),
             fullname: fullname,
             gender: gender,
             birthday: birthday,
@@ -107,7 +106,7 @@ const User = () => {
         passwordChange,
         confirmPasswordChange,
     ) => {
-        const username = localStorage.getItem("username");
+        const username = localStorage.getItem("username_admin");
         const res = await axios.post("http://localhost:5000/api/findUser", {
             username: username,
             password: password,
@@ -128,7 +127,7 @@ const User = () => {
                     for (let i = 0; i < passwordChange.length; i++) {
                         passStar += "*";
                     }
-                    localStorage.setItem("password", passStar);
+                    localStorage.setItem("password_admin", passStar);
                     closeForm("pass");
                     resetData();
                 }

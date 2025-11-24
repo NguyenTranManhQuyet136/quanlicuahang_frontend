@@ -24,13 +24,13 @@ const Login = () => {
             if (res.data) {
                 if (res.data.statusCheck == true) {
                     if (res.data.role == "admin") {
-                        localStorage.setItem("username", res.data.username);
-                        localStorage.setItem("password", res.data.password);
+                        localStorage.setItem("username_admin", res.data.username);
+                        localStorage.setItem("password_admin", res.data.password);
                         navigate("/Dashboard");
                     }
                     if (res.data.role == "user") {
-                        localStorage.setItem("username", res.data.username);
-                        localStorage.setItem("password", res.data.password);
+                        localStorage.setItem("username_user", res.data.username);
+                        localStorage.setItem("password_user", res.data.password);
                         navigate("/Store");
                     }
                 } else {
@@ -52,23 +52,19 @@ const Login = () => {
             return;
         }
 
-        try {
-            const res = await axios.post("http://localhost:5000/api/register", {
-                username,
-                password
-            });
+        const res = await axios.post("http://localhost:5000/api/register", {
+            username,
+            password
+        });
 
-            if (res.data.status) {
-                alert("Đăng ký thành công! Vui lòng đăng nhập.");
-                setIsRegister(false);
-                setUsername("");
-                setPassword("");
-                setConfirmPassword("");
-            } else {
-                alert(res.data.message || "Đăng ký thất bại");
-            }
-        } catch (error) {
-            alert("Lỗi kết nối server");
+        if (res.data.status) {
+            alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            setIsRegister(false);
+            setUsername("");
+            setPassword("");
+            setConfirmPassword("");
+        } else {
+            alert(res.data.message || "Đăng ký thất bại");
         }
     };
 

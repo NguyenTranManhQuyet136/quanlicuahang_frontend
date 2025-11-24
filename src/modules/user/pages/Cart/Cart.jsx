@@ -75,7 +75,7 @@ const Cart = () => {
     const total = subtotal + shipping;
 
     const handleCheckout = async () => {
-        const username = localStorage.getItem('username');
+        const username = localStorage.getItem('username_user');
         if (!username) {
             alert("Vui lòng đăng nhập để thanh toán!");
             navigate('/Login');

@@ -21,7 +21,7 @@ const ProfileInfo = () => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const username = localStorage.getItem('username');
+            const username = localStorage.getItem('username_user');
             if (username) {
                 try {
                     const res = await axios.post('http://localhost:5000/api/customer/get', {

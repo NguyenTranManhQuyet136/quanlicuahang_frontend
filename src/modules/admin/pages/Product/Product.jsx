@@ -38,7 +38,7 @@ const colInfoSearch = [
 
 const Product = () => {
     const themeContext = useContext(ThemeContext);
-    
+
     const [dataProduct, setDataProduct] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
@@ -213,33 +213,11 @@ const Product = () => {
                                     <table className="table table-hover align-middle mb-0" style={{ minWidth: "100%" }}>
                                         <thead style={{ backgroundColor: "#f8f9fa", position: "sticky", top: 0, zIndex: 10 }}>
                                             <tr style={{ backgroundColor: "#f8f9fa", borderBottom: "2px solid #e9ecef" }}>
-                                                <th className="ps-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    ID
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Tên sản phẩm
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Giá
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Mô tả
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Loại
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Hình ảnh
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Tồn kho
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Mã kho
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Trạng thái
-                                                </th>
+                                                {colInfo.map(col => (
+                                                    <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                        {col.label}
+                                                    </th>
+                                                ))}
                                                 <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Hành động
                                                 </th>
@@ -283,7 +261,7 @@ const Product = () => {
                                                         </td>
                                                         <td>{product.type}</td>
                                                         <td>
-                                                            {product.image && <img src={product.image} alt={product.name} style={{ width: "40px", height: "40px", objectFit: "cover", borderRadius: "4px" }} />}
+                                                            {product.image}
                                                         </td>
                                                         <td>
                                                             <span

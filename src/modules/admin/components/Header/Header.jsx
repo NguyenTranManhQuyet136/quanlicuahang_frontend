@@ -49,7 +49,7 @@ const Header = (props) => {
                                 size={sizeIcon}
                                 className="header-icon user-icon"
                             />
-                            <span className="header-username">{localStorage.getItem("username")}</span>
+                            <span className="header-username">{localStorage.getItem("username_admin")}</span>
                         </button>
 
                         {openStatus && (
@@ -60,9 +60,8 @@ const Header = (props) => {
                                 <a
                                     className="header-dropdown-item logout"
                                     onClick={() => {
-                                        localStorage.removeItem("username");
-                                        localStorage.removeItem("password");
-                                        localStorage.setItem("theme", "");
+                                        localStorage.removeItem("username_admin");
+                                        localStorage.removeItem("password_admin");
                                     }}
                                     href="/Login"
                                 >
