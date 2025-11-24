@@ -1,82 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiPackage, FiCheckCircle } from 'react-icons/fi';
 import './OrderHistory.css';
+import axios from 'axios';
 
 const OrderHistory = () => {
-    // Sample orders data - only delivered orders
-    const orders = [
-        {
-            id: 'DH001',
-            date: '20/11/2024',
-            total: 45990000,
-            items: [
-                {
-                    name: 'MacBook Pro 14" M3',
-                    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80',
-                    quantity: 1,
-                    price: 45990000
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            const username = localStorage.getItem('username_user');
+            if (!username) return;
+
+            try {
+                // 1. Fetch all orders for user
+                const res = await axios.post('http://localhost:5000/api/order/search', {
+                    customer_id: username
+                });
+
+                const orderList = res.data;
+                const fullOrders = [];
+
+                // 2. Fetch details for each order
+                for (const order of orderList) {
+                    const detailRes = await axios.post('http://localhost:5000/api/order/detail', {
+                        id: order.order_id
+                    });
+
+                    // detailRes.data contains rows joining order, customer, order_detail, product
+                    // We need to group items
+                    const items = detailRes.data.map(row => ({
+                        name: row.name,
+                        image: row.image,
+                        quantity: row.unit_quantity,
+                        price: row.unit_price
+                    }));
+
+                    fullOrders.push({
+                        id: order.order_id,
+                        date: new Date(order.order_date).toLocaleDateString('vi-VN'),
+                        total: order.total_price,
+                        items: items
+                    });
                 }
-            ]
-        },
-        {
-            id: 'DH002',
-            date: '18/11/2024',
-            total: 56980000,
-            items: [
-                {
-                    name: 'iPhone 15 Pro',
-                    image: 'https://images.unsplash.com/photo-1696446702183-cbd50c5f8e58?w=400&q=80',
-                    quantity: 1,
-                    price: 27990000
-                },
-                {
-                    name: 'Samsung Galaxy S24 Ultra',
-                    image: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80',
-                    quantity: 1,
-                    price: 28990000
-                }
-            ]
-        },
-        {
-            id: 'DH003',
-            date: '15/11/2024',
-            total: 42990000,
-            items: [
-                {
-                    name: 'ASUS ROG Strix G16',
-                    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80',
-                    quantity: 1,
-                    price: 42990000
-                }
-            ]
-        },
-        {
-            id: 'DH004',
-            date: '12/11/2024',
-            total: 38990000,
-            items: [
-                {
-                    name: 'Lenovo ThinkPad X1',
-                    image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&q=80',
-                    quantity: 1,
-                    price: 38990000
-                }
-            ]
-        },
-        {
-            id: 'DH005',
-            date: '10/11/2024',
-            total: 18990000,
-            items: [
-                {
-                    name: 'Xiaomi 14 Pro',
-                    image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&q=80',
-                    quantity: 1,
-                    price: 18990000
-                }
-            ]
-        }
-    ];
+
+                // Sort by newest first
+                fullOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+                setOrders(fullOrders);
+
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+            }
+        };
+
+        fetchOrders();
+    }, []);
 
     return (
         <div className="order-history-wrapper">
@@ -96,10 +73,10 @@ const OrderHistory = () => {
                                     <h4>Đơn hàng #{order.id}</h4>
                                     <p className="order-date">{order.date}</p>
                                 </div>
-                                <div className="order-status delivered">
+                                {/* <div className="order-status delivered">
                                     <FiCheckCircle className="status-icon" />
                                     <span>Đã giao</span>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="order-items">
@@ -124,11 +101,11 @@ const OrderHistory = () => {
                                     <span>Tổng cộng:</span>
                                     <strong>{order.total.toLocaleString('vi-VN')}₫</strong>
                                 </div>
-                                <div className="order-actions">
+                                {/* <div className="order-actions">
                                     <button className="btn-view">Xem chi tiết</button>
                                     <button className="btn-review">Đánh giá</button>
                                     <button className="btn-reorder">Mua lại</button>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     ))

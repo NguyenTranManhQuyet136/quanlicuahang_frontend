@@ -25,6 +25,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem('username_user');
     localStorage.removeItem('password_user');
+    localStorage.removeItem('shopping_cart');
     navigate('/Login');
   };
 
