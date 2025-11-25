@@ -15,6 +15,12 @@ const FormAdd = (props) => {
                     setDataForm(prev => ({ ...prev, product_id: res.data.id }));
                 })
                 .catch(err => console.log(err));
+        } else if (props.typeData === "phiếu nhập kho") {
+            axios.get("http://localhost:5000/api/warehouse/generate-id")
+                .then(res => {
+                    setDataForm(prev => ({ ...prev, warehouse_id: res.data.id }));
+                })
+                .catch(err => console.log(err));
         }
     }, [props.typeData]);
 
@@ -55,7 +61,7 @@ const FormAdd = (props) => {
                                         placeholder={"Nhập " + col.label.toLowerCase()}
                                         className="form-add-input"
                                         value={dataForm[col.key] || ''}
-                                        readOnly={col.key === 'product_id'}
+                                        readOnly={col.key === 'product_id' || col.key === 'warehouse_id'}
                                         onChange={(e) => setDataForm((prev) => ({ ...prev, [col.key]: e.target.value }))}
                                     />
                                 ) : (
