@@ -30,7 +30,6 @@
     padding-bottom: 4rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .profile-header {
         padding: 2rem 0;

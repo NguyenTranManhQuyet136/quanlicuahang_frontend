@@ -108,8 +108,8 @@ const FormDetail = (props) => {
                                         <p>{dataForm[0].fullname}</p>
                                     </div>
                                     <div className="form-detail-info-item">
-                                        <small>Năm sinh</small>
-                                        <p>{dataForm[0].birthyear}</p>
+                                        <small>Ngày sinh</small>
+                                        <p>{new Date(dataForm[0].birthday.slice(0,10)).toLocaleDateString("vi-VN")}</p>
                                     </div>
                                     <div className="form-detail-info-item">
                                         <small>Ngày đặt hàng</small>

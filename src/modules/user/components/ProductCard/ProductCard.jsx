@@ -6,17 +6,13 @@ const ProductCard = ({ product }) => {
 
     const handleAddToCart = () => {
         try {
-            // Get current cart
             const cart = JSON.parse(localStorage.getItem('shopping_cart')) || [];
 
-            // Check if product exists
             const existingItemIndex = cart.findIndex(item => item.product_id === (product.product_id || product.id));
 
             if (existingItemIndex !== -1) {
-                // Increment quantity
                 cart[existingItemIndex].quantity += 1;
             } else {
-                // Add new item
                 cart.push({
                     product_id: product.product_id || product.id,
                     name: product.name,
@@ -27,10 +23,8 @@ const ProductCard = ({ product }) => {
                 });
             }
 
-            // Save back to localStorage
             localStorage.setItem('shopping_cart', JSON.stringify(cart));
 
-            // Dispatch event for real-time updates
             window.dispatchEvent(new Event('cartUpdated'));
 
             alert(`Đã thêm "${name}" vào giỏ hàng!`);

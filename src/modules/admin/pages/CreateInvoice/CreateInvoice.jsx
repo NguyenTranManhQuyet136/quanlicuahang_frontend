@@ -135,7 +135,6 @@ const CreateInvoice = () => {
                     <div className="invoice-form-card">
                         <div className="invoice-form-body">     
                             <form>
-                                {/* Thông tin chung */}
                                 <div className="invoice-section">
                                     <h5 className="invoice-section-title">Thông Tin Chung</h5>
                                     <div className="invoice-grid">
@@ -181,7 +180,6 @@ const CreateInvoice = () => {
                                     </div>
                                 </div>
 
-                                {/* Chi tiết sản phẩm */}
                                 <div className="invoice-items-section">
                                     <div className="d-flex align-items-center justify-content-between mb-3">
                                         <h5 className="invoice-section-title mb-0">Chi Tiết Sản Phẩm</h5>
@@ -260,14 +258,12 @@ const CreateInvoice = () => {
                                     ))}
                                 </div>
 
-                                {/* Tổng tiền */}
                                 <div className="invoice-total-section">
                                     <h5 className="invoice-total-title">
                                         Tổng Cộng: {totalAmount.toLocaleString()} đ
                                     </h5>
                                 </div>
 
-                                {/* Ghi chú */}
                                 <div className="invoice-notes-section">
                                     <label className="invoice-label">Ghi Chú</label>
                                     <textarea 
@@ -278,7 +274,6 @@ const CreateInvoice = () => {
                                     />
                                 </div>
 
-                                {/* Buttons */}
                                 <div className="invoice-buttons">
                                     <button 
                                         type="button" 

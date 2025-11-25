@@ -1,4 +1,4 @@
-/* Header Wrapper */
+
 .header-wrapper {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     border-bottom: 1px solid #e9ecef;
@@ -9,14 +9,13 @@
     z-index: 100;
 }
 
-/* Header Container */
+
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Header Title */
 .header-title {
     flex: 0.3;
 }
@@ -29,14 +28,12 @@
     letter-spacing: -0.5px;
 }
 
-/* Header Actions */
 .header-actions {
     display: flex;
     align-items: center;
     gap: 2rem;
 }
 
-/* Header Icon */
 .header-icon {
     cursor: pointer;
     color: #0d6efd;
@@ -49,7 +46,6 @@
     opacity: 0.8;
 }
 
-/* Notification */
 .header-notification {
     position: relative;
     display: flex;
@@ -77,7 +73,6 @@
     box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
 }
 
-/* User Section */
 .header-user {
     position: relative;
     display: flex;
@@ -119,7 +114,6 @@
     transform: scale(1.1);
 }
 
-/* Dropdown Menu */
 .header-dropdown {
     position: absolute;
     top: 100%;
@@ -162,7 +156,6 @@
     color: #dc3545;
 }
 
-/* Animations */
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -174,7 +167,6 @@
     }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .header-wrapper {
         padding: 0.75rem 1rem;

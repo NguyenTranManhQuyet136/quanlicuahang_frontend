@@ -159,7 +159,6 @@ const Product = () => {
                             <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setAddStatus({ status: true })}><FiPlus size={18} />Thêm sản phẩm</button>
                         </div>
 
-                        {/* Forms */}
                         {removeStatus.status && (
                             <FormRemove
                                 id={removeStatus.product_id}
@@ -200,7 +199,6 @@ const Product = () => {
                             />
                         )}
 
-                        {/* Table Section */}
                         <div className="bg-white rounded-3" style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)", maxHeight: "calc(100vh - 250px)", overflowY: "auto" }}>
                             {dataProduct.length === 0 ? (
                                 <div className="d-flex flex-column align-items-center justify-content-center p-5" style={{ minHeight: "400px" }}>
@@ -363,7 +361,6 @@ const Product = () => {
                             )}
                         </div>
 
-                        {/* Stats Footer */}
                         {dataProduct.length > 0 && (
                             <div className="mt-3 d-flex justify-content-between align-items-center px-3" style={{ color: "#6c757d" }}>
                                 <small>

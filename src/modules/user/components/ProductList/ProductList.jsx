@@ -17,7 +17,7 @@ const ProductList = ({ selectedCategory }) => {
 
     const filteredProducts = selectedCategory === 'all'
         ? dataProduct
-        : dataProduct.filter(product => product.type === selectedCategory);
+        : dataProduct.filter(product => product.type === selectedCategory && product.status == "Hiển thị");
 
     return (
         <div className="product-list-container">

@@ -1,4 +1,3 @@
-/* Header wrapper with enhanced shadow */
 .header-wrapper {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   z-index: 1000;
@@ -13,7 +12,6 @@
   cursor: pointer;
 }
 
-/* Custom lại input của Bootstrap để bỏ viền xanh khi click */
 .form-control:focus,
 .input-group-text {
   box-shadow: none;

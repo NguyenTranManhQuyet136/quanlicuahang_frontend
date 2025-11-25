@@ -8,7 +8,6 @@ const Profile = () => {
         <div className="profile-page">
             <Header />
 
-            {/* Page Title */}
             <div className="profile-header">
                 <div className="container">
                     <h1 className="profile-title">Thông Tin Cá Nhân</h1>
@@ -16,7 +15,6 @@ const Profile = () => {
                 </div>
             </div>
 
-            {/* Profile Content */}
             <div className="container profile-container">
                 <ProfileInfo />
             </div>

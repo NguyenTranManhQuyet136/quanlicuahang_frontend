@@ -7,7 +7,6 @@ const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [changePasswordStatus, setChangePasswordStatus] = useState(false);
 
-    // User data state
     const [userData, setUserData] = useState({
         customer_id: '',
         fullname: '',
@@ -36,7 +35,6 @@ const ProfileInfo = () => {
                     }
                 } catch (error) {
                     console.error("Error fetching user data:", error);
-                    // If not found in customers table, might want to initialize with defaults or fetch from users_detail if needed
                     setUserData(prev => ({ ...prev, customer_id: username }));
                 }
             }
@@ -65,7 +63,6 @@ const ProfileInfo = () => {
     };
 
     const handleChangePassword = (password, passwordChange, confirmPasswordChange) => {
-        // Mock validation and API call
         if (passwordChange !== confirmPasswordChange) {
             alert("Mật khẩu xác nhận không khớp!");
             return;
@@ -77,7 +74,6 @@ const ProfileInfo = () => {
 
     return (
         <div className="profile-info-container">
-            {/* Edit Button */}
             <div className="row mb-4">
                 <div className="col-12 text-end">
                     <button
@@ -91,7 +87,6 @@ const ProfileInfo = () => {
             </div>
 
             <div className="row">
-                {/* Left Column - Avatar Card */}
                 <div className="col-lg-4 mb-4">
                     <div className="avatar-card">
                         <div className="avatar-header"></div>
@@ -153,7 +148,6 @@ const ProfileInfo = () => {
                     </div>
                 </div>
 
-                {/* Right Column - Info Details */}
                 <div className="col-lg-8">
                     <div className="info-card">
                         <div className="info-card-body">

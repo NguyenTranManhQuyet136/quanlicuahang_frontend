@@ -5,61 +5,6 @@ import './ProfileOrders.css';
 const ProfileOrders = () => {
     const [activeTab, setActiveTab] = useState('all');
 
-    // Sample orders data
-    const orders = [
-        {
-            id: 'DH001',
-            date: '20/11/2024',
-            status: 'delivered',
-            statusText: 'Đã giao',
-            total: 45990000,
-            items: [
-                {
-                    name: 'MacBook Pro 14" M3',
-                    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80',
-                    quantity: 1,
-                    price: 45990000
-                }
-            ]
-        },
-        {
-            id: 'DH002',
-            date: '18/11/2024',
-            status: 'shipping',
-            statusText: 'Đang giao',
-            total: 56980000,
-            items: [
-                {
-                    name: 'iPhone 15 Pro',
-                    image: 'https://images.unsplash.com/photo-1696446702183-cbd50c5f8e58?w=400&q=80',
-                    quantity: 1,
-                    price: 27990000
-                },
-                {
-                    name: 'Samsung Galaxy S24 Ultra',
-                    image: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80',
-                    quantity: 1,
-                    price: 28990000
-                }
-            ]
-        },
-        {
-            id: 'DH003',
-            date: '15/11/2024',
-            status: 'processing',
-            statusText: 'Đang xử lý',
-            total: 42990000,
-            items: [
-                {
-                    name: 'ASUS ROG Strix G16',
-                    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80',
-                    quantity: 1,
-                    price: 42990000
-                }
-            ]
-        }
-    ];
-
     const getStatusIcon = (status) => {
         switch (status) {
             case 'delivered':

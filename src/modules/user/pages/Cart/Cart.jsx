@@ -7,11 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const navigate = useNavigate();
-    // Cart State
     const [cartItems, setCartItems] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
 
-    // Helper to get cart from localStorage
     const getCart = () => {
         try {
             const cart = localStorage.getItem('shopping_cart');
@@ -22,7 +20,6 @@ const Cart = () => {
         }
     };
 
-    // Helper to save cart to localStorage
     const saveCart = (items) => {
         try {
             localStorage.setItem('shopping_cart', JSON.stringify(items));
@@ -32,7 +29,6 @@ const Cart = () => {
         }
     };
 
-    // Load cart and calculate total
     useEffect(() => {
         const updateCartState = () => {
             const cart = getCart();
@@ -43,7 +39,6 @@ const Cart = () => {
 
         updateCartState();
 
-        // Listen for cart updates
         window.addEventListener('cartUpdated', updateCartState);
         window.addEventListener('storage', updateCartState);
 
@@ -53,7 +48,6 @@ const Cart = () => {
         };
     }, []);
 
-    // Cart Logic
     const updateQuantity = (productId, delta) => {
         const cart = getCart();
         const updatedCart = cart.map(item =>
@@ -70,7 +64,6 @@ const Cart = () => {
         saveCart(updatedCart);
     };
 
-    // Summary Logic
     const shipping = 0;
     const total = subtotal + shipping;
 
@@ -88,13 +81,11 @@ const Cart = () => {
         }
 
         try {
-            // Validate user info
             const userRes = await axios.post('http://localhost:5000/api/customer/get', {
                 customer_id: username
             });
 
             const userData = userRes.data;
-            // Check if any required field is missing
             if (!userData || !userData.fullname || !userData.email || !userData.phone_number || !userData.address || !userData.birthday || !userData.gender) {
                 alert("Vui lòng cập nhật đầy đủ thông tin cá nhân (Họ tên, Email, SĐT, Địa chỉ, Ngày sinh, Giới tính) trước khi thanh toán!");
                 navigate('/Profile');
@@ -105,7 +96,7 @@ const Cart = () => {
                 customer_id: username,
                 total_price: total,
                 cart_items: cartItems,
-                note: '' // Optional: Add note field input later if needed
+                note: '' ,
             });
 
             if (response.data.status) {
@@ -126,7 +117,6 @@ const Cart = () => {
         <div className="cart-page">
             <Header />
 
-            {/* Page Title */}
             <div className="cart-header">
                 <div className="container">
                     <h1 className="cart-title">Giỏ Hàng Của Bạn</h1>
@@ -134,10 +124,8 @@ const Cart = () => {
                 </div>
             </div>
 
-            {/* Cart Content */}
             <div className="container cart-container">
                 <div className="row g-4">
-                    {/* Cart Items - Left Side */}
                     <div className="col-lg-8">
                         <div className="cart-items-wrapper">
                             <div className="cart-items-header">
@@ -205,7 +193,6 @@ const Cart = () => {
                         </div>
                     </div>
 
-                    {/* Cart Summary - Right Side */}
                     <div className="col-lg-4">
                         <div className="cart-summary-wrapper">
                             <h3 className="summary-title">Tổng Đơn Hàng</h3>
@@ -231,12 +218,10 @@ const Cart = () => {
                                 </div>
                             </div>
 
-                            {/* Checkout Button */}
                             <button className="checkout-btn" onClick={handleCheckout}>
                                 Thanh Toán
                             </button>
 
-                            {/* Additional Info */}
                             <div className="additional-info">
                                 <p>✓ Miễn phí vận chuyển cho đơn hàng trên 500.000₫</p>
                                 <p>✓ Đổi trả trong vòng 7 ngày</p>

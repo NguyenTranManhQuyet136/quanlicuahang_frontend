@@ -1,4 +1,5 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import axios from "axios";
 import { ThemeContext } from "../../../../../contexts/ThemeProvider";
 import { FiPlus } from "react-icons/fi";
 import "./FormAdd.css";
@@ -6,6 +7,16 @@ import "./FormAdd.css";
 const FormAdd = (props) => {
     const themeContext = useContext(ThemeContext);
     const [dataForm, setDataForm] = useState({ status: "Hiển thị" });
+
+    useEffect(() => {
+        if (props.typeData === "sản phẩm") {
+            axios.get("http://localhost:5000/api/product/generate-id")
+                .then(res => {
+                    setDataForm(prev => ({ ...prev, product_id: res.data.id }));
+                })
+                .catch(err => console.log(err));
+        }
+    }, [props.typeData]);
 
     return (
         <div className="form-add-overlay" onClick={props.closeForm}>
@@ -43,11 +54,14 @@ const FormAdd = (props) => {
                                         type={col.type}
                                         placeholder={"Nhập " + col.label.toLowerCase()}
                                         className="form-add-input"
+                                        value={dataForm[col.key] || ''}
+                                        readOnly={col.key === 'product_id'}
                                         onChange={(e) => setDataForm((prev) => ({ ...prev, [col.key]: e.target.value }))}
                                     />
                                 ) : (
                                     <select
                                         className="form-add-select"
+                                        value={dataForm[col.key] || ''}
                                         onChange={(e) => setDataForm((prev) => ({ ...prev, [col.key]: e.target.value }))}
                                     >
                                         <option value="">-- Chọn {col.label.toLowerCase()} --</option>

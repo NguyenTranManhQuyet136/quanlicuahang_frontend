@@ -12,7 +12,6 @@ const OrderHistory = () => {
             if (!username) return;
 
             try {
-                // 1. Fetch all orders for user
                 const res = await axios.post('http://localhost:5000/api/order/search', {
                     customer_id: username
                 });
@@ -20,14 +19,11 @@ const OrderHistory = () => {
                 const orderList = res.data;
                 const fullOrders = [];
 
-                // 2. Fetch details for each order
                 for (const order of orderList) {
                     const detailRes = await axios.post('http://localhost:5000/api/order/detail', {
                         id: order.order_id
                     });
 
-                    // detailRes.data contains rows joining order, customer, order_detail, product
-                    // We need to group items
                     const items = detailRes.data.map(row => ({
                         name: row.name,
                         image: row.image,
@@ -43,7 +39,6 @@ const OrderHistory = () => {
                     });
                 }
 
-                // Sort by newest first
                 fullOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
                 setOrders(fullOrders);
 
@@ -57,7 +52,6 @@ const OrderHistory = () => {
 
     return (
         <div className="order-history-wrapper">
-            {/* Orders Grid */}
             <div className="orders-grid">
                 {orders.length === 0 ? (
                     <div className="empty-orders">

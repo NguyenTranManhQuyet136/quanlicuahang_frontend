@@ -29,7 +29,6 @@ const Header = () => {
     navigate('/Login');
   };
 
-  // Check if current path matches
   const isActive = (path) => {
     return location.pathname === path;
   };
@@ -37,7 +36,6 @@ const Header = () => {
   return (
     <header className="header-wrapper bg-white py-3 sticky-top">
       <div className="container d-flex align-items-center justify-content-between">
-        {/* Logo */}
         <div className="d-flex align-items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
           <div className="logo-box bg-primary rounded-3 p-2 d-flex align-items-center justify-content-center">
             <span className="fw-bold text-white">AT</span>
@@ -48,7 +46,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Search Bar - Bootstrap Input Group */}
         <div className="search-wrapper d-none d-md-block flex-grow-1 mx-5">
           <div className="input-group">
             <span className="input-group-text bg-light border-end-0 rounded-start-pill ps-3">
@@ -62,7 +59,6 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="d-flex align-items-center gap-3">
           <button
             className={`btn btn-outline-light border rounded-circle icon-btn ${isActive('/Store') ? 'active' : 'text-dark'}`}
@@ -79,7 +75,7 @@ const Header = () => {
           >
             <FiShoppingCart />
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              3
+              
             </span>
           </button>
 

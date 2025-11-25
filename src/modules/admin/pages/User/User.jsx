@@ -618,7 +618,6 @@ const User = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Account Information Section */}
                                     <div
                                         className="mt-4 p-4"
                                         style={{

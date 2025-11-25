@@ -2,7 +2,6 @@
     padding: 0;
 }
 
-/* Edit Button */
 .edit-profile-btn {
     background: #0d6efd;
     color: white;
@@ -20,7 +19,6 @@
     color: white;
 }
 
-/* Avatar Card */
 .avatar-card {
     border-radius: 20px;
     overflow: hidden;
@@ -172,7 +170,6 @@
     margin: 0;
 }
 
-/* Info Card */
 .info-card {
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
