@@ -92,11 +92,15 @@ const Cart = () => {
                 return;
             }
 
+            const idRes = await axios.get('http://localhost:5000/api/order/generate-id');
+            const orderId = idRes.data.id;
+
             const response = await axios.post('http://localhost:5000/api/checkout', {
                 customer_id: username,
                 total_price: total,
                 cart_items: cartItems,
-                note: '' ,
+                note: '',
+                order_id: orderId
             });
 
             if (response.data.status) {

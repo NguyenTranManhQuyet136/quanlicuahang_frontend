@@ -73,7 +73,7 @@ const FormSearch = (props) => {
                                 type="button"
                                 className="form-search-btn-submit"
                                 // onClick={() => props.handleSearch(dataForm)}
-                                onClick={() => console.log(dataForm)}
+                                onClick={() => props.handleSearch(dataForm)}
                             >
                                 Tìm kiếm
                             </button>
