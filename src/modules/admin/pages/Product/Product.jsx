@@ -60,6 +60,8 @@ const Product = () => {
         status: false,
     });
 
+    const [filterType, setFilterType] = useState("");
+
     useEffect(() => {
         const fetchData = async () => {
             const res = await axios.get("http://localhost:5000/api/product");
@@ -147,6 +149,9 @@ const Product = () => {
         closeForm("search");
     };
 
+    const uniqueTypes = [...new Set(dataProduct.map((item) => item.type))];
+    const filteredProducts = filterType ? dataProduct.filter((item) => item.type === filterType) : dataProduct;
+
     return (
         <div className="d-flex" style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
             <Menubar focus={"/Product"} />
@@ -154,10 +159,24 @@ const Product = () => {
                 <Header name={"Quản lý sản phẩm"} />
                 <div className="p-4">
                     <div>
-                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginBottom: "16px" }}>
-                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setSearchStatus({ status: true })}><FiSearch size={18} />Tìm kiếm</button>
-                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setAddStatus({ status: true })}><FiPlus size={18} />Thêm sản phẩm</button>
-                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#198754", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={resetData}><FiRefreshCw size={18} />Tải lại</button>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                            <select
+                                style={{ padding: "8px", borderRadius: "6px", border: "1px solid #ced4da" }}
+                                onChange={(e) => setFilterType(e.target.value)}
+                                value={filterType}
+                            >
+                                <option value="">Tất cả loại</option>
+                                {uniqueTypes.map((type) => (
+                                    <option key={type} value={type}>
+                                        {type}
+                                    </option>
+                                ))}
+                            </select>
+                            <div style={{ display: "flex", gap: "8px" }}>
+                                <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setSearchStatus({ status: true })}><FiSearch size={18} />Tìm kiếm</button>
+                                <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setAddStatus({ status: true })}><FiPlus size={18} />Thêm sản phẩm</button>
+                                <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#198754", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => window.location.reload()}><FiRefreshCw size={18} />Tải lại</button>
+                            </div>
                         </div>
 
                         {removeStatus.status && (
@@ -201,7 +220,7 @@ const Product = () => {
                         )}
 
                         <div className="bg-white rounded-3" style={{ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)", maxHeight: "calc(100vh - 250px)", overflowY: "auto" }}>
-                            {dataProduct.length === 0 ? (
+                            {filteredProducts.length === 0 ? (
                                 <div className="d-flex flex-column align-items-center justify-content-center p-5" style={{ minHeight: "400px" }}>
                                     <div style={{ fontSize: "3rem", marginBottom: "1rem", opacity: 0.5 }}>📦</div>
                                     <h5 className="text-muted">Chưa có sản phẩm nào</h5>
@@ -223,7 +242,7 @@ const Product = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {dataProduct.map((product, index) => {
+                                            {filteredProducts.map((product, index) => {
                                                 return (
                                                     <tr
                                                         key={product.product_id}
@@ -362,13 +381,13 @@ const Product = () => {
                             )}
                         </div>
 
-                        {dataProduct.length > 0 && (
+                        {filteredProducts.length > 0 && (
                             <div className="mt-3 d-flex justify-content-between align-items-center px-3" style={{ color: "#6c757d" }}>
                                 <small>
-                                    <strong>Tổng cộng:</strong> {dataProduct.length} sản phẩm
+                                    <strong>Tổng cộng:</strong> {filteredProducts.length} sản phẩm
                                 </small>
                                 <small>
-                                    <strong>Giá trị:</strong> {dataProduct.reduce((sum, p) => sum + (p.price * p.quantity), 0).toLocaleString("vi-VN")} ₫
+                                    <strong>Giá trị:</strong> {filteredProducts.reduce((sum, p) => sum + (p.price * p.quantity), 0).toLocaleString("vi-VN")} ₫
                                 </small>
                             </div>
                         )}

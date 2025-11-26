@@ -22,7 +22,7 @@ const colInfo = [
 
 const colInfoSearch = [
     { key: "order_id", label: "ID", type: "text" },
-    { key: "customer_id", label: "ID khách hàng", type: "number" },
+    { key: "customer_id", label: "ID khách hàng", type: "text" },
 ];
 
 const Order = () => {
@@ -123,7 +123,7 @@ const Order = () => {
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginBottom: "16px" }}>
                             <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => setSearchStatus({ status: true })}><FiSearch size={18} />Tìm kiếm</button>
                             <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#0d6efd", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => window.location.replace("/Create-invoice")}><FiPlus size={18} />Thêm đơn</button>
-                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#198754", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={resetData}><FiRefreshCw size={18} />Tải lại</button>
+                            <button style={{ display: "flex", alignItems: "center", gap: "6px", padding: "8px 16px", backgroundColor: "#198754", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: "500", fontSize: "0.95rem" }} onClick={() => window.location.reload()}><FiRefreshCw size={18} />Tải lại</button>
                         </div>
 
                         {removeStatus.status && (

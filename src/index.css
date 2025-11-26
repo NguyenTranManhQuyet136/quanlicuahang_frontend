@@ -3,7 +3,7 @@
     margin: 0;
     box-sizing: border-box;
     transition: 0.5s;
-    font-family: inherit;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important; 
     font-size: 16px;
 }
 
