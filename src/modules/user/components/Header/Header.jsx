@@ -2,7 +2,7 @@ import { FiSearch, FiShoppingCart, FiUser, FiFileText, FiShoppingBag, FiLogOut }
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ onSearch }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -55,6 +55,7 @@ const Header = () => {
               type="text"
               className="form-control bg-light border-start-0 rounded-end-pill py-2"
               placeholder="Tìm kiếm sản phẩm..."
+              onChange={(e) => onSearch && onSearch(e.target.value)}
             />
           </div>
         </div>
@@ -75,7 +76,7 @@ const Header = () => {
           >
             <FiShoppingCart />
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              
+
             </span>
           </button>
 

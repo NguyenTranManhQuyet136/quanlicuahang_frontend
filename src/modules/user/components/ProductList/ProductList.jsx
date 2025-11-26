@@ -4,7 +4,7 @@ import './ProductList.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductList = ({ selectedCategory }) => {
+const ProductList = ({ selectedCategory, searchTerm }) => {
     const [dataProduct, setDataProduct] = useState([]);
 
     useEffect(() => {
@@ -15,9 +15,12 @@ const ProductList = ({ selectedCategory }) => {
         fetchData();
     }, []);
 
-    const filteredProducts = selectedCategory === 'all'
-        ? dataProduct
-        : dataProduct.filter(product => product.type === selectedCategory && product.status == "Hiển thị");
+    const filteredProducts = dataProduct.filter(product => {
+        const matchesCategory = selectedCategory === 'all' || product.type === selectedCategory;
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const isVisible = product.status == "Hiển thị";
+        return matchesCategory && matchesSearch && isVisible;
+    });
 
     return (
         <div className="product-list-container">

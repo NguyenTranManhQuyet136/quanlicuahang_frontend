@@ -61,7 +61,7 @@ const FormAdd = (props) => {
                                         placeholder={"Nhập " + col.label.toLowerCase()}
                                         className="form-add-input"
                                         value={dataForm[col.key] || ''}
-                                        readOnly={col.key === 'product_id' || col.key === 'warehouse_id'}
+                                        readOnly={col.key === 'product_id'}
                                         onChange={(e) => setDataForm((prev) => ({ ...prev, [col.key]: e.target.value }))}
                                     />
                                 ) : (

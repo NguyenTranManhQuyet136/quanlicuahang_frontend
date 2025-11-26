@@ -81,7 +81,7 @@ const Login = () => {
                 <div className="login-box">
                     <div className="navbar">{isRegister ? "Đăng Ký" : "Đăng Nhập"}</div>
                     <div className="content">
-                        <h2>{isRegister ? "Tạo tài khoản mới" : "Chào mừng bạn đến với Store Manager!"}</h2>
+                        <h2>{isRegister ? "Tạo tài khoản mới" : "Chào mừng bạn đến với Aero Tech!"}</h2>
                         <p>{isRegister ? "Điền thông tin bên dưới" : "Vui lòng đăng nhập để tiếp tục"}</p>
 
                         <form>

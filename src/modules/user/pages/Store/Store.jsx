@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import Header from "../../components/Header/Header";
 import CategoryNav from "../../components/CategoryNav/CategoryNav";
 import HeroBanner from "../../components/HeroBanner/HeroBanner";
@@ -7,16 +8,17 @@ import './Store.css';
 
 const Store = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [searchTerm, setSearchTerm] = useState('');
 
     return (
         <div className="store-page">
-            <Header />
+            <Header onSearch={setSearchTerm} />
             <HeroBanner />
             <CategoryNav
                 activeCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
             />
-            <ProductList selectedCategory={selectedCategory} />
+            <ProductList selectedCategory={selectedCategory} searchTerm={searchTerm} />
         </div>
     );
 }
