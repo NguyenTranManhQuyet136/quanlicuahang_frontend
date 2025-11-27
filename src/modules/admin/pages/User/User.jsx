@@ -6,6 +6,7 @@ import FormEditProfile from "../../components/Form/FormEditProfile/FormEditProfi
 import axios from "axios";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 
 const User = () => {
     checkLogin("admin");
@@ -21,6 +22,9 @@ const User = () => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const [image, setImage] = useState("");
+
+    const [editProfileStatus, setEditProfileStatus] = useState(false);
+    const [changePasswordStatus, setChangePasswordStatus] = useState(false);
 
     useEffect(() => {
         const getDataAccount = async () => {
@@ -65,17 +69,40 @@ const User = () => {
         setPassword(password);
     }
 
-    const [changePasswordStatus, setChangePasswordStatus] = useState(false);
+    const changeAvatar = (file) => {
+        const imageUrl = URL.createObjectURL(file);
+        setImage(imageUrl);
+    };
 
-    const [editProfileStatus, setEditProfileStatus] = useState(false);
+    const handleChangePassword = async (oldPassword, newPassword, confirmPassword) => {
+        if (newPassword !== confirmPassword) {
+            alert("Mật khẩu mới không khớp!");
+            return;
+        }
+        if (oldPassword !== password) {
+            alert("Mật khẩu cũ không đúng!");
+            return;
+        }
 
-    const closeForm = (type) => {
-        switch (type) {
+        await axios.post("http://localhost:5000/api/user/change-password", {
+            username: username,
+            password: newPassword
+        });
+        logAdminAction("Đổi mật khẩu: " + username);
+        alert("Đổi mật khẩu thành công!");
+        setChangePasswordStatus(false);
+        resetData();
+    };
+
+    const closeForm = (name) => {
+        switch (name) {
+            case "profile":
+                setEditProfileStatus(false);
+                break;
             case "pass":
                 setChangePasswordStatus(false);
                 break;
-            case "profile":
-                setEditProfileStatus(false);
+            default:
                 break;
         }
     };
@@ -88,57 +115,18 @@ const User = () => {
         phoneNumber,
         email
     ) => {
-        const res = await axios.post("http://localhost:5000/api/user/fix", {
-            username: localStorage.getItem("username_admin"),
+        await axios.post("http://localhost:5000/api/user/fix", {
+            username: username,
             fullname: fullname,
             gender: gender,
             birthday: birthday,
             position: position,
-            phoneNumber: phoneNumber,
-            email: email,
+            phone_number: phoneNumber,
+            email: email
         });
-        closeForm("profile");
+        logAdminAction("Sửa thông tin cá nhân: " + username);
         resetData();
-    };
-
-    const handleChangePassword = async (
-        password,
-        passwordChange,
-        confirmPasswordChange,
-    ) => {
-        const username = localStorage.getItem("username_admin");
-        const res = await axios.post("http://localhost:5000/api/findUser", {
-            username: username,
-            password: password,
-        });
-        if (res.data.status == false) {
-            alert("sai mat khau");
-            return;
-        } else {
-            if (passwordChange != confirmPasswordChange) {
-                alert("xac nhan mat khau sai");
-            } else {
-                const res = await axios.post(
-                    "http://localhost:5000/api/user/change_password",
-                    { passwordChange: passwordChange, username: username }
-                );
-                if (res.data.status == true) {
-                    let passStar = "";
-                    for (let i = 0; i < passwordChange.length; i++) {
-                        passStar += "*";
-                    }
-                    localStorage.setItem("password_admin", passStar);
-                    closeForm("pass");
-                    resetData();
-                }
-            }
-        }
-    };
-
-    const changeAvatar = (file) => {
-        const imageUrl = URL.createObjectURL(file);
-        console.log(imageUrl);
-        setImage(imageUrl);
+        setEditProfileStatus(false);
     };
 
     return (
@@ -650,26 +638,30 @@ const User = () => {
                     </div>
                 </div>
 
-                {changePasswordStatus && (
-                    <FormChangePassword
-                        closeForm={() => closeForm("pass")}
-                        handleChangePassword={handleChangePassword}
-                    />
-                )}
+                {
+                    changePasswordStatus && (
+                        <FormChangePassword
+                            closeForm={() => closeForm("pass")}
+                            handleChangePassword={handleChangePassword}
+                        />
+                    )
+                }
 
-                {editProfileStatus && (
-                    <FormEditProfile
-                        closeForm={() => closeForm("profile")}
-                        handleEdit={handleEdit}
-                        fullname={fullname}
-                        gender={gender}
-                        birthday={birthday}
-                        position={position}
-                        phoneNumber={phoneNumber}
-                        email={email}
-                    />
-                )}
-            </div>
+                {
+                    editProfileStatus && (
+                        <FormEditProfile
+                            closeForm={() => closeForm("profile")}
+                            handleEdit={handleEdit}
+                            fullname={fullname}
+                            gender={gender}
+                            birthday={birthday}
+                            position={position}
+                            phoneNumber={phoneNumber}
+                            email={email}
+                        />
+                    )
+                }
+            </div >
 
             <style>{`
                 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css');
@@ -679,7 +671,7 @@ const User = () => {
                     50% { opacity: 0.5; }
                 }
             `}</style>
-        </div>
+        </div >
     );
 };
 

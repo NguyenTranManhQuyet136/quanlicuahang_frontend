@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import "./Login.css";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -26,6 +27,7 @@ const Login = () => {
                     if (res.data.role == "admin") {
                         localStorage.setItem("username_admin", res.data.username);
                         localStorage.setItem("password_admin", res.data.password);
+                        logAdminAction("Đăng nhập hệ thống");
                         navigate("/Dashboard");
                     }
                     if (res.data.role == "user") {

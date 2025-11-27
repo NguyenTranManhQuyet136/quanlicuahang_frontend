@@ -9,6 +9,7 @@ import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import FormDetail from "../../components/Form/FormDetail/FormDetail";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye, FiRefreshCw } from "react-icons/fi";
 
 const labelPage = "phiếu nhập kho";
@@ -93,6 +94,7 @@ const Warehouse = () => {
 
     const handleRemove = async (warehouse_id) => {
         await axios.post("http://localhost:5000/api/warehouse/remove", { warehouse_id: warehouse_id });
+        logAdminAction(`Xóa phiếu nhập: ${removeStatus.warehouse_id}`);
         closeForm("remove");
         resetData();
     };
@@ -106,6 +108,7 @@ const Warehouse = () => {
             status: dataFix.status,
             idOld: idOld,
         });
+        logAdminAction(`Sửa phiếu nhập: ${dataFix.warehouse_id}`);
         closeForm("fix");
         resetData();
     };
@@ -118,6 +121,7 @@ const Warehouse = () => {
             total_value: dataAdd.total_value,
             status: dataAdd.status,
         });
+        logAdminAction(`Thêm phiếu nhập: ${dataAdd.warehouse_id}`);
         closeForm("add");
         resetData();
     };
