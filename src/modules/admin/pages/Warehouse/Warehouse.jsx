@@ -101,7 +101,7 @@ const Warehouse = () => {
         await axios.post("http://localhost:5000/api/warehouse/fix", {
             warehouse_id: dataFix.warehouse_id,
             supplier_name: dataFix.supplier_name,
-            import_date: dataFix.import_date,
+            import_date: dataFix.import_date.slice(0, 10),
             total_value: dataFix.total_value,
             status: dataFix.status,
             idOld: idOld,

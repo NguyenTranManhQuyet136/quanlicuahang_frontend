@@ -87,7 +87,7 @@ const Customer = () => {
         await axios.post("http://localhost:5000/api/customer/fix", {
             customer_id: dataFix.customer_id,
             fullname: dataFix.fullname,
-            birthday: dataFix.birthday,
+            birthday: dataFix.birthday.slice(0, 10),
             gender: dataFix.gender,
             address: dataFix.address,
             phone_number: dataFix.phone_number,
