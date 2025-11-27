@@ -91,7 +91,7 @@ const Order = () => {
         await axios.post("http://localhost:5000/api/order/fix", {
             order_id: dataFix.order_id,
             customer_id: dataFix.customer_id,
-            order_date: dataFix.order_date,
+            order_date: dataFix.order_date.slice(0, 10),
             total_price: dataFix.total_price,
             status: dataFix.status,
             idOld: idOld,
