@@ -43,7 +43,7 @@ const FormFix = (props) => {
                                     <input
                                         type={col.type}
                                         placeholder={"Nhập " + col.label.toLowerCase()}
-                                        value={col.type == "date" ? dataForm[col.key].slice(0,10) : dataForm[col.key]}
+                                        value={col.type == "date" ? dataForm[col.key].slice(0, 10) : dataForm[col.key]}
                                         className="form-fix-input"
                                         onChange={(e) => setDataForm((prev) => ({ ...prev, [col.key]: e.target.value }))}
                                     />
