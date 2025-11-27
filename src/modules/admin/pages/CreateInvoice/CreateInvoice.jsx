@@ -8,7 +8,7 @@ import { checkLogin } from "../../../../hooks/checkLogin";
 import "./CreateInvoice.css";
 
 const CreateInvoice = () => {
-    checkLogin();
+    checkLogin("admin");
     const themeContext = useContext(ThemeContext);
 
     const [invoiceData, setInvoiceData] = useState({
@@ -122,7 +122,7 @@ const CreateInvoice = () => {
                 unit_price: dataProduct.product.price,
             });
         };
-        
+
         handleAddCustomer()
         handleAddOrder()
         for (let i = 0; i < invoiceData.items.length; i++) {

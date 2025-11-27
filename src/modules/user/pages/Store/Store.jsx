@@ -5,8 +5,10 @@ import CategoryNav from "../../components/CategoryNav/CategoryNav";
 import HeroBanner from "../../components/HeroBanner/HeroBanner";
 import ProductList from "../../components/ProductList/ProductList";
 import './Store.css';
+import { checkLogin } from "../../../../hooks/checkLogin";
 
 const Store = () => {
+    checkLogin("user");
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
 

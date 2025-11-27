@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { checkLogin } from "../../../../hooks/checkLogin";
 
 const Dashboard = () => {
-    checkLogin()
+    checkLogin("admin")
 
     const themeContext = useContext(ThemeContext);
     return (

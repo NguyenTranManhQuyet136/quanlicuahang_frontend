@@ -38,7 +38,7 @@ const colInfoSearch = [
 ];
 
 const Order = () => {
-    checkLogin()
+    checkLogin("admin")
 
     const themeContext = useContext(ThemeContext);
     const [dataOrder, setDataOrder] = useState([]);

@@ -4,8 +4,10 @@ import Header from '../../components/Header/Header';
 import './Cart.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { checkLogin } from "../../../../hooks/checkLogin";
 
 const Cart = () => {
+    checkLogin("user");
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
