@@ -2,8 +2,10 @@ import React from 'react';
 import Header from '../../components/Header/Header';
 import OrderHistory from '../../components/OrderHistory/OrderHistory';
 import './History.css';
+import { checkLogin } from "../../../../hooks/checkLogin";
 
 const History = () => {
+    checkLogin("user");
     return (
         <div className="history-page">
             <Header />
