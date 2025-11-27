@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import { FaUserCircle, FaBell } from "react-icons/fa";
+import { FaUserCircle, FaBell, FaSearch } from "react-icons/fa";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import "./Header.css";
 
@@ -7,10 +7,12 @@ const Header = (props) => {
     const [openStatus, setOpenStatus] = useState(false);
     const [showNoti, setShowNoti] = useState(false);
     const dropdownRef = useRef(null);
+    const notificationRef = useRef(null);
     const themeContext = useContext(ThemeContext);
 
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const updateNotifications = () => {
         const stored = JSON.parse(localStorage.getItem("admin_notifications") || "[]");
@@ -19,8 +21,22 @@ const Header = (props) => {
         setUnreadCount(count);
     };
 
+    const changedFields = useRef(new Set());
+
     useEffect(() => {
         updateNotifications();
+
+        const handleChange = (e) => {
+            const target = e.target;
+            const formBody = target.closest('.form-fix-body');
+            if (formBody) {
+                const group = target.closest('.form-fix-group');
+                const label = group?.querySelector('label')?.innerText || "";
+                if (label) {
+                    changedFields.current.add(label);
+                }
+            }
+        };
 
         const handleGlobalClick = (e) => {
             const target = e.target.closest('button');
@@ -28,17 +44,58 @@ const Header = (props) => {
 
             let message = "";
             if (target.classList.contains('form-add-btn-submit')) {
-                message = "Đã thêm mới thành công";
+                const modal = target.closest('.form-add-modal');
+                const title = modal?.querySelector('.form-add-header-title h4')?.innerText || "";
+                const type = title.replace('Thêm ', '').toLowerCase();
+
+                const formBody = target.closest('.form-add-body');
+                let name = "mới";
+                if (formBody) {
+                    const groups = formBody.querySelectorAll('.form-add-group');
+                    for (let group of groups) {
+                        const label = group.querySelector('label')?.innerText?.toLowerCase() || "";
+                        if (label.includes('tên') || label.includes('name')) {
+                            const input = group.querySelector('input, select');
+                            if (input) name = input.value;
+                            break;
+                        }
+                    }
+                }
+                message = `Đã thêm ${type} ${name} thành công`;
             } else if (target.classList.contains('form-fix-btn-submit')) {
-                message = "Đã cập nhật thành công";
+                const modal = target.closest('.form-fix-modal');
+                const title = modal?.querySelector('.form-fix-header-title h4')?.innerText || "";
+                const type = title.replace('Sửa ', '').toLowerCase();
+
+                const formBody = target.closest('.form-fix-body');
+                let name = "đã chọn";
+                if (formBody) {
+                    const groups = formBody.querySelectorAll('.form-fix-group');
+                    for (let group of groups) {
+                        const label = group.querySelector('label')?.innerText?.toLowerCase() || "";
+                        if (label.includes('tên') || label.includes('name')) {
+                            const input = group.querySelector('input, select');
+                            if (input) name = input.value;
+                            break;
+                        }
+                    }
+                }
+
+                let fields = Array.from(changedFields.current).map(f => `phần ${f}`).join(', ');
+                if (!fields) fields = "thông tin";
+                message = `Đã sửa ${type} ${name} ${fields} thành công`;
+                changedFields.current.clear();
             } else if (target.classList.contains('form-remove-btn-submit')) {
                 const modalBody = target.closest('.form-remove-body');
                 const nameElement = modalBody ? modalBody.querySelector('.form-remove-highlight') : null;
                 const name = nameElement ? nameElement.innerText : "";
-                message = `Đã xóa ${name}`;
+                message = `Đã xóa ${name} thành công`;
             }
 
             if (message) {
+                const time = new Date().toLocaleString('vi-VN');
+                message = `${message} vào lúc ${time}`;
+
                 const currentNotifications = JSON.parse(localStorage.getItem("admin_notifications") || "[]");
                 currentNotifications.unshift(message);
                 localStorage.setItem("admin_notifications", JSON.stringify(currentNotifications));
@@ -51,12 +108,15 @@ const Header = (props) => {
         };
 
         window.addEventListener("click", handleGlobalClick, true);
-        return () => window.removeEventListener("click", handleGlobalClick, true);
+        window.addEventListener("change", handleChange, true);
+        return () => {
+            window.removeEventListener("click", handleGlobalClick, true);
+            window.removeEventListener("change", handleChange, true);
+        };
     }, []);
 
     const handleBellClick = () => {
         if (!showNoti) {
-            // Nếu đang mở (tức là trước đó đóng), thì reset số lượng chưa đọc
             localStorage.setItem("admin_unread_count", "0");
             setUnreadCount(0);
             window.dispatchEvent(new Event("notificationUpdated"));
@@ -68,17 +128,32 @@ const Header = (props) => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target)
-            ) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setOpenStatus(false);
+            }
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setShowNoti(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () =>
-            document.removeEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    const handleNotificationClick = (note) => {
+        const cleanNote = note.split(" vào lúc")[0];
+        let name = "";
+
+        if (cleanNote.includes("Đã thêm") || cleanNote.includes("Đã sửa")) {
+            name = cleanNote;
+        }
+
+        localStorage.setItem("highlight_name", name);
+
+        if (note.toLowerCase().includes("sản phẩm")) window.location.href = "/Product";
+        else if (note.toLowerCase().includes("khách hàng")) window.location.href = "/Customer";
+        else if (note.toLowerCase().includes("đơn hàng")) window.location.href = "/Order";
+        else if (note.toLowerCase().includes("kho")) window.location.href = "/Warehouse";
+    };
 
     return (
         <header className="header-wrapper">
@@ -88,23 +163,32 @@ const Header = (props) => {
                 </div>
 
                 <div className="header-actions">
-                    <div className="header-notification">
+                    <div className="header-notification" ref={notificationRef}>
                         <div onClick={handleBellClick}>
                             <FaBell
                                 size={sizeIcon}
                                 className="header-icon notification-icon"
                             />
-                            {/* Chỉ hiện số khi có thông báo chưa đọc */}
                             {unreadCount > 0 && <span className="header-badge">{unreadCount}</span>}
                         </div>
                         {showNoti && (
                             <div className="notification-box">
                                 <p style={{ fontWeight: "bold", marginBottom: "10px" }}>Thông báo mới</p>
-                                {notifications.length === 0 ? (
+                                <div style={{ position: 'relative', marginBottom: '10px' }}>
+                                    <FaSearch style={{ position: 'absolute', top: '8px', left: '8px', color: '#888' }} />
+                                    <input
+                                        type="text"
+                                        placeholder="Tìm kiếm..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        style={{ width: '100%', padding: '5px 5px 5px 30px', boxSizing: 'border-box' }}
+                                    />
+                                </div>
+                                {notifications.filter(note => note.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 ? (
                                     <p>Không có thông báo</p>
                                 ) : (
-                                    notifications.map((note, index) => (
-                                        <div key={index} className="notification-item">
+                                    notifications.filter(note => note.toLowerCase().includes(searchTerm.toLowerCase())).map((note, index) => (
+                                        <div key={index} className="notification-item" onClick={() => handleNotificationClick(note)} style={{ cursor: 'pointer' }}>
                                             <span className="notification-dot"></span>
                                             <span>{note}</span>
                                         </div>
