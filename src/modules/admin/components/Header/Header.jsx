@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import { FaUserCircle, FaBell, FaSearch } from "react-icons/fa";
+import { FaUserCircle, FaBell } from "react-icons/fa";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import "./Header.css";
 
@@ -12,7 +12,6 @@ const Header = (props) => {
 
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [searchTerm, setSearchTerm] = useState("");
     const [toast, setToast] = useState(null);
 
     const updateNotifications = () => {
@@ -25,6 +24,9 @@ const Header = (props) => {
     const changedFields = useRef(new Set());
 
     useEffect(() => {
+        // Clear notifications on mount as requested to "refresh"
+        localStorage.removeItem("admin_notifications");
+        localStorage.removeItem("admin_unread_count");
         updateNotifications();
 
         const handleChange = (e) => {
@@ -189,21 +191,11 @@ const Header = (props) => {
                         </div>
                         {showNoti && (
                             <div className="notification-box">
-                                <p style={{ fontWeight: "bold", marginBottom: "10px" }}>Thông báo mới</p>
-                                <div style={{ position: 'relative', marginBottom: '10px' }}>
-                                    <FaSearch style={{ position: 'absolute', top: '8px', left: '8px', color: '#888' }} />
-                                    <input
-                                        type="text"
-                                        placeholder="Tìm kiếm..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                        style={{ width: '100%', padding: '5px 5px 5px 30px', boxSizing: 'border-box' }}
-                                    />
-                                </div>
-                                {notifications.filter(note => note.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 ? (
-                                    <p>Không có thông báo</p>
+                                <p className="notification-header">Thông báo mới</p>
+                                {notifications.length === 0 ? (
+                                    <p className="notification-empty">Không có thông báo</p>
                                 ) : (
-                                    notifications.filter(note => note.toLowerCase().includes(searchTerm.toLowerCase())).map((note, index) => (
+                                    notifications.map((note, index) => (
                                         <div key={index} className="notification-item" onClick={() => handleNotificationClick(note)} style={{ cursor: 'pointer' }}>
                                             <span className="notification-dot"></span>
                                             <span>{note}</span>
