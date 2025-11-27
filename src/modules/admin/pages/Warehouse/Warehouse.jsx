@@ -49,7 +49,7 @@ const getStatusColor = (status) => {
 };
 
 const Warehouse = () => {
-    checkLogin()
+    checkLogin("admin")
 
     const themeContext = useContext(ThemeContext);
     const [dataWarehouse, setDataWarehouse] = useState([]);

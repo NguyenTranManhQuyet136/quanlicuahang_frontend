@@ -8,7 +8,7 @@ import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
 
 const User = () => {
-    checkLogin();
+    checkLogin("admin");
 
     const themeContext = useContext(ThemeContext);
 

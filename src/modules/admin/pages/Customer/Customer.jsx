@@ -38,7 +38,7 @@ const colInfoSearch = [
 ];
 
 const Customer = () => {
-    checkLogin()
+    checkLogin("admin")
 
     const themeContext = useContext(ThemeContext);
     const [dataCustomer, setDataCustomer] = useState([]);
