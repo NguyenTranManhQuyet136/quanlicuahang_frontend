@@ -41,11 +41,11 @@ const FormDetail = (props) => {
     ]
     console.log(props.id_target)
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const res = await axios.post(`http://localhost:5000/api/${props.type_target}/detail`,{
+                const res = await axios.post(`http://localhost:5000/api/${props.type_target}/detail`, {
                     id: props.id_target
                 })
                 setDataForm(res.data);
@@ -59,7 +59,7 @@ const FormDetail = (props) => {
         if (props.type_target == "order") {
             setBonusInfo(true)
         }
-    },[])
+    }, [])
 
     return (
         <div className="form-detail-overlay" onClick={props.closeForm}>
@@ -108,12 +108,12 @@ const FormDetail = (props) => {
                                         <p>{dataForm[0].fullname}</p>
                                     </div>
                                     <div className="form-detail-info-item">
-                                        <small>Ngày sinh</small>
-                                        <p>{new Date(dataForm[0].birthday.slice(0,10)).toLocaleDateString("vi-VN")}</p>
+                                        <small>Mã hóa đơn</small>
+                                        <p>{dataForm[0].order_id}</p>
                                     </div>
                                     <div className="form-detail-info-item">
                                         <small>Ngày đặt hàng</small>
-                                        <p>{new Date(dataForm[0].order_date.slice(0,10)).toLocaleDateString("vi-VN")}</p>
+                                        <p>{new Date(dataForm[0].order_date.slice(0, 10)).toLocaleDateString("vi-VN")}</p>
                                     </div>
                                 </div>
                             )}
@@ -136,11 +136,10 @@ const FormDetail = (props) => {
                                                     <td key={`${idx}-${col.key}`}>
                                                         {col.type === "select" && col.options ? (
                                                             <span
-                                                                className={`form-detail-badge ${
-                                                                    row[col.key] === 1
+                                                                className={`form-detail-badge ${row[col.key] === 1
                                                                         ? "form-detail-badge-active"
                                                                         : "form-detail-badge-inactive"
-                                                                }`}
+                                                                    }`}
                                                             >
                                                                 {col.options.find(opt => opt.value === row[col.key])?.label || "-"}
                                                             </span>

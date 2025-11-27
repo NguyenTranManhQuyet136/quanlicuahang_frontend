@@ -16,7 +16,20 @@ const colInfo = [
     { key: "name", label: "Tên sản phẩm", type: "text" },
     { key: "price", label: "Giá", type: "number" },
     { key: "description", label: "Mô tả", type: "text" },
-    { key: "type", label: "Loại", type: "text" },
+    {
+        key: "type",
+        label: "Loại",
+        type: "select",
+        options: [
+            { value: "Laptop", label: "Laptop" },
+            { value: "Điện thoại", label: "Điện thoại" },
+            { value: "monitor", label: "Màn hình" },
+            { value: "headphone", label: "Tai nghe" },
+            { value: "keyboard", label: "Bàn phím" },
+            { value: "mouse", label: "Chuột" },
+            { value: "speaker", label: "Loa" },
+        ],
+    },
     { key: "image", label: "Hình ảnh", type: "text" },
     { key: "quantity", label: "Số lượng", type: "number" },
     { key: "warehouse_id", label: "Mã kho", type: "text" },
@@ -278,7 +291,7 @@ const Product = () => {
                                                             {product.description}
                                                         </td>
                                                         <td>{product.type}</td>
-                                                        <td>
+                                                        <td style={{ maxWidth: "150px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={product.image}>
                                                             {product.image}
                                                         </td>
                                                         <td>

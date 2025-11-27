@@ -122,6 +122,7 @@ const CreateInvoice = () => {
                 unit_price: dataProduct.product.price,
             });
         };
+        
         handleAddCustomer()
         handleAddOrder()
         for (let i = 0; i < invoiceData.items.length; i++) {
