@@ -24,9 +24,6 @@ const Header = (props) => {
     const changedFields = useRef(new Set());
 
     useEffect(() => {
-        // Clear notifications on mount as requested to "refresh"
-        localStorage.removeItem("admin_notifications");
-        localStorage.removeItem("admin_unread_count");
         updateNotifications();
 
         const handleChange = (e) => {
