@@ -13,6 +13,7 @@ const Header = (props) => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
+    const [toast, setToast] = useState(null);
 
     const updateNotifications = () => {
         const stored = JSON.parse(localStorage.getItem("admin_notifications") || "[]");
@@ -43,10 +44,13 @@ const Header = (props) => {
             if (!target) return;
 
             let message = "";
+            let shortMessage = "";
+
             if (target.classList.contains('form-add-btn-submit')) {
                 const modal = target.closest('.form-add-modal');
                 const title = modal?.querySelector('.form-add-header-title h4')?.innerText || "";
-                const type = title.replace('Thêm ', '').toLowerCase();
+                let type = title.replace('Thêm ', '').toLowerCase();
+                if (type === 'nhập kho') type = 'phiếu nhập kho';
 
                 const formBody = target.closest('.form-add-body');
                 let name = "mới";
@@ -62,10 +66,12 @@ const Header = (props) => {
                     }
                 }
                 message = `Đã thêm ${type} ${name} thành công`;
+                shortMessage = "Đã thêm thành công";
             } else if (target.classList.contains('form-fix-btn-submit')) {
                 const modal = target.closest('.form-fix-modal');
                 const title = modal?.querySelector('.form-fix-header-title h4')?.innerText || "";
-                const type = title.replace('Sửa ', '').toLowerCase();
+                let type = title.replace('Sửa ', '').toLowerCase();
+                if (type === 'nhập kho') type = 'phiếu nhập kho';
 
                 const formBody = target.closest('.form-fix-body');
                 let name = "đã chọn";
@@ -84,12 +90,14 @@ const Header = (props) => {
                 let fields = Array.from(changedFields.current).map(f => `phần ${f}`).join(', ');
                 if (!fields) fields = "thông tin";
                 message = `Đã sửa ${type} ${name} ${fields} thành công`;
+                shortMessage = "Đã sửa thành công";
                 changedFields.current.clear();
             } else if (target.classList.contains('form-remove-btn-submit')) {
                 const modalBody = target.closest('.form-remove-body');
                 const nameElement = modalBody ? modalBody.querySelector('.form-remove-highlight') : null;
                 const name = nameElement ? nameElement.innerText : "";
                 message = `Đã xóa ${name} thành công`;
+                shortMessage = "Đã xóa thành công";
             }
 
             if (message) {
@@ -104,6 +112,9 @@ const Header = (props) => {
                 localStorage.setItem("admin_unread_count", (currentUnread + 1).toString());
 
                 updateNotifications();
+
+                setToast(shortMessage);
+                setTimeout(() => setToast(null), 3000);
             }
         };
 
@@ -157,6 +168,11 @@ const Header = (props) => {
 
     return (
         <header className="header-wrapper">
+            {toast && (
+                <div className="header-toast">
+                    {toast}
+                </div>
+            )}
             <div className="header-container">
                 <div className="header-title">
                     <h4 className="header-name">{props.name}</h4>
