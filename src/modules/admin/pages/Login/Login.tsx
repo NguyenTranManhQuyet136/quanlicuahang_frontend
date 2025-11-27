@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import "./Login.css";
 import { logAdminAction } from "../../../../hooks/logAdminAction";
+import { logUserAction } from "../../../../hooks/logUserAction";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -33,6 +34,7 @@ const Login = () => {
                     if (res.data.role == "user") {
                         localStorage.setItem("username_user", res.data.username);
                         localStorage.setItem("password_user", res.data.password);
+                        logUserAction("Người dùng đăng nhập");
                         navigate("/Store");
                     }
                 } else {
