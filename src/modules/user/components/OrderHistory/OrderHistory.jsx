@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiPackage, FiCheckCircle } from 'react-icons/fi';
+import { FiPackage, FiCheckCircle, FiClock, FiTruck, FiLoader } from 'react-icons/fi';
 import './OrderHistory.css';
 import axios from 'axios';
 
@@ -35,6 +35,7 @@ const OrderHistory = () => {
                         id: order.order_id,
                         date: new Date(order.order_date).toLocaleDateString('vi-VN'),
                         total: order.total_price,
+                        status: order.status,
                         items: items
                     });
                 }
@@ -49,6 +50,36 @@ const OrderHistory = () => {
 
         fetchOrders();
     }, []);
+
+    const getStatusStyle = (status) => {
+        switch (status) {
+            case "Hoàn tất":
+            case "Đã giao hàng":
+                return { backgroundColor: "#d1e7dd", color: "#0f5132", border: "1px solid #badbcc" };
+            case "Đang giao hàng":
+                return { backgroundColor: "#cfe2ff", color: "#084298", border: "1px solid #b6d4fe" };
+            case "Chờ lấy hàng":
+                return { backgroundColor: "#fff3cd", color: "#664d03", border: "1px solid #ffecb5" };
+            case "Đang chờ xác nhận":
+            default:
+                return { backgroundColor: "#e2e3e5", color: "#41464b", border: "1px solid #d3d6d8" };
+        }
+    };
+
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case "Hoàn tất":
+            case "Đã giao hàng":
+                return <FiCheckCircle className="status-icon" />;
+            case "Đang giao hàng":
+                return <FiTruck className="status-icon" />;
+            case "Chờ lấy hàng":
+                return <FiLoader className="status-icon" />;
+            case "Đang chờ xác nhận":
+            default:
+                return <FiClock className="status-icon" />;
+        }
+    };
 
     return (
         <div className="order-history-wrapper">
@@ -67,10 +98,19 @@ const OrderHistory = () => {
                                     <h4>Đơn hàng #{order.id}</h4>
                                     <p className="order-date">{order.date}</p>
                                 </div>
-                                {/* <div className="order-status delivered">
-                                    <FiCheckCircle className="status-icon" />
-                                    <span>Đã giao</span>
-                                </div> */}
+                                <div className="order-status" style={{
+                                    ...getStatusStyle(order.status || "Đang chờ xác nhận"),
+                                    padding: "4px 12px",
+                                    borderRadius: "6px",
+                                    fontWeight: "500",
+                                    fontSize: "0.85rem",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px"
+                                }}>
+                                    {getStatusIcon(order.status || "Đang chờ xác nhận")}
+                                    <span>{order.status || "Đang chờ xác nhận"}</span>
+                                </div>
                             </div>
 
                             <div className="order-items">
