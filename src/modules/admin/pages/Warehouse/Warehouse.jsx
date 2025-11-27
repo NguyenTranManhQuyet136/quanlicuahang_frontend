@@ -23,8 +23,9 @@ const colInfo = [
         label: "Trạng thái",
         type: "select",
         options: [
-            { value: 1, label: "Hoàn tất" },
-            { value: 0, label: "Đang xử lý" },
+            { value: "Đang vận chuyển", label: "Đang vận chuyển" },
+            { value: "Đã giao", label: "Đã giao" },
+            { value: "Đang xử lý", label: "Đang xử lý" },
         ],
     },
 ];
@@ -33,6 +34,19 @@ const colInfoSearch = [
     { key: "warehouse_id", label: "ID", type: "text" },
     { key: "supplier_name", label: "Tên nhà cung cấp", type: "text" },
 ];
+
+const getStatusColor = (status) => {
+    switch (status) {
+        case "Đang xử lý":
+            return { bg: "#cfe2ff", text: "#084298" };
+        case "Đang vận chuyển":
+            return { bg: "#fff3cd", text: "#856404" };
+        case "Đã giao":
+            return { bg: "#d1e7dd", text: "#0f5132" };
+        default:
+            return { bg: "#e2e3e5", text: "#383d41" };
+    }
+};
 
 const Warehouse = () => {
     checkLogin()
@@ -256,14 +270,14 @@ const Warehouse = () => {
                                                                 style={{
                                                                     display: "inline-block",
                                                                     padding: "4px 12px",
-                                                                    backgroundColor: warehouse.status === 1 ? "#cfe2ff" : "#e2e3e5",
-                                                                    color: warehouse.status === 1 ? "#084298" : "#383d41",
+                                                                    backgroundColor: getStatusColor(warehouse.status).bg,
+                                                                    color: getStatusColor(warehouse.status).text,
                                                                     borderRadius: "6px",
                                                                     fontWeight: "500",
                                                                     fontSize: "0.9rem",
                                                                 }}
                                                             >
-                                                                {warehouse.status === 1 ? "Hoàn tất" : "Đang xử lý"}
+                                                                {warehouse.status}
                                                             </span>
                                                         </td>
                                                         <td className="text-center pe-4">
