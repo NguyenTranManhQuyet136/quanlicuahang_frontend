@@ -10,7 +10,6 @@ const History = () => {
         <div className="history-page">
             <Header />
 
-            {/* Page Title */}
             <div className="history-header">
                 <div className="container">
                     <h1 className="history-title">Lịch Sử Mua Hàng</h1>
@@ -18,11 +17,12 @@ const History = () => {
                 </div>
             </div>
 
-            {/* History Content */}
+                
+
             <div className="container history-container">
                 <OrderHistory />
             </div>
-        </div>
+        </div>  
     );
 };
 

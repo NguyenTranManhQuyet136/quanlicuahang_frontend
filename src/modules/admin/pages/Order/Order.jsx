@@ -9,6 +9,7 @@ import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import FormDetail from "../../components/Form/FormDetail/FormDetail";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye, FiRefreshCw } from "react-icons/fi";
 
 const labelPage = "đơn hàng";
@@ -83,6 +84,7 @@ const Order = () => {
 
     const handleRemove = async (order_id) => {
         await axios.post("http://localhost:5000/api/order/remove", { order_id: order_id });
+        logAdminAction(`Xóa đơn hàng: ${order_id}`);
         closeForm("remove");
         resetData();
     };
@@ -96,6 +98,7 @@ const Order = () => {
             status: dataFix.status,
             idOld: idOld,
         });
+        logAdminAction(`Sửa đơn hàng: ${dataFix.order_id}`);
         closeForm("fix");
         resetData();
     };
@@ -109,6 +112,7 @@ const Order = () => {
             status: dataAdd.status,
             created_by: localStorage.getItem("username")
         });
+        logAdminAction(`Thêm đơn hàng: ${dataAdd.order_id}`);
         closeForm("add");
         resetData();
     };

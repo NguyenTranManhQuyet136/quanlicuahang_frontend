@@ -7,6 +7,7 @@ import FormAdd from "../../components/Form/FormAdd/FormAdd";
 import FormFix from "../../components/Form/FormFix/FormFix";
 import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiRefreshCw } from "react-icons/fi";
 
 const labelPage = "sản phẩm";
@@ -102,13 +103,14 @@ const Product = () => {
             case "search":
                 setSearchStatus({ status: false });
                 break;
+            default:
+                break;
         }
     };
 
     const handleRemove = async (product_id) => {
-        await axios.post("http://localhost:5000/api/product/remove", {
-            product_id: product_id,
-        });
+        await axios.post("http://localhost:5000/api/product/remove", { product_id: product_id });
+        logAdminAction(`Xóa sản phẩm: ${removeStatus.name}`);
         closeForm("remove");
         resetData();
     };
@@ -126,6 +128,7 @@ const Product = () => {
             status: dataFix.status,
             idOld: idOld,
         });
+        logAdminAction(`Sửa sản phẩm: ${dataFix.name}`);
         closeForm("fix");
         resetData();
     };
@@ -142,19 +145,17 @@ const Product = () => {
             warehouse_id: dataAdd.warehouse_id,
             status: dataAdd.status,
         });
+        logAdminAction(`Thêm sản phẩm: ${dataAdd.name}`);
         closeForm("add");
         resetData();
     };
 
     const handleSearch = async (dataSearch) => {
-        const res = await axios.post(
-            "http://localhost:5000/api/product/search",
-            {
-                product_id: dataSearch.product_id,
-                name: dataSearch.name,
-            },
-        );
-        if (res.data.length == 0) {
+        const res = await axios.post("http://localhost:5000/api/product/search", {
+            product_id: dataSearch.product_id,
+            name: dataSearch.name,
+        });
+        if (res.data.length === 0) {
             resetData();
         } else {
             setDataProduct(res.data);

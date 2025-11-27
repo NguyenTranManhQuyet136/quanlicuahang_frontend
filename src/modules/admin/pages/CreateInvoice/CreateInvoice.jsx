@@ -5,6 +5,7 @@ import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { FaFileInvoice } from "react-icons/fa";
 import axios from "axios";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import "./CreateInvoice.css";
 
 const CreateInvoice = () => {
@@ -128,6 +129,7 @@ const CreateInvoice = () => {
         for (let i = 0; i < invoiceData.items.length; i++) {
             handleAddOrderDetail(invoiceData.invoiceNumber, (invoiceData.items)[i])
         }
+        logAdminAction("Tạo hóa đơn: " + invoiceData.invoiceNumber);
 
         window.location.reload()
     };
@@ -217,22 +219,11 @@ const CreateInvoice = () => {
                                                                 className="invoice-suggestion-item"
                                                                 onClick={() => selectSuggestion(index, product)}
                                                             >
-                                                                <div className="invoice-item-name">{product.name}</div>
-                                                                <div className="invoice-item-price">{product.price?.toLocaleString()} đ</div>
+                                                                {product.name} - {product.price ? product.price.toLocaleString() : 0} đ
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
-                                            </div>
-                                            <div>
-                                                <label className="invoice-label">Số Lượng</label>
-                                                <input
-                                                    type="number"
-                                                    placeholder="SL"
-                                                    className="invoice-item-input"
-                                                    value={item.quantity}
-                                                    onChange={(e) => handleItemChange(index, "quantity", parseInt(e.target.value) || 0)}
-                                                />
                                             </div>
                                             <div>
                                                 <label className="invoice-label">Giá</label>

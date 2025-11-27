@@ -5,6 +5,7 @@ import './Cart.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logUserAction } from "../../../../hooks/logUserAction";
 
 const Cart = () => {
     checkLogin("user");
@@ -106,6 +107,7 @@ const Cart = () => {
             });
 
             if (response.data.status) {
+                logUserAction("Đặt hàng thành công");
                 alert("Đặt hàng thành công! Mã đơn hàng: " + response.data.order_id);
                 localStorage.removeItem('shopping_cart');
                 window.dispatchEvent(new Event('cartUpdated'));
