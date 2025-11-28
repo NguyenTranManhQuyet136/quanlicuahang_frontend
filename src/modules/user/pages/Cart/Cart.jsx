@@ -113,7 +113,7 @@ const Cart = () => {
             }
         } catch (error) {
             console.error("Checkout error:", error);
-            alert("Lỗi khi thanh toán. Vui lòng thử lại sau.");
+            window.dispatchEvent(new CustomEvent('paymentError', { detail: { message: "Lỗi khi thanh toán. Vui lòng thử lại sau." } }));
         }
     };
 
