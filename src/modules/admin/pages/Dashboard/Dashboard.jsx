@@ -20,18 +20,20 @@ const Dashboard = () => {
     const [warehouse, setWarehouse] = useState([]);
     const [adminHistory, setAdminHistory] = useState([]);
     const [userHistory, setUserHistory] = useState([]);
+    const [profit, setProfit] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [resOrders, resProducts, resCustomers, resWarehouse, resAdminHist, resUserHist] = await Promise.all([
+                const [resOrders, resProducts, resCustomers, resWarehouse, resAdminHist, resUserHist, resProfit] = await Promise.all([
                     axios.get("http://localhost:5000/api/order"),
                     axios.get("http://localhost:5000/api/product"),
                     axios.get("http://localhost:5000/api/customer"),
                     axios.get("http://localhost:5000/api/warehouse"),
                     axios.get("http://localhost:5000/api/admin/history"),
-                    axios.get("http://localhost:5000/api/user/history")
+                    axios.get("http://localhost:5000/api/user/history"),
+                    axios.get("http://localhost:5000/api/profit")
                 ]);
                 setOrders(resOrders.data);
                 setProducts(resProducts.data);
@@ -39,6 +41,7 @@ const Dashboard = () => {
                 setWarehouse(resWarehouse.data);
                 setAdminHistory(resAdminHist.data);
                 setUserHistory(resUserHist.data);
+                setProfit(resProfit.data.total_profit);
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);
             } finally {
@@ -155,7 +158,7 @@ const Dashboard = () => {
             ]
         },
         {
-            label: "Nhập kho",
+            label: "Kho",
             count: warehouse.length,
             icon: <FaWarehouse size={24} />,
             color: "warning",
@@ -168,19 +171,24 @@ const Dashboard = () => {
         }
     ];
 
-    // Area 3: Profit (Total Revenue)
-    const totalRevenue = orders.reduce((sum, o) => sum + Number(o.total_price), 0);
+    // Total Revenue Calculation
+    const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total_price), 0);
 
-    // Area 4: Best Sellers (Simulated by taking first 4 products)
-    const bestSellers = products.slice(0, 4);
+    // Best Sellers Logic
+    const bestSellers = [...products]
+        .sort((a, b) => b.quantity - a.quantity)
+        .slice(0, 4);
 
-    if (loading) return (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-            <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
+
+    if (loading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 
     return (
         <div className="d-flex dashboard-container">
@@ -189,7 +197,6 @@ const Dashboard = () => {
                 <Header name={"Dashboard"} />
                 <div className="p-4">
 
-                    {/* Area 1: Pending Orders */}
                     <div className="mb-4">
                         <div className="card border-0 shadow-sm">
                             <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -257,7 +264,6 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Area 2: Category Stats */}
                     <div className="row g-4 mb-4">
                         {stats.map((item, index) => (
                             <div className="col-md-3" key={index}>
@@ -272,7 +278,6 @@ const Dashboard = () => {
                                                 {item.icon}
                                             </div>
                                         </div>
-                                        {/* Details Section */}
                                         {item.details && (
                                             <div className="mt-3 pt-3 border-top" style={{ borderColor: 'rgba(0,0,0,0.05)', fontSize: '0.9rem' }}>
                                                 {item.details.map((detail, idx) => (
@@ -290,10 +295,9 @@ const Dashboard = () => {
                         ))}
                     </div>
 
-                    {/* Area 3: Total Revenue (Redesigned) */}
-                    <div className="row mb-4">
-                        <div className="col-12">
-                            <div className="card border-0 shadow-sm text-white revenue-card">
+                    <div className="row g-4 mb-4">
+                        <div className="col-md-6">
+                            <div className="card border-0 shadow-sm text-white revenue-card h-100">
                                 <div className="card-body p-4 d-flex align-items-center justify-content-between">
                                     <div>
                                         <h5 className="card-title opacity-75 mb-1">Tổng Doanh Thu</h5>
@@ -308,9 +312,28 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="col-md-6">
+                            <div className="card border-0 shadow-sm text-white bg-success h-100">
+                                <div className="card-body p-4 d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h5 className="card-title opacity-75 mb-1">Lợi Nhuận Ước Tính</h5>
+                                        <h2 className="display-5 fw-bold mb-0">
+                                            {Number(profit).toLocaleString("vi-VN")} ₫
+                                        </h2>
+                                        <p className="mb-0 opacity-50 mt-2">
+                                            <small>
+                                                Tỉ suất: {totalRevenue > 0 ? ((profit / totalRevenue) * 100).toFixed(1) : 0}%
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div className="d-none d-md-block opacity-25">
+                                        <FaMoneyBillWave size={80} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Area 4: Best Sellers */}
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h5 className="text-secondary fw-bold m-0">🔥 Sản phẩm bán chạy</h5>
                         <Link to="/Product" className="text-decoration-none text-primary fw-semibold">Xem tất cả</Link>
@@ -325,9 +348,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* Area 5: History (Split) */}
                     <div className="row g-4">
-                        {/* Admin History */}
                         <div className="col-lg-6">
                             <div className="card border-0 shadow-sm h-100">
                                 <div className="card-header bg-white py-3 border-bottom-0">
@@ -347,7 +368,7 @@ const Dashboard = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {adminHistory.slice(0, 10).map((h, index) => (
+                                                {adminHistory.slice(0, 30).map((h, index) => (
                                                     <tr key={index}>
                                                         <td className="ps-3 text-muted history-time">
                                                             {new Date(h.time).toLocaleString("vi-VN")}
@@ -363,7 +384,6 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                        {/* User History */}
                         <div className="col-lg-6">
                             <div className="card border-0 shadow-sm h-100">
                                 <div className="card-header bg-white py-3 border-bottom-0">
@@ -383,7 +403,7 @@ const Dashboard = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {userHistory.slice(0, 10).map((h, index) => (
+                                                {userHistory.slice(0, 30).map((h, index) => (
                                                     <tr key={index}>
                                                         <td className="ps-3 text-muted history-time">
                                                             {new Date(h.time).toLocaleString("vi-VN")}
