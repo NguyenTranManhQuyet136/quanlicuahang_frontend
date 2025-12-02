@@ -33,6 +33,22 @@ const colInfo = [
     },
 ];
 
+const colInfoFix = [
+    { key: "order_id", label: "ID", type: "text", readOnly: true },
+    {
+        key: "status",
+        label: "Trạng thái",
+        type: "select",
+        options: [
+            { value: "Đang chờ xác nhận", label: "Đang chờ xác nhận" },
+            { value: "Chờ lấy hàng", label: "Chờ lấy hàng" },
+            { value: "Đang giao hàng", label: "Đang giao hàng" },
+            { value: "Đã giao hàng", label: "Đã giao hàng" },
+            { value: "Hoàn tất", label: "Hoàn tất" }
+        ]
+    },
+];
+
 const colInfoSearch = [
     { key: "order_id", label: "ID", type: "text" },
     { key: "customer_id", label: "ID khách hàng", type: "text" },
@@ -184,7 +200,7 @@ const Order = () => {
                             <FormFix
                                 typeData={labelPage}
                                 dataFix={fixStatus.dataFix}
-                                colInfo={colInfo}
+                                colInfo={colInfoFix}
                                 closeForm={() => closeForm("fix")}
                                 handleFix={handleFix}
                             />

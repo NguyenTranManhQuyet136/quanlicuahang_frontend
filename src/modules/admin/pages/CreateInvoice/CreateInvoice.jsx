@@ -19,7 +19,7 @@ const CreateInvoice = () => {
         invoiceDate: new Date().toISOString().split('T')[0],
         items: [{ productId: "", productName: "", quantity: 1, price: 0, total: 0, suggestions: [] }],
 
-        status: 1
+        status: "Chờ lấy hàng"
     });
 
     const [dataProduct, setDataProduct] = useState([])
@@ -66,7 +66,7 @@ const CreateInvoice = () => {
         const newItems = [...invoiceData.items];
         newItems[index].product = product;
         newItems[index].productName = product.name;
-        newItems[index].price = product.price || 0;
+        newItems[index].price = product.price_sell || 0;
         newItems[index].suggestions = [];
         newItems[index].total = (newItems[index].quantity || 0) * (newItems[index].price || 0);
         setInvoiceData(prev => ({ ...prev, items: newItems }));
@@ -111,8 +111,8 @@ const CreateInvoice = () => {
                 customer_id: invoiceData.customerId,
                 order_date: invoiceData.invoiceDate,
                 total_price: totalAmount,
-                status: 1,
-                created_by: localStorage.getItem("username")
+                status: "Chờ lấy hàng",
+                created_by: localStorage.getItem("username_admin")
             });
         };
 
@@ -220,11 +220,21 @@ const CreateInvoice = () => {
                                                                 className="invoice-suggestion-item"
                                                                 onClick={() => selectSuggestion(index, product)}
                                                             >
-                                                                {product.name} - {product.price ? product.price.toLocaleString() : 0} đ
+                                                                {product.name} - {product.price_sell ? product.price_sell.toLocaleString() : 0} đ
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
+                                            </div>
+                                            <div>
+                                                <label className="invoice-label">Số lượng</label>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Số lượng"
+                                                    className="invoice-item-input"
+                                                    value={item.quantity}
+                                                    onChange={(e) => handleItemChange(index, "quantity", parseFloat(e.target.value) || 0)}
+                                                />
                                             </div>
                                             <div>
                                                 <label className="invoice-label">Giá</label>
