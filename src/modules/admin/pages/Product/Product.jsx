@@ -15,7 +15,8 @@ const labelPage = "sản phẩm";
 const colInfo = [
     { key: "product_id", label: "ID", type: "text" },
     { key: "name", label: "Tên sản phẩm", type: "text" },
-    { key: "price", label: "Giá", type: "number" },
+    { key: "price", label: "Giá nhập", type: "number" },
+    { key: "price_sell", label: "Giá bán", type: "number" },
     { key: "description", label: "Mô tả", type: "text" },
     {
         key: "type",
@@ -24,11 +25,11 @@ const colInfo = [
         options: [
             { value: "Laptop", label: "Laptop" },
             { value: "Điện thoại", label: "Điện thoại" },
-            { value: "monitor", label: "Màn hình" },
-            { value: "headphone", label: "Tai nghe" },
-            { value: "keyboard", label: "Bàn phím" },
-            { value: "mouse", label: "Chuột" },
-            { value: "speaker", label: "Loa" },
+            { value: "Màn hình", label: "Màn hình" },
+            { value: "Tai nghe", label: "Tai nghe" },
+            { value: "Bàn phím", label: "Bàn phím" },
+            { value: "Chuột", label: "Chuột" },
+            { value: "Loa", label: "Loa" },
         ],
     },
     { key: "image", label: "Hình ảnh", type: "text" },
@@ -54,6 +55,7 @@ const Product = () => {
     const themeContext = useContext(ThemeContext);
 
     const [dataProduct, setDataProduct] = useState([]);
+    const [warehouses, setWarehouses] = useState([]);
 
     const [removeStatus, setRemoveStatus] = useState({
         status: false,
@@ -72,6 +74,8 @@ const Product = () => {
 
     const [searchStatus, setSearchStatus] = useState({
         status: false,
+        product_id: "",
+        name: "",
     });
 
     const [filterType, setFilterType] = useState("");
@@ -80,9 +84,23 @@ const Product = () => {
         const fetchData = async () => {
             const res = await axios.get("http://localhost:5000/api/product");
             setDataProduct(res.data);
+            const resWarehouse = await axios.get("http://localhost:5000/api/warehouse");
+            setWarehouses(resWarehouse.data);
         };
         fetchData();
     }, []);
+
+    // Update colInfo with warehouse options
+    const dynamicColInfo = colInfo.map(col => {
+        if (col.key === "warehouse_id") {
+            return {
+                ...col,
+                type: "select",
+                options: warehouses.map(warehouse => ({ value: warehouse.warehouse_id, label: warehouse.warehouse_id }))
+            };
+        }
+        return col;
+    });
 
     async function resetData() {
         const res = await axios.get("http://localhost:5000/api/product");
@@ -116,10 +134,15 @@ const Product = () => {
     };
 
     const handleFix = async (dataFix, idOld) => {
+        if (Number(dataFix.price_sell) <= Number(dataFix.price)) {
+            alert("Giá bán phải cao hơn giá gốc");
+            return;
+        }
         await axios.post("http://localhost:5000/api/product/fix", {
             product_id: dataFix.product_id,
             name: dataFix.name,
             price: dataFix.price,
+            price_sell: dataFix.price_sell,
             description: dataFix.description,
             type: dataFix.type,
             image: dataFix.image,
@@ -134,10 +157,15 @@ const Product = () => {
     };
 
     const handleAdd = async (dataAdd) => {
+        if (Number(dataAdd.price_sell) <= Number(dataAdd.price)) {
+            alert("Giá bán phải cao hơn giá gốc");
+            return;
+        }
         await axios.post("http://localhost:5000/api/product/add", {
             product_id: dataAdd.product_id,
             name: dataAdd.name,
             price: dataAdd.price,
+            price_sell: dataAdd.price_sell,
             description: dataAdd.description,
             type: dataAdd.type,
             image: dataAdd.image,
@@ -208,7 +236,7 @@ const Product = () => {
                         {addStatus.status && (
                             <FormAdd
                                 typeData={labelPage}
-                                colInfo={colInfo}
+                                colInfo={dynamicColInfo}
                                 closeForm={() => closeForm("add")}
                                 handleAdd={handleAdd}
                             />
@@ -218,7 +246,7 @@ const Product = () => {
                             <FormFix
                                 typeData={labelPage}
                                 dataFix={fixStatus.dataFix}
-                                colInfo={colInfo}
+                                colInfo={dynamicColInfo}
                                 closeForm={() => closeForm("fix")}
                                 handleFix={handleFix}
                             />
@@ -286,7 +314,10 @@ const Product = () => {
                                                             {product.name}
                                                         </td>
                                                         <td style={{ color: "#0d6efd", fontWeight: "600" }}>
-                                                            {product.price.toLocaleString("vi-VN")} ₫
+                                                            {Number(product.price).toLocaleString("vi-VN")} ₫
+                                                        </td>
+                                                        <td style={{ color: "#198754", fontWeight: "600" }}>
+                                                            {Number(product.price_sell).toLocaleString("vi-VN")} ₫
                                                         </td>
                                                         <td style={{ maxWidth: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={product.description}>
                                                             {product.description}
@@ -347,6 +378,7 @@ const Product = () => {
                                                                                 product_id: product.product_id,
                                                                                 name: product.name,
                                                                                 price: product.price,
+                                                                                price_sell: product.price_sell,
                                                                                 description: product.description,
                                                                                 type: product.type,
                                                                                 image: product.image,
