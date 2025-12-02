@@ -18,7 +18,7 @@ const colInfo = [
     { key: "warehouse_id", label: "ID", type: "text" },
     { key: "supplier_name", label: "Tên nhà cung cấp", type: "text" },
     { key: "import_date", label: "Ngày nhập hàng", type: "date" },
-    { key: "total_value", label: "Tổng giá trị", type: "number" },
+
     {
         key: "status",
         label: "Trạng thái",
@@ -104,7 +104,6 @@ const Warehouse = () => {
             warehouse_id: dataFix.warehouse_id,
             supplier_name: dataFix.supplier_name,
             import_date: dataFix.import_date.slice(0, 10),
-            total_value: dataFix.total_value,
             status: dataFix.status,
             idOld: idOld,
         });
@@ -118,7 +117,6 @@ const Warehouse = () => {
             warehouse_id: dataAdd.warehouse_id,
             supplier_name: dataAdd.supplier_name,
             import_date: dataAdd.import_date,
-            total_value: dataAdd.total_value,
             status: dataAdd.status,
         });
         logAdminAction(`Thêm phiếu nhập: ${dataAdd.warehouse_id}`);
@@ -223,9 +221,6 @@ const Warehouse = () => {
                                                     Ngày nhập
                                                 </th>
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
-                                                    Tổng giá trị
-                                                </th>
-                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Trạng thái
                                                 </th>
                                                 <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
@@ -266,9 +261,7 @@ const Warehouse = () => {
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
                                                             {new Date(warehouse.import_date).toLocaleDateString("vi-VN")}
                                                         </td>
-                                                        <td style={{ color: "#0d6efd", fontWeight: "600" }}>
-                                                            {Number(warehouse.total_value).toLocaleString("vi-VN")} ₫
-                                                        </td>
+
                                                         <td>
                                                             <span
                                                                 style={{
@@ -305,7 +298,6 @@ const Warehouse = () => {
                                                                                 warehouse_id: warehouse.warehouse_id,
                                                                                 supplier_name: warehouse.supplier_name,
                                                                                 import_date: warehouse.import_date,
-                                                                                total_value: warehouse.total_value,
                                                                                 status: warehouse.status,
                                                                             },
                                                                         })
@@ -374,9 +366,7 @@ const Warehouse = () => {
                                 <small>
                                     <strong>Tổng cộng:</strong> {dataWarehouse.length} phiếu
                                 </small>
-                                <small>
-                                    <strong>Giá trị:</strong> {dataWarehouse.reduce((sum, w) => sum + (Number(w.total_value)), 0).toLocaleString("vi-VN")} ₫
-                                </small>
+
                             </div>
                         )}
                     </div>
