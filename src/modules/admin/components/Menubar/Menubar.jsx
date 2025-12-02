@@ -13,7 +13,7 @@ import FormSetting from "../Form/FormSetting/FormSetting";
 import { useState } from "react";
 
 const Menubar = (props) => {
-    const [settingStatus, setSettingStatus] = useState({status: false})
+    const [settingStatus, setSettingStatus] = useState({ status: false })
 
     const menu = [
         { icon: <FaHome />, label: "Trang chủ", ref: "/Dashboard" },
@@ -28,7 +28,7 @@ const Menubar = (props) => {
     return (
         <div
             className="bg-primary text-white p-3 menubar"
-            style={{ minWidth: "250px", display: "flex", flexDirection: "column", minHeight: "100vh" }}
+            style={{ minWidth: "250px", display: "flex", flexDirection: "column", height: "100vh", position: "sticky", top: "0", overflowY: "auto", zIndex: 1000 }}
         >
             <div>
                 <h4 className="text-center fw-bold mb-4">
@@ -37,7 +37,7 @@ const Menubar = (props) => {
                     Aero Tech
                 </h4>
 
-                {}
+                { }
                 <div className="mb-3">
                     <a
                         className="nav-link text-dark d-flex align-items-center justify-content-center gap-2 create-invoice-btn"
@@ -61,9 +61,10 @@ const Menubar = (props) => {
                         <li
                             key={id}
                             className={`product-items nav-item mb-2`}
-                            style= {{borderRadius: "8px", background : item.ref == props.focus ? "linear-gradient(90deg, #5a9bff 0%, #337aff 100%)" :
-                                "none"
-                             }}
+                            style={{
+                                borderRadius: "8px", background: item.ref == props.focus ? "linear-gradient(90deg, #5a9bff 0%, #337aff 100%)" :
+                                    "none"
+                            }}
                         >
                             <a
                                 href={item.ref}
@@ -78,11 +79,11 @@ const Menubar = (props) => {
 
             {settingStatus.status && (
                 <FormSetting
-                    closeForm={() => {setSettingStatus({status: false})}}
+                    closeForm={() => { setSettingStatus({ status: false }) }}
                 />
             )}
 
-            {}
+            { }
             <ul className="nav flex-column mt-auto gap-2">
                 <li className="nav-item">
                     <a
@@ -95,7 +96,7 @@ const Menubar = (props) => {
                             textDecoration: "none",
                             transition: "0.3s",
                         }}
-                        onClick={() => setSettingStatus({status: true})}
+                        onClick={() => setSettingStatus({ status: true })}
                     >
                         <FaCog size={18} /> <span>Cài đặt</span>
                     </a>
