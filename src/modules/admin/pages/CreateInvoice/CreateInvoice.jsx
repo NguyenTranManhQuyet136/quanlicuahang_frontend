@@ -18,7 +18,7 @@ const CreateInvoice = () => {
         customerName: "",
         invoiceDate: new Date().toISOString().split('T')[0],
         items: [{ productId: "", productName: "", quantity: 1, price: 0, total: 0, suggestions: [] }],
-        notes: "",
+
         status: 1
     });
 
@@ -32,7 +32,8 @@ const CreateInvoice = () => {
         };
         const fetchId = async () => {
             const res = await axios.get("http://localhost:5000/api/order/generate-id");
-            setInvoiceData(prev => ({ ...prev, invoiceNumber: res.data.id }));
+            const randomCustomerId = "KH" + Math.floor(100000 + Math.random() * 900000);
+            setInvoiceData(prev => ({ ...prev, invoiceNumber: res.data.id, customerId: randomCustomerId }));
         };
         fetchData();
         fetchId();
@@ -163,7 +164,7 @@ const CreateInvoice = () => {
                                                 placeholder="Nhập mã khách hàng"
                                                 className="invoice-input"
                                                 value={invoiceData.customerId}
-                                                onChange={(e) => handleInputChange("customerId", e.target.value)}
+                                                readOnly
                                             />
                                         </div>
                                         <div className="invoice-input-group">
@@ -261,15 +262,7 @@ const CreateInvoice = () => {
                                     </h5>
                                 </div>
 
-                                <div className="invoice-notes-section">
-                                    <label className="invoice-label">Ghi Chú</label>
-                                    <textarea
-                                        placeholder="Thêm ghi chú cho hóa đơn"
-                                        className="invoice-textarea"
-                                        value={invoiceData.notes}
-                                        onChange={(e) => handleInputChange("notes", e.target.value)}
-                                    />
-                                </div>
+
 
                                 <div className="invoice-buttons">
                                     <button
