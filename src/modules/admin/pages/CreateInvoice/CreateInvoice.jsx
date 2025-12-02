@@ -18,7 +18,7 @@ const CreateInvoice = () => {
         customerName: "",
         invoiceDate: new Date().toISOString().split('T')[0],
         items: [{ productId: "", productName: "", quantity: 1, price: 0, total: 0, suggestions: [] }],
-        notes: "",
+
         status: 1
     });
 
@@ -261,15 +261,7 @@ const CreateInvoice = () => {
                                     </h5>
                                 </div>
 
-                                <div className="invoice-notes-section">
-                                    <label className="invoice-label">Ghi Chú</label>
-                                    <textarea
-                                        placeholder="Thêm ghi chú cho hóa đơn"
-                                        className="invoice-textarea"
-                                        value={invoiceData.notes}
-                                        onChange={(e) => handleInputChange("notes", e.target.value)}
-                                    />
-                                </div>
+
 
                                 <div className="invoice-buttons">
                                     <button
