@@ -9,6 +9,7 @@ import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import FormDetail from "../../components/Form/FormDetail/FormDetail";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiEye, FiRefreshCw } from "react-icons/fi";
 
 const labelPage = "đơn hàng";
@@ -18,6 +19,34 @@ const colInfo = [
     { key: "customer_id", label: "ID khách hàng", type: "text" },
     { key: "order_date", label: "Ngày đặt hàng", type: "date" },
     { key: "total_price", label: "Tổng giá trị", type: "number" },
+    {
+        key: "status",
+        label: "Trạng thái",
+        type: "select",
+        options: [
+            { value: "Đang chờ xác nhận", label: "Đang chờ xác nhận" },
+            { value: "Chờ lấy hàng", label: "Chờ lấy hàng" },
+            { value: "Đang giao hàng", label: "Đang giao hàng" },
+            { value: "Đã giao hàng", label: "Đã giao hàng" },
+            { value: "Hoàn tất", label: "Hoàn tất" }
+        ]
+    },
+];
+
+const colInfoFix = [
+    { key: "order_id", label: "ID", type: "text", readOnly: true },
+    {
+        key: "status",
+        label: "Trạng thái",
+        type: "select",
+        options: [
+            { value: "Đang chờ xác nhận", label: "Đang chờ xác nhận" },
+            { value: "Chờ lấy hàng", label: "Chờ lấy hàng" },
+            { value: "Đang giao hàng", label: "Đang giao hàng" },
+            { value: "Đã giao hàng", label: "Đã giao hàng" },
+            { value: "Hoàn tất", label: "Hoàn tất" }
+        ]
+    },
 ];
 
 const colInfoSearch = [
@@ -26,7 +55,7 @@ const colInfoSearch = [
 ];
 
 const Order = () => {
-    checkLogin()
+    checkLogin("admin")
 
     const themeContext = useContext(ThemeContext);
     const [dataOrder, setDataOrder] = useState([]);
@@ -71,6 +100,7 @@ const Order = () => {
 
     const handleRemove = async (order_id) => {
         await axios.post("http://localhost:5000/api/order/remove", { order_id: order_id });
+        logAdminAction(`Xóa đơn hàng: ${order_id}`);
         closeForm("remove");
         resetData();
     };
@@ -79,10 +109,12 @@ const Order = () => {
         await axios.post("http://localhost:5000/api/order/fix", {
             order_id: dataFix.order_id,
             customer_id: dataFix.customer_id,
-            order_date: dataFix.order_date,
+            order_date: dataFix.order_date.slice(0, 10),
             total_price: dataFix.total_price,
+            status: dataFix.status,
             idOld: idOld,
         });
+        logAdminAction(`Sửa đơn hàng: ${dataFix.order_id}`);
         closeForm("fix");
         resetData();
     };
@@ -93,8 +125,10 @@ const Order = () => {
             customer_id: dataAdd.customer_id,
             order_date: dataAdd.order_date,
             total_price: dataAdd.total_price,
+            status: dataAdd.status,
             created_by: localStorage.getItem("username")
         });
+        logAdminAction(`Thêm đơn hàng: ${dataAdd.order_id}`);
         closeForm("add");
         resetData();
     };
@@ -111,6 +145,21 @@ const Order = () => {
             setDataOrder(res.data);
         }
         closeForm("search");
+    };
+
+    const getStatusStyle = (status) => {
+        switch (status) {
+            case "Hoàn tất":
+            case "Đã giao hàng":
+                return { backgroundColor: "#d1e7dd", color: "#0f5132", border: "1px solid #badbcc" };
+            case "Đang giao hàng":
+                return { backgroundColor: "#cfe2ff", color: "#084298", border: "1px solid #b6d4fe" };
+            case "Chờ lấy hàng":
+                return { backgroundColor: "#fff3cd", color: "#664d03", border: "1px solid #ffecb5" };
+            case "Đang chờ xác nhận":
+            default:
+                return { backgroundColor: "#e2e3e5", color: "#41464b", border: "1px solid #d3d6d8" };
+        }
     };
 
     return (
@@ -151,7 +200,7 @@ const Order = () => {
                             <FormFix
                                 typeData={labelPage}
                                 dataFix={fixStatus.dataFix}
-                                colInfo={colInfo}
+                                colInfo={colInfoFix}
                                 closeForm={() => closeForm("fix")}
                                 handleFix={handleFix}
                             />
@@ -199,6 +248,9 @@ const Order = () => {
                                                 <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Tổng giá trị
                                                 </th>
+                                                <th style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
+                                                    Trạng thái
+                                                </th>
                                                 <th className="text-center pe-4" style={{ color: "#495057", fontWeight: "600", fontSize: "0.95rem" }}>
                                                     Hành động
                                                 </th>
@@ -240,6 +292,21 @@ const Order = () => {
                                                         <td style={{ color: "#0d6efd", fontWeight: "600" }}>
                                                             {Number(order.total_price).toLocaleString("vi-VN")} ₫
                                                         </td>
+                                                        <td style={{ color: "#212529", fontWeight: "500" }}>
+                                                            <span
+                                                                style={{
+                                                                    ...getStatusStyle(order.status || "Đang chờ xác nhận"),
+                                                                    padding: "4px 12px",
+                                                                    borderRadius: "6px",
+                                                                    fontWeight: "500",
+                                                                    fontSize: "0.85rem",
+                                                                    display: "inline-block",
+                                                                    whiteSpace: "nowrap"
+                                                                }}
+                                                            >
+                                                                {order.status || "Đang chờ xác nhận"}
+                                                            </span>
+                                                        </td>
 
                                                         <td className="text-center pe-4">
                                                             <div className="d-flex gap-2 justify-content-center">
@@ -263,6 +330,7 @@ const Order = () => {
                                                                                 customer_id: order.customer_id,
                                                                                 order_date: order.order_date,
                                                                                 total_price: order.total_price,
+                                                                                status: order.status,
                                                                             },
                                                                         })
                                                                     }

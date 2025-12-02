@@ -5,10 +5,11 @@ import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { FaFileInvoice } from "react-icons/fa";
 import axios from "axios";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import "./CreateInvoice.css";
 
 const CreateInvoice = () => {
-    checkLogin();
+    checkLogin("admin");
     const themeContext = useContext(ThemeContext);
 
     const [invoiceData, setInvoiceData] = useState({
@@ -17,8 +18,8 @@ const CreateInvoice = () => {
         customerName: "",
         invoiceDate: new Date().toISOString().split('T')[0],
         items: [{ productId: "", productName: "", quantity: 1, price: 0, total: 0, suggestions: [] }],
-        notes: "",
-        status: 1
+
+        status: "Chờ lấy hàng"
     });
 
     const [dataProduct, setDataProduct] = useState([])
@@ -31,7 +32,8 @@ const CreateInvoice = () => {
         };
         const fetchId = async () => {
             const res = await axios.get("http://localhost:5000/api/order/generate-id");
-            setInvoiceData(prev => ({ ...prev, invoiceNumber: res.data.id }));
+            const randomCustomerId = "KH" + Math.floor(100000 + Math.random() * 900000);
+            setInvoiceData(prev => ({ ...prev, invoiceNumber: res.data.id, customerId: randomCustomerId }));
         };
         fetchData();
         fetchId();
@@ -64,7 +66,7 @@ const CreateInvoice = () => {
         const newItems = [...invoiceData.items];
         newItems[index].product = product;
         newItems[index].productName = product.name;
-        newItems[index].price = product.price || 0;
+        newItems[index].price = product.price_sell || 0;
         newItems[index].suggestions = [];
         newItems[index].total = (newItems[index].quantity || 0) * (newItems[index].price || 0);
         setInvoiceData(prev => ({ ...prev, items: newItems }));
@@ -109,8 +111,8 @@ const CreateInvoice = () => {
                 customer_id: invoiceData.customerId,
                 order_date: invoiceData.invoiceDate,
                 total_price: totalAmount,
-                status: 1,
-                created_by: localStorage.getItem("username")
+                status: "Chờ lấy hàng",
+                created_by: localStorage.getItem("username_admin")
             });
         };
 
@@ -122,12 +124,13 @@ const CreateInvoice = () => {
                 unit_price: dataProduct.product.price,
             });
         };
-        
+
         handleAddCustomer()
         handleAddOrder()
         for (let i = 0; i < invoiceData.items.length; i++) {
             handleAddOrderDetail(invoiceData.invoiceNumber, (invoiceData.items)[i])
         }
+        logAdminAction("Tạo hóa đơn: " + invoiceData.invoiceNumber);
 
         window.location.reload()
     };
@@ -161,7 +164,7 @@ const CreateInvoice = () => {
                                                 placeholder="Nhập mã khách hàng"
                                                 className="invoice-input"
                                                 value={invoiceData.customerId}
-                                                onChange={(e) => handleInputChange("customerId", e.target.value)}
+                                                readOnly
                                             />
                                         </div>
                                         <div className="invoice-input-group">
@@ -217,21 +220,20 @@ const CreateInvoice = () => {
                                                                 className="invoice-suggestion-item"
                                                                 onClick={() => selectSuggestion(index, product)}
                                                             >
-                                                                <div className="invoice-item-name">{product.name}</div>
-                                                                <div className="invoice-item-price">{product.price?.toLocaleString()} đ</div>
+                                                                {product.name} - {product.price_sell ? product.price_sell.toLocaleString() : 0} đ
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
                                             </div>
                                             <div>
-                                                <label className="invoice-label">Số Lượng</label>
+                                                <label className="invoice-label">Số lượng</label>
                                                 <input
                                                     type="number"
-                                                    placeholder="SL"
+                                                    placeholder="Số lượng"
                                                     className="invoice-item-input"
                                                     value={item.quantity}
-                                                    onChange={(e) => handleItemChange(index, "quantity", parseInt(e.target.value) || 0)}
+                                                    onChange={(e) => handleItemChange(index, "quantity", parseFloat(e.target.value) || 0)}
                                                 />
                                             </div>
                                             <div>
@@ -270,15 +272,7 @@ const CreateInvoice = () => {
                                     </h5>
                                 </div>
 
-                                <div className="invoice-notes-section">
-                                    <label className="invoice-label">Ghi Chú</label>
-                                    <textarea
-                                        placeholder="Thêm ghi chú cho hóa đơn"
-                                        className="invoice-textarea"
-                                        value={invoiceData.notes}
-                                        onChange={(e) => handleInputChange("notes", e.target.value)}
-                                    />
-                                </div>
+
 
                                 <div className="invoice-buttons">
                                     <button

@@ -1,8 +1,8 @@
 import React from 'react';
 import './ProductCard.css';
 
-const ProductCard = ({ product }) => {
-    const { name, image, price, originalPrice, discount, isHot } = product;
+const ProductCard = ({ product, showAddToCart = true }) => {
+    const { name, image, price, price_sell, originalPrice, discount, isHot } = product;
 
     const handleAddToCart = () => {
         try {
@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
                     product_id: product.product_id || product.id,
                     name: product.name,
                     image: product.image,
-                    price: product.price,
+                    price: product.price_sell || product.price,
                     quantity: 1,
                     inStock: true
                 });
@@ -61,7 +61,7 @@ const ProductCard = ({ product }) => {
 
 
                 <div className="product-price">
-                    <span className="current-price">{price.toLocaleString('vi-VN')}₫</span>
+                    <span className="current-price">{Number(price_sell || price).toLocaleString('vi-VN')}₫</span>
                     {originalPrice && (
                         <span className="original-price">{originalPrice.toLocaleString('vi-VN')}₫</span>
                     )}

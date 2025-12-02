@@ -8,6 +8,7 @@ import FormFix from "../../components/Form/FormFix/FormFix";
 import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
+import { logAdminAction } from "../../../../hooks/logAdminAction";
 import { FiEdit2, FiTrash2, FiPlus, FiSearch, FiRefreshCw } from "react-icons/fi";
 
 const labelPage = "khách hàng";
@@ -38,7 +39,7 @@ const colInfoSearch = [
 ];
 
 const Customer = () => {
-    checkLogin()
+    checkLogin("admin")
 
     const themeContext = useContext(ThemeContext);
     const [dataCustomer, setDataCustomer] = useState([]);
@@ -74,11 +75,14 @@ const Customer = () => {
             case "search":
                 setSearchStatus({ status: false });
                 break;
+            default:
+                break;
         }
     };
 
     const handleRemove = async (customer_id) => {
         await axios.post("http://localhost:5000/api/customer/remove", { customer_id: customer_id });
+        logAdminAction(`Xóa khách hàng: ${removeStatus.fullname}`);
         closeForm("remove");
         resetData();
     };
@@ -87,13 +91,14 @@ const Customer = () => {
         await axios.post("http://localhost:5000/api/customer/fix", {
             customer_id: dataFix.customer_id,
             fullname: dataFix.fullname,
-            birthday: dataFix.birthday,
+            birthday: dataFix.birthday.slice(0, 10),
             gender: dataFix.gender,
             address: dataFix.address,
             phone_number: dataFix.phone_number,
             email: dataFix.email,
             idOld: idOld,
         });
+        logAdminAction(`Sửa khách hàng: ${dataFix.fullname}`);
         closeForm("fix");
         resetData();
     };
@@ -108,6 +113,7 @@ const Customer = () => {
             phone_number: dataAdd.phone_number,
             email: dataAdd.email,
         });
+        logAdminAction(`Thêm khách hàng: ${dataAdd.fullname}`);
         closeForm("add");
         resetData();
     };

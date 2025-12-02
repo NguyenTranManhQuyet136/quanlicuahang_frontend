@@ -258,26 +258,3 @@
 .invoice-icon {
     font-size: 1.2rem;
 }
-
-.invoice-notes-section {
-    margin: 2rem 0;
-}
-
-.invoice-textarea {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #dee2e6;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: all 0.3s;
-    resize: vertical;
-    min-height: 100px;
-}
-
-.invoice-textarea:focus {
-    border-color: #337aff;
-    box-shadow: 0 0 0 0.2rem rgba(51, 122, 255, 0.25);
-    outline: none;
-}
-

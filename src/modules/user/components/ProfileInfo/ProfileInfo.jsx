@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ProfileInfo.css';
 import FormChangePassword from '../Form/FormChangePassword/FormChangePassword';
 import axios from 'axios';
+import { logUserAction } from "../../../../hooks/logUserAction";
 
 const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -49,6 +50,7 @@ const ProfileInfo = () => {
                 birthday: userData.birthday === '' ? null : userData.birthday,
                 idOld: userData.customer_id
             });
+            logUserAction("Sửa thông tin cá nhân");
             setIsEditing(false);
             alert("Cập nhật thông tin thành công!");
         } catch (error) {
@@ -68,6 +70,7 @@ const ProfileInfo = () => {
             return;
         }
         console.log("Changing password:", { password, passwordChange });
+        logUserAction("Đổi mật khẩu");
         alert("Đổi mật khẩu thành công!");
         setChangePasswordStatus(false);
     };

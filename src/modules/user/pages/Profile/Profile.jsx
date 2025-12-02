@@ -2,8 +2,10 @@ import React from 'react';
 import Header from '../../components/Header/Header';
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import './Profile.css';
+import { checkLogin } from "../../../../hooks/checkLogin";
 
 const Profile = () => {
+    checkLogin("user");
     return (
         <div className="profile-page">
             <Header />

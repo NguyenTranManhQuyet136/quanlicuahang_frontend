@@ -5,12 +5,12 @@ import './CategoryNav.css';
 const categories = [
   { id: 1, name: "Tất Cả", type: "all", icon: <MdDashboard /> },
   { id: 2, name: "Laptop", type: "laptop", icon: <MdLaptop /> },
-  { id: 3, name: "Điện Thoại", type: "smartphone", icon: <MdPhoneIphone /> },
-  { id: 4, name: "Màn hình", type: "monitor", icon: <MdMonitor /> },
-  { id: 5, name: "Tai nghe", type: "headphone", icon: <MdHeadset /> },
-  { id: 6, name: "Bàn phím", type: "keyboard", icon: <MdKeyboard /> },
-  { id: 7, name: "Chuột", type: "mouse", icon: <MdMouse /> },
-  { id: 8, name: "Loa", type: "speaker", icon: <MdSpeaker /> },
+  { id: 3, name: "Điện Thoại", type: "Điện thoại", icon: <MdPhoneIphone /> },
+  { id: 4, name: "Màn hình", type: "Màn hình", icon: <MdMonitor /> },
+  { id: 5, name: "Tai nghe", type: "Tai nghe", icon: <MdHeadset /> },
+  { id: 6, name: "Bàn phím", type: "Bàn phím", icon: <MdKeyboard /> },
+  { id: 7, name: "Chuột", type: "Chuột", icon: <MdMouse /> },
+  { id: 8, name: "Loa", type: "Loa", icon: <MdSpeaker /> },
 ];
 
 const CategoryNav = ({ activeCategory, onSelectCategory }) => {
