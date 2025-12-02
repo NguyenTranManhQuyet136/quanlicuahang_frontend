@@ -1,0 +1,39 @@
+.dashboard-container {
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.dashboard-content {
+    background-color: #f0f2f5;
+}
+
+.hover-scale {
+    transition: transform 0.2s;
+}
+
+.hover-scale:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+}
+
+.card-icon-bg {
+    opacity: 0.75;
+}
+
+.revenue-card {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+}
+
+.table-history-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-time {
+    font-size: 0.85rem;
+}
+
+.category-label {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
