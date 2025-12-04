@@ -90,13 +90,21 @@ const Product = () => {
         fetchData();
     }, []);
 
-    // Update colInfo with warehouse options
+    const role = localStorage.getItem("role");
     const dynamicColInfo = colInfo.map(col => {
         if (col.key === "warehouse_id") {
             return {
                 ...col,
                 type: "select",
                 options: warehouses.map(warehouse => ({ value: warehouse.warehouse_id, label: warehouse.warehouse_id }))
+            };
+        }
+        if (col.key === "type") {
+            const uniqueCategories = [...new Set(dataProduct.map(p => p.type))];
+            return {
+                ...col,
+                type: role === "superadmin" ? "text" : "select",
+                options: uniqueCategories.map(cat => ({ value: cat, label: cat }))
             };
         }
         return col;

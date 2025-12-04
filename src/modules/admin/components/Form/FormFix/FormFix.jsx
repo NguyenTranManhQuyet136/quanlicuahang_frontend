@@ -65,24 +65,25 @@ const FormFix = (props) => {
                                 )}
                             </div>
                         ))}
-
-                        <div className="form-fix-actions">
-                            <button
-                                type="button"
-                                className="form-fix-btn-cancel"
-                                onClick={props.closeForm}
-                            >
-                                Hủy bỏ
-                            </button>
-                            <button
-                                type="button"
-                                className="form-fix-btn-submit"
-                                onClick={() => props.handleFix(dataForm, idOld)}
-                            >
-                                Cập nhật
-                            </button>
-                        </div>
                     </form>
+                </div>
+                <div className="form-fix-footer">
+                    <div className="form-fix-actions">
+                        <button
+                            type="button"
+                            className="form-fix-btn-cancel"
+                            onClick={props.closeForm}
+                        >
+                            Hủy bỏ
+                        </button>
+                        <button
+                            type="button"
+                            className="form-fix-btn-submit"
+                            onClick={() => props.handleFix(dataForm, idOld)}
+                        >
+                            Cập nhật
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

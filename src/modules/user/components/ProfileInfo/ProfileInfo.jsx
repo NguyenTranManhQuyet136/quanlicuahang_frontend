@@ -50,8 +50,8 @@ const ProfileInfo = () => {
                         const orders = orderRes.data;
                         setOrderStats({
                             pending: orders.filter(o => o.status === 'Đang chờ xác nhận' || o.status === 'Chờ lấy hàng').length,
-                            shipping: orders.filter(o => o.status === 'Đang giao').length,
-                            completed: orders.filter(o => o.status === 'Đã giao').length,
+                            shipping: orders.filter(o => o.status === 'Đang giao hàng').length,
+                            completed: orders.filter(o => o.status === 'Đã giao hàng' || o.status === 'Hoàn tất').length,
                             cancelled: orders.filter(o => o.status === 'Đã hủy').length
                         });
                     }

@@ -1,22 +1,10 @@
 import React from 'react';
 import ProductCard from '../ProductCard/ProductCard';
 import './ProductList.css';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 
-const ProductList = ({ selectedCategory, searchTerm }) => {
-    const [dataProduct, setDataProduct] = useState([]);
+const ProductList = ({ selectedCategory, searchTerm, products }) => {
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const res = await axios.get("http://localhost:5000/api/product");
-            setDataProduct(res.data);
-        };
-        fetchData();
-    }, []);
-
-    const filteredProducts = dataProduct.filter(product => {
+    const filteredProducts = products.filter(product => {
         const matchesCategory = selectedCategory === 'all' || product.type === selectedCategory;
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         const isVisible = product.status == "Hiển thị";

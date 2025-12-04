@@ -18,7 +18,7 @@ const FormDetail = (props) => {
     ] : [
         { key: "product_id", label: "Mã sản phẩm", type: "text" },
         { key: "name", label: "Tên sản phẩm", type: "text" },
-        { key: "price", label: "Giá", type: "number" },
+        { key: "price_sell", label: "Giá", type: "number" },
         { key: "unit_quantity", label: "Số lượng", type: "number" },
     ]
     console.log(props.id_target)

@@ -15,6 +15,8 @@ import { useState } from "react";
 const Menubar = (props) => {
     const [settingStatus, setSettingStatus] = useState({ status: false })
 
+    const role = localStorage.getItem("role");
+
     const menu = [
         { icon: <FaHome />, label: "Trang chủ", ref: "/Dashboard" },
         { icon: <FaBox />, label: "Sản phẩm", ref: "/Product" },
@@ -22,6 +24,13 @@ const Menubar = (props) => {
         { icon: <FaUsers />, label: "Khách hàng", ref: "/Customer" },
         { icon: <FaWarehouse />, label: "Nhập kho", ref: "/Warehouse" },
     ];
+
+    if (role === "superadmin") {
+        menu.push(
+            { icon: <FaUsers />, label: "Quản lý tài khoản", ref: "/AccountManager" },
+            { icon: <FaWarehouse />, label: "Lịch sử hệ thống", ref: "/HistoryManager" }
+        );
+    }
 
     const target_color = "linear-gradient(90deg, #5a9bff 0%, #337aff 100%)"
 
@@ -118,7 +127,7 @@ const Menubar = (props) => {
                             localStorage.removeItem("username");
                             localStorage.removeItem("password");
 
-                            
+
                         }}
 
 
