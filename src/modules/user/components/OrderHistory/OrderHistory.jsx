@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FiPackage, FiCheckCircle, FiClock, FiTruck, FiLoader } from 'react-icons/fi';
 import './OrderHistory.css';
 import axios from 'axios';
+import { logUserAction } from "../../../../hooks/logUserAction";
+import { showNotification } from "../../../../utils/notification";
 
 const OrderHistory = () => {
     const [orders, setOrders] = useState([]);
@@ -51,6 +53,27 @@ const OrderHistory = () => {
         fetchOrders();
     }, []);
 
+    const handleCancelOrder = async (orderId) => {
+        if (window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
+            try {
+                await axios.post('http://localhost:5000/api/order/update_status', {
+                    order_id: orderId,
+                    status: 'Đã hủy'
+                });
+                logUserAction("Hủy đơn hàng " + orderId);
+                showNotification("Hủy đơn hàng thành công!");
+
+                // Refresh orders
+                setOrders(prevOrders => prevOrders.map(order =>
+                    order.id === orderId ? { ...order, status: 'Đã hủy' } : order
+                ));
+            } catch (error) {
+                console.error("Error cancelling order:", error);
+                showNotification("Lỗi khi hủy đơn hàng");
+            }
+        }
+    };
+
     const getStatusStyle = (status) => {
         switch (status) {
             case "Hoàn tất":
@@ -60,6 +83,8 @@ const OrderHistory = () => {
                 return { backgroundColor: "#cfe2ff", color: "#084298", border: "1px solid #b6d4fe" };
             case "Chờ lấy hàng":
                 return { backgroundColor: "#fff3cd", color: "#664d03", border: "1px solid #ffecb5" };
+            case "Đã hủy":
+                return { backgroundColor: "#f8d7da", color: "#842029", border: "1px solid #f5c2c7" };
             case "Đang chờ xác nhận":
             default:
                 return { backgroundColor: "#e2e3e5", color: "#41464b", border: "1px solid #d3d6d8" };
@@ -75,6 +100,8 @@ const OrderHistory = () => {
                 return <FiTruck className="status-icon" />;
             case "Chờ lấy hàng":
                 return <FiLoader className="status-icon" />;
+            case "Đã hủy":
+                return <FiCheckCircle className="status-icon" style={{ transform: "rotate(45deg)" }} />;
             case "Đang chờ xác nhận":
             default:
                 return <FiClock className="status-icon" />;
@@ -135,11 +162,25 @@ const OrderHistory = () => {
                                     <span>Tổng cộng:</span>
                                     <strong>{order.total.toLocaleString('vi-VN')}₫</strong>
                                 </div>
-                                {/* <div className="order-actions">
-                                    <button className="btn-view">Xem chi tiết</button>
-                                    <button className="btn-review">Đánh giá</button>
-                                    <button className="btn-reorder">Mua lại</button>
-                                </div> */}
+                                <div className="order-actions">
+                                    {(order.status === "Đang chờ xác nhận" || order.status === "Chờ lấy hàng") && (
+                                        <button
+                                            className="btn-cancel"
+                                            onClick={() => handleCancelOrder(order.id)}
+                                            style={{
+                                                padding: "8px 16px",
+                                                backgroundColor: "#dc3545",
+                                                color: "white",
+                                                border: "none",
+                                                borderRadius: "6px",
+                                                cursor: "pointer",
+                                                fontWeight: "500"
+                                            }}
+                                        >
+                                            Hủy đơn hàng
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))

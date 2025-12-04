@@ -20,6 +20,13 @@ const ProfileInfo = () => {
         avatar: ''
     });
 
+    const [orderStats, setOrderStats] = useState({
+        pending: 0,
+        shipping: 0,
+        completed: 0,
+        cancelled: 0
+    });
+
     useEffect(() => {
         const fetchUserData = async () => {
             const username = localStorage.getItem('username_user');
@@ -35,8 +42,21 @@ const ProfileInfo = () => {
                             gender: res.data.gender || ''
                         });
                     }
+
+                    const orderRes = await axios.post('http://localhost:5000/api/order/search', {
+                        customer_id: username
+                    });
+                    if (orderRes.data) {
+                        const orders = orderRes.data;
+                        setOrderStats({
+                            pending: orders.filter(o => o.status === 'Đang chờ xác nhận' || o.status === 'Chờ lấy hàng').length,
+                            shipping: orders.filter(o => o.status === 'Đang giao').length,
+                            completed: orders.filter(o => o.status === 'Đã giao').length,
+                            cancelled: orders.filter(o => o.status === 'Đã hủy').length
+                        });
+                    }
                 } catch (error) {
-                    console.error("Error fetching user data:", error);
+                    console.error("Error fetching data:", error);
                     setUserData(prev => ({ ...prev, customer_id: username }));
                 }
             }
@@ -130,14 +150,24 @@ const ProfileInfo = () => {
 
                             <div className="stats-row mb-4">
                                 <div className="stat-box">
-                                    <i className="bi bi-box-seam"></i>
-                                    <p className="stat-label">Đơn hàng</p>
-                                    <p className="stat-value">0</p>
+                                    <i className="bi bi-hourglass-split text-warning"></i>
+                                    <p className="stat-label">Chờ xác nhận</p>
+                                    <p className="stat-value">{orderStats.pending}</p>
                                 </div>
                                 <div className="stat-box">
-                                    <i className="bi bi-heart"></i>
-                                    <p className="stat-label">Yêu thích</p>
-                                    <p className="stat-value">0</p>
+                                    <i className="bi bi-truck text-primary"></i>
+                                    <p className="stat-label">Đang giao</p>
+                                    <p className="stat-value">{orderStats.shipping}</p>
+                                </div>
+                                <div className="stat-box">
+                                    <i className="bi bi-check-circle text-success"></i>
+                                    <p className="stat-label">Hoàn thành</p>
+                                    <p className="stat-value">{orderStats.completed}</p>
+                                </div>
+                                <div className="stat-box">
+                                    <i className="bi bi-x-circle text-danger"></i>
+                                    <p className="stat-label">Đã hủy</p>
+                                    <p className="stat-value">{orderStats.cancelled}</p>
                                 </div>
                             </div>
 

@@ -121,7 +121,7 @@ const CreateInvoice = () => {
                 order_id: order_id,
                 product_id: dataProduct.product.product_id,
                 unit_quantity: dataProduct.quantity,
-                unit_price: dataProduct.product.price,
+                unit_price: dataProduct.price,
             });
         };
 

@@ -6,9 +6,11 @@ import { checkLogin } from "../../../../hooks/checkLogin";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import ProductCard from "../../../user/components/ProductCard/ProductCard";
-import { FaBox, FaShoppingCart, FaUsers, FaWarehouse, FaMoneyBillWave, FaHistory, FaUserClock } from "react-icons/fa";
+import { FaBox, FaShoppingCart, FaUsers, FaWarehouse, FaMoneyBillWave } from "react-icons/fa";
+import { FiEye, FiCheck } from "react-icons/fi";
 import { MdLaptop, MdPhoneIphone, MdMonitor, MdHeadset, MdKeyboard, MdMouse, MdSpeaker } from 'react-icons/md';
 import "./Dashboard.css";
+import FormDetail from "../../components/Form/FormDetail/FormDetail";
 
 const Dashboard = () => {
     checkLogin("admin");
@@ -18,29 +20,24 @@ const Dashboard = () => {
     const [products, setProducts] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [warehouse, setWarehouse] = useState([]);
-    const [adminHistory, setAdminHistory] = useState([]);
-    const [userHistory, setUserHistory] = useState([]);
     const [profit, setProfit] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [detailStatus, setDetailStatus] = useState({ status: false, id_target: "" });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [resOrders, resProducts, resCustomers, resWarehouse, resAdminHist, resUserHist, resProfit] = await Promise.all([
+                const [resOrders, resProducts, resCustomers, resWarehouse, resProfit] = await Promise.all([
                     axios.get("http://localhost:5000/api/order"),
                     axios.get("http://localhost:5000/api/product"),
                     axios.get("http://localhost:5000/api/customer"),
                     axios.get("http://localhost:5000/api/warehouse"),
-                    axios.get("http://localhost:5000/api/admin/history"),
-                    axios.get("http://localhost:5000/api/user/history"),
                     axios.get("http://localhost:5000/api/profit")
                 ]);
                 setOrders(resOrders.data);
                 setProducts(resProducts.data);
                 setCustomers(resCustomers.data);
                 setWarehouse(resWarehouse.data);
-                setAdminHistory(resAdminHist.data);
-                setUserHistory(resUserHist.data);
                 setProfit(resProfit.data.total_profit);
             } catch (error) {
                 console.error("Error fetching dashboard data:", error);
@@ -196,6 +193,14 @@ const Dashboard = () => {
             <div className={`flex-grow-1 ${themeContext.theme} dashboard-content`}>
                 <Header name={"Dashboard"} />
                 <div className="p-4">
+                    {detailStatus.status && (
+                        <FormDetail
+                            typeData="đơn hàng"
+                            type_target="order"
+                            id_target={detailStatus.id_target}
+                            closeForm={() => setDetailStatus({ status: false })}
+                        />
+                    )}
 
                     <div className="mb-4">
                         <div className="card border-0 shadow-sm">
@@ -247,12 +252,47 @@ const Dashboard = () => {
                                                         <td className="text-muted">{new Date(order.order_date).toLocaleDateString("vi-VN")}</td>
                                                         <td className="fw-bold text-primary">{Number(order.total_price).toLocaleString("vi-VN")} ₫</td>
                                                         <td>
-                                                            <button
-                                                                className="btn btn-sm btn-primary"
-                                                                onClick={() => handleProcessOrder(order.order_id)}
-                                                            >
-                                                                Xác nhận
-                                                            </button>
+
+                                                            <div className="d-flex gap-2">
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#cfe2ff",
+                                                                        color: "#0d6efd",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                        transition: "all 0.3s ease",
+                                                                        cursor: "pointer",
+                                                                    }}
+                                                                    onClick={() => setDetailStatus({ status: true, id_target: order.order_id })}
+                                                                >
+                                                                    <FiEye size={16} />
+                                                                    Xem chi tiết
+                                                                </button>
+                                                                <button
+                                                                    style={{
+                                                                        padding: "6px 10px",
+                                                                        backgroundColor: "#0d6efd",
+                                                                        color: "#fff",
+                                                                        border: "none",
+                                                                        borderRadius: "6px",
+                                                                        fontWeight: "500",
+                                                                        display: "flex",
+                                                                        alignItems: "center",
+                                                                        gap: "4px",
+                                                                        transition: "all 0.3s ease",
+                                                                        cursor: "pointer",
+                                                                    }}
+                                                                    onClick={() => handleProcessOrder(order.order_id)}
+                                                                >
+                                                                    <FiCheck size={16} />
+                                                                    Xác nhận
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -348,77 +388,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="row g-4">
-                        <div className="col-lg-6">
-                            <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-white py-3 border-bottom-0">
-                                    <div className="d-flex align-items-center gap-2">
-                                        <FaHistory className="text-primary" />
-                                        <h6 className="mb-0 fw-bold text-primary">Lịch sử Admin</h6>
-                                    </div>
-                                </div>
-                                <div className="card-body p-0">
-                                    <div className="table-responsive table-history-container">
-                                        <table className="table table-hover mb-0 align-middle">
-                                            <thead className="bg-light sticky-top">
-                                                <tr>
-                                                    <th className="ps-3">Thời gian</th>
-                                                    <th>Admin</th>
-                                                    <th>Hành động</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {adminHistory.slice(0, 30).map((h, index) => (
-                                                    <tr key={index}>
-                                                        <td className="ps-3 text-muted history-time">
-                                                            {new Date(h.time).toLocaleString("vi-VN")}
-                                                        </td>
-                                                        <td className="fw-semibold">{h.created_by}</td>
-                                                        <td>{h.content}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className="col-lg-6">
-                            <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-white py-3 border-bottom-0">
-                                    <div className="d-flex align-items-center gap-2">
-                                        <FaUserClock className="text-info" />
-                                        <h6 className="mb-0 fw-bold text-info">Lịch sử Người dùng</h6>
-                                    </div>
-                                </div>
-                                <div className="card-body p-0">
-                                    <div className="table-responsive table-history-container">
-                                        <table className="table table-hover mb-0 align-middle">
-                                            <thead className="bg-light sticky-top">
-                                                <tr>
-                                                    <th className="ps-3">Thời gian</th>
-                                                    <th>User</th>
-                                                    <th>Hành động</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {userHistory.slice(0, 30).map((h, index) => (
-                                                    <tr key={index}>
-                                                        <td className="ps-3 text-muted history-time">
-                                                            {new Date(h.time).toLocaleString("vi-VN")}
-                                                        </td>
-                                                        <td className="fw-semibold">{h.created_by}</td>
-                                                        <td>{h.content}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>

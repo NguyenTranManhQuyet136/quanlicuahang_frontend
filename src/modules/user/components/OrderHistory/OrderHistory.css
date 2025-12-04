@@ -15,6 +15,9 @@
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .order-card:hover {
@@ -68,6 +71,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    flex-grow: 1;
 }
 
 .order-item {
@@ -122,6 +126,7 @@
     padding: 1.25rem;
     background: #f8f9fa;
     border-top: 1px solid #e2e8f0;
+    margin-top: auto;
 }
 
 .order-total {
