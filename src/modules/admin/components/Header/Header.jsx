@@ -15,7 +15,8 @@ const Header = (props) => {
     const [toast, setToast] = useState(null);
 
     const updateNotifications = () => {
-        fetch("http://localhost:5000/api/admin/history")
+        const username = localStorage.getItem("username_admin");
+        fetch(`http://localhost:5000/api/admin/history?username=${username}`)
             .then((res) => res.json())
             .then((data) => {
                 const newNoti = data.slice(0, 10).map((item) => {
@@ -112,7 +113,7 @@ const Header = (props) => {
                     },
                     body: JSON.stringify({
                         content: message,
-                        created_by: "admin",
+                        created_by: localStorage.getItem("username_admin"),
                     }),
                 }).then(() => {
                     updateNotifications();
