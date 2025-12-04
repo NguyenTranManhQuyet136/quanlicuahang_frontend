@@ -313,14 +313,15 @@ const Order = () => {
                                                                 <button
                                                                     style={{
                                                                         padding: "6px 10px",
-                                                                        backgroundColor: "#cfe2ff",
-                                                                        color: "#0d6efd",
+                                                                        backgroundColor: order.status === "Đã hủy" ? "#e9ecef" : "#cfe2ff",
+                                                                        color: order.status === "Đã hủy" ? "#adb5bd" : "#0d6efd",
                                                                         border: "none",
                                                                         borderRadius: "6px",
                                                                         fontWeight: "500",
                                                                         display: "flex",
                                                                         alignItems: "center",
                                                                         gap: "4px",
+                                                                        cursor: order.status === "Đã hủy" ? "not-allowed" : "pointer",
                                                                     }}
                                                                     onClick={() =>
                                                                         setFixStatus({
@@ -334,6 +335,7 @@ const Order = () => {
                                                                             },
                                                                         })
                                                                     }
+                                                                    disabled={order.status === "Đã hủy"}
                                                                 >
                                                                     <FiEdit2 size={16} />
                                                                     Sửa

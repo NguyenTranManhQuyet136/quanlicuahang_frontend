@@ -91,7 +91,7 @@ const CreateInvoice = () => {
         calculateTotal(newItems);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log(invoiceData.items)
         console.log(invoiceData)
 
@@ -121,18 +121,20 @@ const CreateInvoice = () => {
                 order_id: order_id,
                 product_id: dataProduct.product.product_id,
                 unit_quantity: dataProduct.quantity,
-                unit_price: dataProduct.product.price,
+                unit_price: dataProduct.price,
             });
         };
 
-        handleAddCustomer()
-        handleAddOrder()
+        await handleAddCustomer()
+        await handleAddOrder()
         for (let i = 0; i < invoiceData.items.length; i++) {
-            handleAddOrderDetail(invoiceData.invoiceNumber, (invoiceData.items)[i])
+            await handleAddOrderDetail(invoiceData.invoiceNumber, (invoiceData.items)[i])
         }
-        logAdminAction("Tạo hóa đơn: " + invoiceData.invoiceNumber);
+        await logAdminAction("Tạo hóa đơn: " + invoiceData.invoiceNumber);
 
-        window.location.reload()
+        setTimeout(() => {
+            window.location.reload()
+        }, 1500);
     };
 
     return (

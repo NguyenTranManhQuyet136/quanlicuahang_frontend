@@ -8,15 +8,29 @@ const Header = ({ onSearch }) => {
   const location = useLocation();
   const [notificationMsg, setNotificationMsg] = useState('');
   const [isError, setIsError] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   const btnClass = "btn btn-outline-light border rounded-circle icon-btn";
   const activeClass = (path) => location.pathname === path ? 'active' : 'text-dark';
 
   useEffect(() => {
+    const updateCartCount = () => {
+      try {
+        const cart = JSON.parse(localStorage.getItem('shopping_cart') || '[]');
+        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(count);
+      } catch (e) {
+        setCartCount(0);
+      }
+    };
+
+    updateCartCount();
+
     const handleAddToCart = (event) => {
       setNotificationMsg(`Đã thêm ${event.detail.type || 'sản phẩm'} ${event.detail.name} vào giỏ hàng thành công`);
       setIsError(false);
       setTimeout(() => setNotificationMsg(''), 3000);
+      updateCartCount();
     };
 
     const handlePaymentError = (event) => {
@@ -25,12 +39,20 @@ const Header = ({ onSearch }) => {
       setTimeout(() => setNotificationMsg(''), 3000);
     };
 
+    const handleCartUpdate = () => {
+      updateCartCount();
+    };
+
     window.addEventListener('addToCart', handleAddToCart);
     window.addEventListener('paymentError', handlePaymentError);
+    window.addEventListener('cartUpdated', handleCartUpdate);
+    window.addEventListener('storage', handleCartUpdate);
 
     return () => {
       window.removeEventListener('addToCart', handleAddToCart);
       window.removeEventListener('paymentError', handlePaymentError);
+      window.removeEventListener('cartUpdated', handleCartUpdate);
+      window.removeEventListener('storage', handleCartUpdate);
     };
   }, []);
 
@@ -66,14 +88,17 @@ const Header = ({ onSearch }) => {
 
           <button className={`${btnClass} position-relative ${activeClass('/Cart')}`} onClick={() => navigate('/Cart')} title="Giỏ hàng">
             <FiShoppingCart />
-            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+            {cartCount > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {cartCount}
+              </span>
+            )}
           </button>
 
           <button className={`${btnClass} ${activeClass('/History')}`} onClick={() => navigate('/History')} title="Lịch sử"><FiFileText /></button>
 
-          <button className={`btn btn-outline-light border rounded-pill user-btn ${activeClass('/Profile')}`} onClick={() => navigate('/Profile')} title="Tài khoản">
+          <button className={`${btnClass} ${activeClass('/Profile')}`} onClick={() => navigate('/Profile')} title="Tài khoản">
             <FiUser />
-            <span className="ms-2 fw-medium">{localStorage.getItem('username_user') || 'Tài khoản'}</span>
           </button>
 
           <button className={`${btnClass} logout-btn text-dark`} onClick={handleLogout} title="Đăng xuất"><FiLogOut /></button>

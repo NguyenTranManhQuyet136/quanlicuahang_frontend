@@ -3,6 +3,7 @@ import './ProfileInfo.css';
 import FormChangePassword from '../Form/FormChangePassword/FormChangePassword';
 import axios from 'axios';
 import { logUserAction } from "../../../../hooks/logUserAction";
+import { showNotification } from "../../../../utils/notification";
 
 const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -17,6 +18,13 @@ const ProfileInfo = () => {
         birthday: '',
         gender: '',
         avatar: ''
+    });
+
+    const [orderStats, setOrderStats] = useState({
+        pending: 0,
+        shipping: 0,
+        completed: 0,
+        cancelled: 0
     });
 
     useEffect(() => {
@@ -34,8 +42,21 @@ const ProfileInfo = () => {
                             gender: res.data.gender || ''
                         });
                     }
+
+                    const orderRes = await axios.post('http://localhost:5000/api/order/search', {
+                        customer_id: username
+                    });
+                    if (orderRes.data) {
+                        const orders = orderRes.data;
+                        setOrderStats({
+                            pending: orders.filter(o => o.status === 'Đang chờ xác nhận' || o.status === 'Chờ lấy hàng').length,
+                            shipping: orders.filter(o => o.status === 'Đang giao').length,
+                            completed: orders.filter(o => o.status === 'Đã giao').length,
+                            cancelled: orders.filter(o => o.status === 'Đã hủy').length
+                        });
+                    }
                 } catch (error) {
-                    console.error("Error fetching user data:", error);
+                    console.error("Error fetching data:", error);
                     setUserData(prev => ({ ...prev, customer_id: username }));
                 }
             }
@@ -52,10 +73,10 @@ const ProfileInfo = () => {
             });
             logUserAction("Sửa thông tin cá nhân");
             setIsEditing(false);
-            alert("Cập nhật thông tin thành công!");
+            showNotification("Cập nhật thông tin thành công!");
         } catch (error) {
             console.error("Error saving user data:", error);
-            alert("Lỗi khi cập nhật thông tin!");
+            showNotification("Lỗi khi cập nhật thông tin!");
         }
     };
 
@@ -66,12 +87,12 @@ const ProfileInfo = () => {
 
     const handleChangePassword = (password, passwordChange, confirmPasswordChange) => {
         if (passwordChange !== confirmPasswordChange) {
-            alert("Mật khẩu xác nhận không khớp!");
+            showNotification("Mật khẩu xác nhận không khớp!");
             return;
         }
         console.log("Changing password:", { password, passwordChange });
         logUserAction("Đổi mật khẩu");
-        alert("Đổi mật khẩu thành công!");
+        showNotification("Đổi mật khẩu thành công!");
         setChangePasswordStatus(false);
     };
 
@@ -129,14 +150,24 @@ const ProfileInfo = () => {
 
                             <div className="stats-row mb-4">
                                 <div className="stat-box">
-                                    <i className="bi bi-box-seam"></i>
-                                    <p className="stat-label">Đơn hàng</p>
-                                    <p className="stat-value">0</p>
+                                    <i className="bi bi-hourglass-split text-warning"></i>
+                                    <p className="stat-label">Chờ xác nhận</p>
+                                    <p className="stat-value">{orderStats.pending}</p>
                                 </div>
                                 <div className="stat-box">
-                                    <i className="bi bi-heart"></i>
-                                    <p className="stat-label">Yêu thích</p>
-                                    <p className="stat-value">0</p>
+                                    <i className="bi bi-truck text-primary"></i>
+                                    <p className="stat-label">Đang giao</p>
+                                    <p className="stat-value">{orderStats.shipping}</p>
+                                </div>
+                                <div className="stat-box">
+                                    <i className="bi bi-check-circle text-success"></i>
+                                    <p className="stat-label">Hoàn thành</p>
+                                    <p className="stat-value">{orderStats.completed}</p>
+                                </div>
+                                <div className="stat-box">
+                                    <i className="bi bi-x-circle text-danger"></i>
+                                    <p className="stat-label">Đã hủy</p>
+                                    <p className="stat-value">{orderStats.cancelled}</p>
                                 </div>
                             </div>
 
