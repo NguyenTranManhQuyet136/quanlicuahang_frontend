@@ -41,13 +41,13 @@ const Login = () => {
                         navigate("/Store");
                     }
                 } else {
-                    showNotification("Sai tài khoản hoặc mật khẩu");
+                    showNotification("Sai tài khoản hoặc mật khẩu", true);
                 }
             } else {
-                showNotification("Sai tài khoản hoặc mật khẩu");
+                showNotification("Sai tài khoản hoặc mật khẩu", true);
             }
         } catch (error) {
-            showNotification("Lỗi kết nối server");
+            showNotification("Lỗi kết nối server", true);
         }
     };
 
@@ -55,23 +55,27 @@ const Login = () => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            showNotification("Mật khẩu xác nhận không khớp!");
+            showNotification("Mật khẩu xác nhận không khớp!", true);
             return;
         }
 
-        const res = await axios.post("http://localhost:5000/api/register", {
-            username,
-            password
-        });
+        try {
+            const res = await axios.post("http://localhost:5000/api/register", {
+                username,
+                password
+            });
 
-        if (res.data.status) {
-            showNotification("Đăng ký thành công! Vui lòng đăng nhập.");
-            setIsRegister(false);
-            setUsername("");
-            setPassword("");
-            setConfirmPassword("");
-        } else {
-            showNotification(res.data.message || "Đăng ký thất bại");
+            if (res.data.status) {
+                showNotification("Đăng ký thành công! Vui lòng đăng nhập.", true);
+                setIsRegister(false);
+                setUsername("");
+                setPassword("");
+                setConfirmPassword("");
+            } else {
+                showNotification("Đăng ký thất bại: " + (res.data.message || "Lỗi không xác định"), true);
+            }
+        } catch (error) {
+            showNotification("Lỗi kết nối server khi đăng ký", true);
         }
     };
 

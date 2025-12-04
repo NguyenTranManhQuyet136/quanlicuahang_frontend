@@ -25,7 +25,7 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
 
     const [fullname, setFullname] = useState(props.fullname);
     const [gender, setGender] = useState(props.gender);
-    const [birthday, setBirthday] = useState(props.birthday.slice(0, 10));
+    const [birthday, setBirthday] = useState(props.birthday || "");
     const [position, setPosition] = useState(props.position);
     const [phoneNumber, setPhoneNumber] = useState(props.phoneNumber);
     const [email, setEmail] = useState(props.email);

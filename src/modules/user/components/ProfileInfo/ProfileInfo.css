@@ -248,6 +248,12 @@
     box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
 }
 
+.cancelled-box {
+    grid-column: span 2;
+    background: #fff5f5;
+    border: 1px solid #ffe3e3;
+}
+
 /* Responsive */
 @media (max-width: 991px) {
     .avatar-card {

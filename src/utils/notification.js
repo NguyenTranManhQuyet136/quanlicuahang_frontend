@@ -1,4 +1,5 @@
-export const showNotification = (message) => {
+export const showNotification = (message, force = false) => {
+    if (!force && localStorage.getItem("notification") === "false") return;
     const isError = message.toLowerCase().includes("lỗi") ||
         message.toLowerCase().includes("thất bại") ||
         message.toLowerCase().includes("sai") ||
