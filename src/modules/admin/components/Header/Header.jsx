@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { FaUserCircle, FaBell } from "react-icons/fa";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import "./Header.css";
+import { showNotification } from "../../../../utils/notification";
 
 const Header = (props) => {
     const [openStatus, setOpenStatus] = useState(false);
@@ -12,18 +13,22 @@ const Header = (props) => {
 
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [toast, setToast] = useState(null);
 
     const updateNotifications = () => {
         const username = localStorage.getItem("username_admin");
         fetch(`http://localhost:5000/api/admin/history?username=${username}`)
             .then((res) => res.json())
             .then((data) => {
+                const lastView = localStorage.getItem("last_view_time") || "1970-01-01";
+                let count = 0;
                 const newNoti = data.slice(0, 10).map((item) => {
+                    if (new Date(item.time) > new Date(lastView)) {
+                        count++;
+                    }
                     return `${item.content} vào lúc ${new Date(item.time).toLocaleString("vi-VN")}`;
                 });
                 setNotifications(newNoti);
-                setUnreadCount(newNoti.length);
+                setUnreadCount(count);
             });
     };
 
@@ -117,8 +122,7 @@ const Header = (props) => {
                     }),
                 }).then(() => {
                     updateNotifications();
-                    setToast(shortMessage);
-                    setTimeout(() => setToast(null), 3000);
+                    showNotification(shortMessage);
                 });
             }
         };
@@ -134,6 +138,7 @@ const Header = (props) => {
     const handleBellClick = () => {
         if (!showNoti) {
             setUnreadCount(0);
+            localStorage.setItem("last_view_time", new Date().toISOString());
         }
         setShowNoti(!showNoti);
     };
@@ -171,11 +176,6 @@ const Header = (props) => {
 
     return (
         <header className="header-wrapper">
-            {toast && (
-                <div className="header-toast">
-                    {toast}
-                </div>
-            )}
             <div className="header-container">
                 <div className="header-title">
                     <h4 className="header-name">{props.name}</h4>

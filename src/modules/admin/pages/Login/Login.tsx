@@ -5,6 +5,7 @@ import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import "./Login.css";
 import { logAdminAction } from "../../../../hooks/logAdminAction";
 import { logUserAction } from "../../../../hooks/logUserAction";
+import { showNotification } from "../../../../utils/notification";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -28,23 +29,27 @@ const Login = () => {
                     if (res.data.role == "admin") {
                         localStorage.setItem("username_admin", res.data.username);
                         localStorage.setItem("password_admin", res.data.password);
+                        localStorage.setItem("password_admin", res.data.password);
                         logAdminAction("Đăng nhập hệ thống");
+                        showNotification("Đăng nhập thành công");
                         navigate("/Dashboard");
                     }
                     if (res.data.role == "user") {
                         localStorage.setItem("username_user", res.data.username);
                         localStorage.setItem("password_user", res.data.password);
+                        localStorage.setItem("password_user", res.data.password);
                         logUserAction("Người dùng đăng nhập");
+                        showNotification("Đăng nhập thành công");
                         navigate("/Store");
                     }
                 } else {
-                    alert("Sai tài khoản hoặc mật khẩu");
+                    showNotification("Sai tài khoản hoặc mật khẩu");
                 }
             } else {
-                alert("Sai tài khoản hoặc mật khẩu");
+                showNotification("Sai tài khoản hoặc mật khẩu");
             }
         } catch (error) {
-            alert("Lỗi kết nối server");
+            showNotification("Lỗi kết nối server");
         }
     };
 
@@ -52,7 +57,7 @@ const Login = () => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            alert("Mật khẩu xác nhận không khớp!");
+            showNotification("Mật khẩu xác nhận không khớp!");
             return;
         }
 
@@ -62,13 +67,13 @@ const Login = () => {
         });
 
         if (res.data.status) {
-            alert("Đăng ký thành công! Vui lòng đăng nhập.");
+            showNotification("Đăng ký thành công! Vui lòng đăng nhập.");
             setIsRegister(false);
             setUsername("");
             setPassword("");
             setConfirmPassword("");
         } else {
-            alert(res.data.message || "Đăng ký thất bại");
+            showNotification(res.data.message || "Đăng ký thất bại");
         }
     };
 

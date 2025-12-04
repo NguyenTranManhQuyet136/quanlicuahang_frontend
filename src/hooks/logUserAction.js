@@ -1,4 +1,5 @@
 import axios from "axios";
+import { showNotification } from "../utils/notification";
 
 const logUserAction = async (content) => {
     const username = localStorage.getItem("username_user");
@@ -8,6 +9,7 @@ const logUserAction = async (content) => {
                 content: content,
                 created_by: username
             });
+            showNotification(content);
         } catch (error) {
             console.log("Lỗi lưu lịch sử");
         }
