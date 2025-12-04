@@ -7,6 +7,7 @@ import axios from "axios";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
 import { checkLogin } from "../../../../hooks/checkLogin";
 import { logAdminAction } from "../../../../hooks/logAdminAction";
+import { showNotification } from "../../../../utils/notification";
 
 const User = () => {
     checkLogin("admin");
@@ -119,7 +120,7 @@ const User = () => {
             username: username,
             fullname: fullname,
             gender: gender,
-            birthday: birthday,
+            birthday: birthday === "" ? null : birthday,
             position: position,
             phone_number: phoneNumber,
             email: email
@@ -127,6 +128,7 @@ const User = () => {
         logAdminAction("Sửa thông tin cá nhân: " + username);
         resetData();
         setEditProfileStatus(false);
+        showNotification("Cập nhật thông tin thành công!", true);
     };
 
     return (
