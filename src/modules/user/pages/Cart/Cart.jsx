@@ -74,7 +74,7 @@ const Cart = () => {
     const handleCheckout = async () => {
         const username = localStorage.getItem('username_user');
         if (!username) {
-            showNotification("Vui lòng đăng nhập để thanh toán!");
+            showNotification("Vui lòng đăng nhập để thanh toán!", true);
             navigate('/Login');
             return;
         }
@@ -91,7 +91,7 @@ const Cart = () => {
 
             const userData = userRes.data;
             if (!userData || !userData.fullname || !userData.email || !userData.phone_number || !userData.address || !userData.birthday || !userData.gender) {
-                showNotification("Vui lòng cập nhật đầy đủ thông tin cá nhân (Họ tên, Email, SĐT, Địa chỉ, Ngày sinh, Giới tính) trước khi thanh toán!");
+                showNotification("Vui lòng cập nhật đầy đủ thông tin cá nhân (Họ tên, Email, SĐT, Địa chỉ, Ngày sinh, Giới tính) trước khi thanh toán!", true);
                 navigate('/Profile');
                 return;
             }
@@ -109,12 +109,12 @@ const Cart = () => {
 
             if (response.data.status) {
                 logUserAction("Đặt hàng thành công");
-                showNotification("Đặt hàng thành công! Mã đơn hàng: " + response.data.order_id);
+                showNotification("Đặt hàng thành công! Mã đơn hàng: " + response.data.order_id, true);
                 localStorage.removeItem('shopping_cart');
                 window.dispatchEvent(new Event('cartUpdated'));
                 navigate('/History');
             } else {
-                showNotification("Đặt hàng thất bại: " + response.data.message);
+                showNotification("Đặt hàng thất bại: " + response.data.message, true);
             }
         } catch (error) {
             console.error("Checkout error:", error);

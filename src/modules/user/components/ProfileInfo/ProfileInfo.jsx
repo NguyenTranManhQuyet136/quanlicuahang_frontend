@@ -22,6 +22,7 @@ const ProfileInfo = () => {
 
     const [orderStats, setOrderStats] = useState({
         pending: 0,
+        waiting: 0,
         shipping: 0,
         completed: 0,
         cancelled: 0
@@ -49,7 +50,8 @@ const ProfileInfo = () => {
                     if (orderRes.data) {
                         const orders = orderRes.data;
                         setOrderStats({
-                            pending: orders.filter(o => o.status === 'Đang chờ xác nhận' || o.status === 'Chờ lấy hàng').length,
+                            pending: orders.filter(o => o.status === 'Đang chờ xác nhận').length,
+                            waiting: orders.filter(o => o.status === 'Chờ lấy hàng').length,
                             shipping: orders.filter(o => o.status === 'Đang giao hàng').length,
                             completed: orders.filter(o => o.status === 'Đã giao hàng' || o.status === 'Hoàn tất').length,
                             cancelled: orders.filter(o => o.status === 'Đã hủy').length
@@ -155,6 +157,11 @@ const ProfileInfo = () => {
                                     <p className="stat-value">{orderStats.pending}</p>
                                 </div>
                                 <div className="stat-box">
+                                    <i className="bi bi-box-seam text-info"></i>
+                                    <p className="stat-label">Chờ lấy hàng</p>
+                                    <p className="stat-value">{orderStats.waiting}</p>
+                                </div>
+                                <div className="stat-box">
                                     <i className="bi bi-truck text-primary"></i>
                                     <p className="stat-label">Đang giao</p>
                                     <p className="stat-value">{orderStats.shipping}</p>
@@ -164,7 +171,7 @@ const ProfileInfo = () => {
                                     <p className="stat-label">Hoàn thành</p>
                                     <p className="stat-value">{orderStats.completed}</p>
                                 </div>
-                                <div className="stat-box">
+                                <div className="stat-box cancelled-box">
                                     <i className="bi bi-x-circle text-danger"></i>
                                     <p className="stat-label">Đã hủy</p>
                                     <p className="stat-value">{orderStats.cancelled}</p>
