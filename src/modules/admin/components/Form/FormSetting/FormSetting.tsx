@@ -19,7 +19,7 @@ const FormSetting = (props: any) => {
     };
 
     return (
-        <div className="form-setting-overlay" onClick={props.closeForm}>
+        <div className="form-setting-overlay">
             <div className="form-setting-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="form-setting-header">
                     <div className="form-setting-header-content">

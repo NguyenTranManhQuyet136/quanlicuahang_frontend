@@ -25,7 +25,7 @@ const FormAdd = (props: any) => {
     }, [props.typeData]);
 
     return (
-        <div className="form-add-overlay" onClick={props.closeForm}>
+        <div className="form-add-overlay">
             <div className="form-add-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="form-add-header">
                     <div className="form-add-header-content">

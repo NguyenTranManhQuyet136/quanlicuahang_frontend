@@ -116,16 +116,16 @@ const User = () => {
 
     const handleEdit = async (data: any) => {
         try {
-            const res = await axios.post("http://localhost:5000/api/edit_profile", {
+            const res = await axios.post("http://localhost:5000/api/user/fix", {
                 username: username,
                 ...data
             });
-            if (res.data.status) {
+            if (res.status === 200) {
                 showNotification("Cập nhật thông tin thành công");
                 setEditProfileStatus(false);
                 resetData();
             } else {
-                showNotification(res.data.message || "Cập nhật thất bại", true);
+                showNotification("Cập nhật thất bại", true);
             }
         } catch (error) {
             showNotification("Lỗi kết nối server", true);
