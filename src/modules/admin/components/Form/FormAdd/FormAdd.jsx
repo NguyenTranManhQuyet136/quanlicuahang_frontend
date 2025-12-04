@@ -80,27 +80,28 @@ const FormAdd = (props) => {
                                 )}
                             </div>
                         ))}
-
-                        <div className="form-add-actions">
-                            <button
-                                type="button"
-                                className="form-add-btn-cancel"
-                                onClick={props.closeForm}
-                            >
-                                Hủy bỏ
-                            </button>
-                            <button
-                                type="button"
-                                className="form-add-btn-submit"
-                                onClick={() => {
-                                    console.log(dataForm)
-                                    props.handleAdd(dataForm)
-                                }}
-                            >
-                                Thêm mới
-                            </button>
-                        </div>
                     </form>
+                </div>
+                <div className="form-add-footer">
+                    <div className="form-add-actions">
+                        <button
+                            type="button"
+                            className="form-add-btn-cancel"
+                            onClick={props.closeForm}
+                        >
+                            Hủy bỏ
+                        </button>
+                        <button
+                            type="button"
+                            className="form-add-btn-submit"
+                            onClick={() => {
+                                console.log(dataForm)
+                                props.handleAdd(dataForm)
+                            }}
+                        >
+                            Thêm mới
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

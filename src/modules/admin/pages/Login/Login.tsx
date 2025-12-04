@@ -31,7 +31,6 @@ const Login = () => {
                         localStorage.setItem("password_admin", res.data.password);
                         localStorage.setItem("password_admin", res.data.password);
                         logAdminAction("Đăng nhập hệ thống");
-                        showNotification("Đăng nhập thành công");
                         navigate("/Dashboard");
                     }
                     if (res.data.role == "user") {
@@ -39,7 +38,6 @@ const Login = () => {
                         localStorage.setItem("password_user", res.data.password);
                         localStorage.setItem("password_user", res.data.password);
                         logUserAction("Người dùng đăng nhập");
-                        showNotification("Đăng nhập thành công");
                         navigate("/Store");
                     }
                 } else {
