@@ -15,10 +15,15 @@ const Header = (props) => {
     const [toast, setToast] = useState(null);
 
     const updateNotifications = () => {
-        const stored = JSON.parse(localStorage.getItem("admin_notifications") || "[]");
-        const count = parseInt(localStorage.getItem("admin_unread_count") || "0");
-        setNotifications(stored);
-        setUnreadCount(count);
+        fetch("http://localhost:5000/api/admin/history")
+            .then((res) => res.json())
+            .then((data) => {
+                const newNoti = data.slice(0, 10).map((item) => {
+                    return `${item.content} vào lúc ${new Date(item.time).toLocaleString("vi-VN")}`;
+                });
+                setNotifications(newNoti);
+                setUnreadCount(newNoti.length);
+            });
     };
 
     const changedFields = useRef(new Set());
@@ -100,20 +105,20 @@ const Header = (props) => {
             }
 
             if (message) {
-                const time = new Date().toLocaleString('vi-VN');
-                message = `${message} vào lúc ${time}`;
-
-                const currentNotifications = JSON.parse(localStorage.getItem("admin_notifications") || "[]");
-                currentNotifications.unshift(message);
-                localStorage.setItem("admin_notifications", JSON.stringify(currentNotifications));
-
-                const currentUnread = parseInt(localStorage.getItem("admin_unread_count") || "0");
-                localStorage.setItem("admin_unread_count", (currentUnread + 1).toString());
-
-                updateNotifications();
-
-                setToast(shortMessage);
-                setTimeout(() => setToast(null), 3000);
+                fetch("http://localhost:5000/api/admin/history", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        content: message,
+                        created_by: "admin",
+                    }),
+                }).then(() => {
+                    updateNotifications();
+                    setToast(shortMessage);
+                    setTimeout(() => setToast(null), 3000);
+                });
             }
         };
 
@@ -127,9 +132,7 @@ const Header = (props) => {
 
     const handleBellClick = () => {
         if (!showNoti) {
-            localStorage.setItem("admin_unread_count", "0");
             setUnreadCount(0);
-            window.dispatchEvent(new Event("notificationUpdated"));
         }
         setShowNoti(!showNoti);
     };
