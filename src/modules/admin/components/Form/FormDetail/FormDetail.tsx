@@ -81,109 +81,111 @@ const FormDetail = (props: any) => {
                     </button>
                 </div>
 
-                {loading ? (
-                    <div className="d-flex justify-content-center align-items-center p-5">
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                ) : dataForm.length === 0 ? (
-                    <div className="form-detail-empty">
-                        Không có dữ liệu
-                    </div>
-                ) : (
-                    <>
-                        {bonusInfo && (
-                            <div className="form-detail-bonus-info">
-                                {props.type_target === "order" ? (
-                                    <>
-                                        <div className="form-detail-info-item">
-                                            <small>Mã khách hàng</small>
-                                            <p>{dataForm[0].customer_id}</p>
-                                        </div>
-                                        <div className="form-detail-info-item">
-                                            <small>Tên khách hàng</small>
-                                            <p>{dataForm[0].fullname}</p>
-                                        </div>
-                                        <div className="form-detail-info-item">
-                                            <small>Mã hóa đơn</small>
-                                            <p>{dataForm[0].order_id}</p>
-                                        </div>
-                                        <div className="form-detail-info-item">
-                                            <small>Ngày đặt hàng</small>
-                                            <p>{new Date(dataForm[0].order_date.slice(0, 10)).toLocaleDateString("vi-VN")}</p>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="form-detail-info-item">
-                                            <small>Mã phiếu nhập</small>
-                                            <p>{props.id_target}</p>
-                                        </div>
-                                        <div className="form-detail-info-item">
-                                            <small>Nhà cung cấp</small>
-                                            <p>{dataForm[0].supplier_name}</p>
-                                        </div>
-                                        <div className="form-detail-info-item">
-                                            <small>Ngày nhập</small>
-                                            <p>{new Date(dataForm[0].import_date.slice(0, 10)).toLocaleDateString("vi-VN")}</p>
-                                        </div>
-                                    </>
-                                )}
+                <div className="form-detail-body">
+                    {loading ? (
+                        <div className="d-flex justify-content-center align-items-center p-5">
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Loading...</span>
                             </div>
-                        )}
+                        </div>
+                    ) : dataForm.length === 0 ? (
+                        <div className="form-detail-empty">
+                            Không có dữ liệu
+                        </div>
+                    ) : (
+                        <>
+                            {bonusInfo && (
+                                <div className="form-detail-bonus-info">
+                                    {props.type_target === "order" ? (
+                                        <>
+                                            <div className="form-detail-info-item">
+                                                <small>Mã khách hàng</small>
+                                                <p>{dataForm[0].customer_id}</p>
+                                            </div>
+                                            <div className="form-detail-info-item">
+                                                <small>Tên khách hàng</small>
+                                                <p>{dataForm[0].fullname}</p>
+                                            </div>
+                                            <div className="form-detail-info-item">
+                                                <small>Mã hóa đơn</small>
+                                                <p>{dataForm[0].order_id}</p>
+                                            </div>
+                                            <div className="form-detail-info-item">
+                                                <small>Ngày đặt hàng</small>
+                                                <p>{new Date(dataForm[0].order_date.slice(0, 10)).toLocaleDateString("vi-VN")}</p>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="form-detail-info-item">
+                                                <small>Mã phiếu nhập</small>
+                                                <p>{props.id_target}</p>
+                                            </div>
+                                            <div className="form-detail-info-item">
+                                                <small>Nhà cung cấp</small>
+                                                <p>{dataForm[0].supplier_name}</p>
+                                            </div>
+                                            <div className="form-detail-info-item">
+                                                <small>Ngày nhập</small>
+                                                <p>{new Date(dataForm[0].import_date.slice(0, 10)).toLocaleDateString("vi-VN")}</p>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            )}
 
-                        <div className="form-detail-table-wrapper">
-                            <table className="form-detail-table">
-                                <thead>
-                                    <tr>
-                                        {colInfo.map((col: any) => (
-                                            <th key={col.key}>
-                                                {col.label}
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {dataForm.map((row: any, idx: number) => (
-                                        <tr key={idx}>
+                            <div className="form-detail-table-wrapper">
+                                <table className="form-detail-table">
+                                    <thead>
+                                        <tr>
                                             {colInfo.map((col: any) => (
-                                                <td key={`${idx}-${col.key}`}>
-                                                    {col.type === "select" && col.options ? (
-                                                        <span
-                                                            className={`form-detail-badge ${row[col.key] === 1
-                                                                ? "form-detail-badge-active"
-                                                                : "form-detail-badge-inactive"
-                                                                }`}
-                                                        >
-                                                            {col.options.find((opt: any) => opt.value === row[col.key])?.label || "-"}
-                                                        </span>
-                                                    ) : col.type === "date" ? (
-                                                        new Date(row[col.key]).toLocaleDateString("vi-VN")
-                                                    ) : col.type === "number" ? (
-                                                        Number(row[col.key] || 0).toLocaleString("vi-VN")
-                                                    ) : (
-                                                        row[col.key] || "-"
-                                                    )}
-                                                </td>
+                                                <th key={col.key}>
+                                                    {col.label}
+                                                </th>
                                             ))}
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {dataForm.map((row: any, idx: number) => (
+                                            <tr key={idx}>
+                                                {colInfo.map((col: any) => (
+                                                    <td key={`${idx}-${col.key}`}>
+                                                        {col.type === "select" && col.options ? (
+                                                            <span
+                                                                className={`form-detail-badge ${row[col.key] === 1
+                                                                    ? "form-detail-badge-active"
+                                                                    : "form-detail-badge-inactive"
+                                                                    }`}
+                                                            >
+                                                                {col.options.find((opt: any) => opt.value === row[col.key])?.label || "-"}
+                                                            </span>
+                                                        ) : col.type === "date" ? (
+                                                            new Date(row[col.key]).toLocaleDateString("vi-VN")
+                                                        ) : col.type === "number" ? (
+                                                            Number(row[col.key] || 0).toLocaleString("vi-VN")
+                                                        ) : (
+                                                            row[col.key] || "-"
+                                                        )}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <div className="form-detail-actions">
-                            <button
-                                type="button"
-                                className="form-detail-btn-close"
-                                onClick={props.closeForm}
-                            >
-                                Đóng
-                            </button>
-                        </div>
-                    </>
-                )}
+                            <div className="form-detail-actions">
+                                <button
+                                    type="button"
+                                    className="form-detail-btn-close"
+                                    onClick={props.closeForm}
+                                >
+                                    Đóng
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
         </div>
     );
