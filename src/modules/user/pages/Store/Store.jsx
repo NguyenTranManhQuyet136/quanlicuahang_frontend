@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import Header from "../../components/Header/Header";
 import CategoryNav from "../../components/CategoryNav/CategoryNav";
@@ -11,6 +12,18 @@ const Store = () => {
     checkLogin("user");
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await axios.get("http://localhost:5000/api/product");
+            setProducts(res.data);
+        };
+        fetchData();
+    }, []);
+
+    // Extract unique categories from products
+    const categories = ['all', ...new Set(products.map(p => p.type))];
 
     return (
         <div className="store-page">
@@ -19,8 +32,13 @@ const Store = () => {
             <CategoryNav
                 activeCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
+                categories={categories}
             />
-            <ProductList selectedCategory={selectedCategory} searchTerm={searchTerm} />
+            <ProductList
+                selectedCategory={selectedCategory}
+                searchTerm={searchTerm}
+                products={products}
+            />
         </div>
     );
 }

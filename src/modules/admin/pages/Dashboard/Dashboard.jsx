@@ -162,7 +162,6 @@ const Dashboard = () => {
             bg: "bg-warning",
             link: "/Warehouse",
             details: [
-                { label: "Tổng giá trị", value: `${warehouse.reduce((sum, w) => sum + Number(w.total_value), 0).toLocaleString("vi-VN")} ₫` },
                 ...warehouseStats
             ]
         }

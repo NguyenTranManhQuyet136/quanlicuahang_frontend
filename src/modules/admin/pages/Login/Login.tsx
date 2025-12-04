@@ -26,20 +26,18 @@ const Login = () => {
 
             if (res.data) {
                 if (res.data.statusCheck == true) {
-                    if (res.data.role == "admin") {
+                    if (res.data.role == "admin" || res.data.role == "superadmin") {
                         localStorage.setItem("username_admin", res.data.username);
                         localStorage.setItem("password_admin", res.data.password);
-                        localStorage.setItem("password_admin", res.data.password);
+                        localStorage.setItem("role", res.data.role);
                         logAdminAction("Đăng nhập hệ thống");
-                        showNotification("Đăng nhập thành công");
                         navigate("/Dashboard");
                     }
                     if (res.data.role == "user") {
                         localStorage.setItem("username_user", res.data.username);
                         localStorage.setItem("password_user", res.data.password);
-                        localStorage.setItem("password_user", res.data.password);
+                        localStorage.setItem("role", res.data.role);
                         logUserAction("Người dùng đăng nhập");
-                        showNotification("Đăng nhập thành công");
                         navigate("/Store");
                     }
                 } else {

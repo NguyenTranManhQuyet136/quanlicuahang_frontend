@@ -9,6 +9,9 @@ import Warehouse from "./modules/admin/pages/Warehouse/Warehouse";
 import User from "./modules/admin/pages/User/User";
 import CreateInvoice from "./modules/admin/pages/CreateInvoice/CreateInvoice";
 
+import AccountManager from "./modules/superadmin/pages/AccountManager/AccountManager";
+import HistoryManager from "./modules/superadmin/pages/HistoryManager/HistoryManager";
+
 import Store from "./modules/user/pages/Store/Store";
 import Cart from "./modules/user/pages/Cart/Cart";
 import Profile from "./modules/user/pages/Profile/Profile";
@@ -29,6 +32,9 @@ function App() {
                     <Route path="/Warehouse" element={<Warehouse />} />
                     <Route path="/User" element={<User />}></Route>
                     <Route path="/create-invoice" element={<CreateInvoice />}></Route>
+
+                    <Route path="/AccountManager" element={<AccountManager />} />
+                    <Route path="/HistoryManager" element={<HistoryManager />} />
 
                     <Route path="/Store" element={<Store />}></Route>
                     <Route path="/Cart" element={<Cart />}></Route>
