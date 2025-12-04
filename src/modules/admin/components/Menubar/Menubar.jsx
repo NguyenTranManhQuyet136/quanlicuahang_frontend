@@ -7,6 +7,7 @@ import {
     FaCog,
     FaSignOutAlt,
     FaPlus,
+    FaClock,
 } from "react-icons/fa";
 import "./Menubar.css";
 import FormSetting from "../Form/FormSetting/FormSetting";
@@ -28,7 +29,7 @@ const Menubar = (props) => {
     if (role === "superadmin") {
         menu.push(
             { icon: <FaUsers />, label: "Quản lý tài khoản", ref: "/AccountManager" },
-            { icon: <FaWarehouse />, label: "Lịch sử hệ thống", ref: "/HistoryManager" }
+            { icon: <FaClock />, label: "Lịch sử hệ thống", ref: "/HistoryManager" }
         );
     }
 

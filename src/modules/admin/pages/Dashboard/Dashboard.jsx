@@ -96,23 +96,17 @@ const Dashboard = () => {
     const orderStats = countByStatus(orders, orderStatuses);
     const warehouseStats = countByStatus(warehouse, warehouseStatuses);
 
-    // Product Categories
-    const productCategories = [
-        { label: "Laptop", type: "laptop" },
-        { label: "Điện Thoại", type: "Điện thoại" },
-        { label: "Màn hình", type: "Màn hình" },
-        { label: "Tai nghe", type: "Tai nghe" },
-        { label: "Bàn phím", type: "Bàn phím" },
-        { label: "Chuột", type: "Chuột" },
-        { label: "Loa", type: "Loa" },
-    ];
+    // Product Categories - Dynamic Calculation
+    const productTypeCounts = products.reduce((acc, product) => {
+        const type = product.type || 'Khác';
+        acc[type] = (acc[type] || 0) + 1;
+        return acc;
+    }, {});
 
-    const productStats = countByStatus(products, productCategories.map(c => c.type), 'type');
-    // Map back to labels for display
-    const productDisplayStats = productStats.map(stat => {
-        const category = productCategories.find(c => c.type === stat.label);
-        return { label: category ? category.label : stat.label, value: stat.value };
-    });
+    const productDisplayStats = Object.keys(productTypeCounts).map(type => ({
+        label: type,
+        value: productTypeCounts[type]
+    }));
 
     // Area 2: Category Stats (Products, Orders, Customers, Warehouse)
     const stats = [
