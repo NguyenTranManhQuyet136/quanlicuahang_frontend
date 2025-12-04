@@ -9,7 +9,7 @@ const FormFix = (props: any) => {
     const idOld = props.dataFix[entity];
     const [dataForm, setDataForm] = useState(props.dataFix);
     return (
-        <div className="form-fix-overlay" onClick={props.closeForm}>
+        <div className="form-fix-overlay">
             <div className="form-fix-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="form-fix-header">
                     <div className="form-fix-header-content">

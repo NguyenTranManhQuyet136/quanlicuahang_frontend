@@ -7,7 +7,7 @@ const FormRemove = (props: any) => {
     const themeContext = useContext(ThemeContext);
 
     return (
-        <div className="form-remove-overlay" onClick={props.closeForm}>
+        <div className="form-remove-overlay">
             <div className="form-remove-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="form-remove-header">
                     <div className="form-remove-header-content">

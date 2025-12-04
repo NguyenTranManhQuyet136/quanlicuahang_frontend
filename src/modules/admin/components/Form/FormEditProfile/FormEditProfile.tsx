@@ -4,14 +4,14 @@ import "./FormEditProfile.css";
 
 interface SetVari {
     closeForm: () => void;
-    handleEdit: (
-        fullname: string,
-        gender: string,
-        birthday: string,
-        position: string,
-        phoneNumber: string,
-        email: string,
-    ) => void;
+    handleEdit: (data: {
+        fullname: string;
+        gender: string;
+        birthday: string;
+        position: string;
+        phoneNumber: string;
+        email: string;
+    }) => void;
     fullname: string;
     gender: string;
     birthday: string;
@@ -33,7 +33,6 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
     return (
         <div
             className="form-edit-profile-overlay"
-            onClick={props.closeForm}
         >
             <div
                 className="form-edit-profile-modal"
@@ -163,14 +162,14 @@ const FormEditProfile: React.FC<SetVari> = (props) => {
                                 type="button"
                                 className="form-edit-profile-btn-submit"
                                 onClick={() =>
-                                    props.handleEdit(
+                                    props.handleEdit({
                                         fullname,
                                         gender,
                                         birthday,
                                         position,
                                         phoneNumber,
                                         email,
-                                    )
+                                    })
                                 }
                             >
                                 <i className="bi bi-check-circle"></i>

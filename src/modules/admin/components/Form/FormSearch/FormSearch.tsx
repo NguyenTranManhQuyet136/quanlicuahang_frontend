@@ -8,7 +8,7 @@ const FormSearch = (props: any) => {
     const [dataForm, setDataForm] = useState({});
 
     return (
-        <div className="form-search-overlay" onClick={props.closeForm}>
+        <div className="form-search-overlay">
             <div className="form-search-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="form-search-header">
                     <div className="form-search-header-content">

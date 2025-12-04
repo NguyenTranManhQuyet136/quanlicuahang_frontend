@@ -21,7 +21,6 @@ const FormChangePassword: React.FC<SetVari> = (props) => {
     return (
         <div
             className="form-change-password-overlay"
-            onClick={props.closeForm}
         >
             <div
                 className="form-change-password-modal"
