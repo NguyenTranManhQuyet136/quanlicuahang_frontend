@@ -3,6 +3,7 @@ import './ProfileInfo.css';
 import FormChangePassword from '../Form/FormChangePassword/FormChangePassword';
 import axios from 'axios';
 import { logUserAction } from "../../../../hooks/logUserAction";
+import { showNotification } from "../../../../utils/notification";
 
 const ProfileInfo = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -52,10 +53,10 @@ const ProfileInfo = () => {
             });
             logUserAction("Sửa thông tin cá nhân");
             setIsEditing(false);
-            alert("Cập nhật thông tin thành công!");
+            showNotification("Cập nhật thông tin thành công!");
         } catch (error) {
             console.error("Error saving user data:", error);
-            alert("Lỗi khi cập nhật thông tin!");
+            showNotification("Lỗi khi cập nhật thông tin!");
         }
     };
 
@@ -66,12 +67,12 @@ const ProfileInfo = () => {
 
     const handleChangePassword = (password, passwordChange, confirmPasswordChange) => {
         if (passwordChange !== confirmPasswordChange) {
-            alert("Mật khẩu xác nhận không khớp!");
+            showNotification("Mật khẩu xác nhận không khớp!");
             return;
         }
         console.log("Changing password:", { password, passwordChange });
         logUserAction("Đổi mật khẩu");
-        alert("Đổi mật khẩu thành công!");
+        showNotification("Đổi mật khẩu thành công!");
         setChangePasswordStatus(false);
     };
 
