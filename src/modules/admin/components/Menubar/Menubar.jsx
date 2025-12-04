@@ -117,7 +117,11 @@ const Menubar = (props) => {
                         onClick={() => {
                             localStorage.removeItem("username");
                             localStorage.removeItem("password");
+
+                            
                         }}
+
+
                     >
                         <FaSignOutAlt size={18} /> <span>Đăng Xuất</span>
                     </a>
@@ -127,4 +131,4 @@ const Menubar = (props) => {
     );
 };
 
-export default Menubar;
+export default Menubar; 
