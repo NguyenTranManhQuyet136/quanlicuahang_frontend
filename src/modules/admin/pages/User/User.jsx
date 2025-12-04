@@ -40,7 +40,7 @@ const User = () => {
             const profile = res.data[0];
             setFullname(profile.fullname);
             setGender(profile.gender);
-            setBirthday(profile.birthday.slice(0, 10));
+            setBirthday(profile.birthday ? profile.birthday.slice(0, 10) : "");
             setPosition(profile.position);
             setPhoneNumber(profile.phone_number);
             setEmail(profile.email);
@@ -60,7 +60,7 @@ const User = () => {
         const profile = res.data[0];
         setFullname(profile.fullname);
         setGender(profile.gender);
-        setBirthday(profile.birthday.slice(0, 10));
+        setBirthday(profile.birthday ? profile.birthday.slice(0, 10) : "");
         setPosition(profile.position);
         setPhoneNumber(profile.phone_number);
         setEmail(profile.email);

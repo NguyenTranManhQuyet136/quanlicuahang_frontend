@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react";
+import { showNotification } from "../../../../utils/notification";
 import Menubar from "../../components/Menubar/Menubar";
 import Header from "../../components/Header/Header";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
@@ -92,6 +93,27 @@ const CreateInvoice = () => {
     };
 
     const handleSubmit = async () => {
+        if (!invoiceData.invoiceNumber || !invoiceData.customerId || !invoiceData.customerName || !invoiceData.invoiceDate) {
+            showNotification("Vui lòng điền đầy đủ thông tin chung!");
+            return;
+        }
+
+        if (invoiceData.items.length === 0) {
+            showNotification("Vui lòng thêm ít nhất một sản phẩm!");
+            return;
+        }
+
+        for (const item of invoiceData.items) {
+            if (!item.product || !item.productName) {
+                showNotification("Vui lòng chọn sản phẩm cho tất cả các dòng!");
+                return;
+            }
+            if (!item.quantity || item.quantity <= 0) {
+                showNotification("Số lượng sản phẩm phải lớn hơn 0!");
+                return;
+            }
+        }
+
         console.log(invoiceData.items)
         console.log(invoiceData)
 

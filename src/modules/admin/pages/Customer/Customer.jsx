@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import FormRemove from "../../components/Form/FormRemove/FormRemove";
 import FormAdd from "../../components/Form/FormAdd/FormAdd";
+import { showNotification } from "../../../../utils/notification";
 import FormFix from "../../components/Form/FormFix/FormFix";
 import FormSearch from "../../components/Form/FormSearch/FormSearch";
 import { ThemeContext } from "../../../../contexts/ThemeProvider";
@@ -81,17 +82,23 @@ const Customer = () => {
     };
 
     const handleRemove = async (customer_id) => {
-        await axios.post("http://localhost:5000/api/customer/remove", { customer_id: customer_id });
-        logAdminAction(`Xóa khách hàng: ${removeStatus.fullname}`);
-        closeForm("remove");
-        resetData();
+        try {
+            await axios.post("http://localhost:5000/api/customer/remove", { customer_id: customer_id });
+            logAdminAction(`Xóa khách hàng: ${removeStatus.fullname}`);
+            showNotification("Xóa khách hàng thành công!");
+            closeForm("remove");
+            resetData();
+        } catch (error) {
+            console.error(error);
+            showNotification("Có lỗi xảy ra khi xóa khách hàng!");
+        }
     };
 
     const handleFix = async (dataFix, idOld) => {
         await axios.post("http://localhost:5000/api/customer/fix", {
             customer_id: dataFix.customer_id,
             fullname: dataFix.fullname,
-            birthday: dataFix.birthday.slice(0, 10),
+            birthday: dataFix.birthday ? dataFix.birthday.slice(0, 10) : null,
             gender: dataFix.gender,
             address: dataFix.address,
             phone_number: dataFix.phone_number,
@@ -253,7 +260,7 @@ const Customer = () => {
                                                             {customer.fullname}
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
-                                                            {new Date(customer.birthday).toLocaleDateString('vi-VN')}
+                                                            {customer.birthday ? new Date(customer.birthday).toLocaleDateString('vi-VN') : ""}
                                                         </td>
                                                         <td style={{ color: "#212529", fontWeight: "500" }}>
                                                             {customer.gender}

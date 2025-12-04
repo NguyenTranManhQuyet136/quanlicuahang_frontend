@@ -84,7 +84,7 @@ const Header = (props) => {
                 if (type === 'nhập kho') type = 'phiếu nhập kho';
 
                 const formBody = target.closest('.form-fix-body');
-                let name = "đã chọn";
+                let name = "";
                 if (formBody) {
                     const groups = formBody.querySelectorAll('.form-fix-group');
                     for (let group of groups) {
@@ -99,7 +99,7 @@ const Header = (props) => {
 
                 let fields = Array.from(changedFields.current).map(f => `phần ${f}`).join(', ');
                 if (!fields) fields = "thông tin";
-                message = `Đã sửa ${type} ${name} ${fields} thành công`;
+                message = `Đã sửa ${fields} ${type} ${name} thành công`;
                 shortMessage = "Đã sửa thành công";
                 changedFields.current.clear();
             } else if (target.classList.contains('form-remove-btn-submit')) {
