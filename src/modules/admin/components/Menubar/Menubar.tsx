@@ -28,7 +28,7 @@ const Menubar = (props: any) => {
 
     if (role === "superadmin") {
         menu.push(
-            { icon: (FaUsers as any)({}), label: "Quản lý tài khoản", ref: "/AccountManager" },
+            { icon: (FaUsers as any)({}), label: "Tài khoản", ref: "/AccountManager" },
             { icon: (FaClock as any)({}), label: "Lịch sử hệ thống", ref: "/HistoryManager" }
         );
     }
