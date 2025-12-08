@@ -249,7 +249,6 @@
 }
 
 .cancelled-box {
-    grid-column: span 2;
     background: #fff5f5;
     border: 1px solid #ffe3e3;
 }

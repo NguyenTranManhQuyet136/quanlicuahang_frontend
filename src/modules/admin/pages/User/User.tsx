@@ -87,7 +87,7 @@ const User = () => {
             showNotification("Cập nhật ảnh đại diện thành công");
             window.location.reload();
         } catch (error) {
-            showNotification("Lỗi khi cập nhật ảnh", true);
+            showNotification("Lỗi khi cập nhật ảnh", false);
         }
     };
 
@@ -96,18 +96,26 @@ const User = () => {
         if (type === "profile") setEditProfileStatus(false);
     };
 
-    const handleChangePassword = async (data: any) => {
+    const handleChangePassword = async (oldPass: string, newPass: string, confirmPass: string) => {
+        if (newPass !== confirmPass) {
+            showNotification("Mật khẩu xác nhận không khớp", false);
+            return;
+        }
         try {
-            const res = await axios.post("http://localhost:5000/api/change_password", {
+            const res = await axios.post("http://localhost:5000/api/user/change_password", {
                 username: username,
-                oldPassword: data.oldPassword,
-                newPassword: data.newPassword
+                passwordChange: newPass
             });
             if (res.data.status) {
                 showNotification("Đổi mật khẩu thành công");
                 setChangePasswordStatus(false);
+                let passStar = ''
+                for (let i = 0; i < newPass.length; i++) {
+                    passStar += "*"
+                }
+                localStorage.setItem("password_admin", passStar)
             } else {
-                showNotification(res.data.message || "Đổi mật khẩu thất bại", true);
+                showNotification("Đổi mật khẩu thất bại", true);
             }
         } catch (error) {
             showNotification("Lỗi kết nối server", true);

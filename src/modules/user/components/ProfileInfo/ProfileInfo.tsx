@@ -106,15 +106,34 @@ const ProfileInfo: React.FC = () => {
         setUserData({ ...userData, avatar: imageUrl });
     };
 
-    const handleChangePassword = (password: string, passwordChange: string, confirmPasswordChange: string) => {
-        if (passwordChange !== confirmPasswordChange) {
-            showNotification("Mật khẩu xác nhận không khớp!");
+    const handleChangePassword = async (oldPass: string, newPass: string, confirmPass: string) => {
+        if (newPass !== confirmPass) {
+            showNotification("Mật khẩu xác nhận không khớp!", false);
             return;
         }
-        console.log("Changing password:", { password, passwordChange });
-        logUserAction("Đổi mật khẩu");
-        showNotification("Đổi mật khẩu thành công!");
-        setChangePasswordStatus(false);
+        try {
+            const username = localStorage.getItem('username_user');
+            const res = await axios.post("http://localhost:5000/api/user/change_password", {
+                username: username,
+                passwordChange: newPass
+            });
+            if (res.data.status) {
+                showNotification("Đổi mật khẩu thành công!");
+                setChangePasswordStatus(false);
+                logUserAction("Đổi mật khẩu");
+
+                let passStar = ''
+                for (let i = 0; i < newPass.length; i++) {
+                    passStar += "*"
+                }
+                localStorage.setItem("password_user", passStar);
+            } else {
+                showNotification("Đổi mật khẩu thất bại!", true);
+            }
+        } catch (error) {
+            console.error("Error changing password:", error);
+            showNotification("Lỗi kết nối server!", false);
+        }
     };
 
     return (
@@ -190,11 +209,12 @@ const ProfileInfo: React.FC = () => {
                                     <p className="stat-label">Hoàn thành</p>
                                     <p className="stat-value">{orderStats.completed}</p>
                                 </div>
-                                <div className="stat-box cancelled-box">
-                                    <i className="bi bi-x-circle text-danger"></i>
-                                    <p className="stat-label">Đã hủy</p>
-                                    <p className="stat-value">{orderStats.cancelled}</p>
-                                </div>
+                            </div>
+
+                            <div className="stat-box cancelled-box mb-4">
+                                <i className="bi bi-x-circle text-danger"></i>
+                                <p className="stat-label">Đã hủy</p>
+                                <p className="stat-value">{orderStats.cancelled}</p>
                             </div>
 
                             <button

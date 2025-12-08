@@ -106,7 +106,7 @@ const Cart: React.FC = () => {
 
             const userData = userRes.data;
             if (!userData || !userData.fullname || !userData.email || !userData.phone_number || !userData.address || !userData.birthday || !userData.gender) {
-                showNotification("Vui lòng cập nhật đầy đủ thông tin cá nhân (Họ tên, Email, SĐT, Địa chỉ, Ngày sinh, Giới tính) trước khi thanh toán!", true);
+                showNotification("Vui lòng cập nhật đầy đủ thông tin cá nhân (Họ tên, Email, SĐT, Địa chỉ, Ngày sinh, Giới tính) trước khi thanh toán!",false);
                 navigate('/Profile');
                 return;
             }
@@ -242,7 +242,7 @@ const Cart: React.FC = () => {
                                 </div>
                             </div>
 
-                            <button className="checkout-btn" onClick={handleCheckout}>
+                            <button className="checkout-btn" onClick={handleCheckout} disabled={cartItems.length === 0}>
                                 Thanh Toán
                             </button>
 
