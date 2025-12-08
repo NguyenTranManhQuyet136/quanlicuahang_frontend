@@ -54,7 +54,6 @@ const Dashboard = () => {
                 order_id: orderId,
                 status: "Chờ lấy hàng"
             });
-            // Refresh data
             const resOrders = await axios.get("http://localhost:5000/api/order");
             setOrders(resOrders.data);
         } catch (error) {
@@ -63,9 +62,7 @@ const Dashboard = () => {
         }
     };
 
-    // Area 1: Pending Orders
     const pendingOrders = orders.filter(o => o.status === "Đang chờ xác nhận");
-    // Helper to group by status
     const countByStatus = (data: any, statusList: any, statusKey = 'status') => {
         const counts = data.reduce((acc: any, item: any) => {
             const status = item[statusKey] || 'Khác';
@@ -96,7 +93,6 @@ const Dashboard = () => {
     const orderStats = countByStatus(orders, orderStatuses);
     const warehouseStats = countByStatus(warehouse, warehouseStatuses);
 
-    // Product Categories - Dynamic Calculation
     const productTypeCounts = products.reduce((acc: any, product: any) => {
         const type = product.type || 'Khác';
         acc[type] = (acc[type] || 0) + 1;
@@ -108,7 +104,6 @@ const Dashboard = () => {
         value: productTypeCounts[type]
     }));
 
-    // Area 2: Category Stats (Products, Orders, Customers, Warehouse)
     const stats = [
         {
             label: "Sản phẩm",
@@ -160,14 +155,44 @@ const Dashboard = () => {
             ]
         }
     ];
-
-    // Total Revenue Calculation
     const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total_price), 0);
 
-    // Best Sellers Logic
     const bestSellers = [...products]
         .sort((a, b) => b.quantity - a.quantity)
         .slice(0, 4);
+
+
+    const [revenueFilter, setRevenueFilter] = useState("all");
+    const [profitFilter, setProfitFilter] = useState("all");
+
+    const filterOrders = (orders: any[], filterType: string) => {
+        const now = new Date();
+        return orders.filter(order => {
+            const orderDate = new Date(order.order_date);
+            if (filterType === "today") {
+                return orderDate.toDateString() === now.toDateString();
+            }
+            if (filterType === "week") {
+                const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+                return orderDate >= startOfWeek;
+            }
+            if (filterType === "month") {
+                return orderDate.getMonth() === new Date().getMonth() && orderDate.getFullYear() === new Date().getFullYear();
+            }
+            if (filterType === "year") {
+                return orderDate.getFullYear() === new Date().getFullYear();
+            }
+            return true;
+        });
+    };
+
+    const filteredRevenueOrders = filterOrders(orders, revenueFilter);
+    const filteredRevenue = filteredRevenueOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
+
+    const filteredProfitOrders = filterOrders(orders, profitFilter);
+    const filteredProfitRevenue = filteredProfitOrders.reduce((sum, o) => sum + Number(o.total_price), 0);
+    const profitMargin = totalRevenue > 0 ? profit / totalRevenue : 0;
+    const estimatedProfit = filteredProfitRevenue * profitMargin;
 
 
     if (loading) {
@@ -331,11 +356,23 @@ const Dashboard = () => {
                     <div className="row g-4 mb-4">
                         <div className="col-md-6">
                             <div className="card border-0 shadow-sm text-white revenue-card h-100">
-                                <div className="card-body p-4 d-flex align-items-center justify-content-between">
+                                <div className="card-body p-4 position-relative d-flex align-items-center justify-content-between">
+                                    <select
+                                        className="form-select form-select-sm border-0 shadow-sm text-dark"
+                                        style={{ position: 'absolute', top: '15px', right: '15px', width: 'auto', cursor: 'pointer', backgroundColor: 'white' }}
+                                        value={revenueFilter}
+                                        onChange={(e) => setRevenueFilter(e.target.value)}
+                                    >
+                                        <option value="all">Tất cả</option>
+                                        <option value="today">Hôm nay</option>
+                                        <option value="week">Tuần này</option>
+                                        <option value="month">Tháng này</option>
+                                        <option value="year">Năm nay</option>
+                                    </select>
                                     <div>
                                         <h5 className="card-title opacity-75 mb-1">Tổng Doanh Thu</h5>
                                         <h2 className="display-5 fw-bold mb-0">
-                                            {totalRevenue.toLocaleString("vi-VN")} ₫
+                                            {filteredRevenue.toLocaleString("vi-VN")} ₫
                                         </h2>
                                         <p className="mb-0 opacity-50 mt-2"><small>Cập nhật liên tục từ hệ thống</small></p>
                                     </div>
@@ -347,11 +384,23 @@ const Dashboard = () => {
                         </div>
                         <div className="col-md-6">
                             <div className="card border-0 shadow-sm text-white bg-success h-100">
-                                <div className="card-body p-4 d-flex align-items-center justify-content-between">
+                                <div className="card-body p-4 position-relative d-flex align-items-center justify-content-between">
+                                    <select
+                                        className="form-select form-select-sm border-0 shadow-sm text-dark"
+                                        style={{ position: 'absolute', top: '15px', right: '15px', width: 'auto', cursor: 'pointer', backgroundColor: 'white' }}
+                                        value={profitFilter}
+                                        onChange={(e) => setProfitFilter(e.target.value)}
+                                    >
+                                        <option value="all">Tất cả</option>
+                                        <option value="today">Hôm nay</option>
+                                        <option value="week">Tuần này</option>
+                                        <option value="month">Tháng này</option>
+                                        <option value="year">Năm nay</option>
+                                    </select>
                                     <div>
                                         <h5 className="card-title opacity-75 mb-1">Lợi Nhuận Ước Tính</h5>
                                         <h2 className="display-5 fw-bold mb-0">
-                                            {Number(profit).toLocaleString("vi-VN")} ₫
+                                            {Math.round(estimatedProfit).toLocaleString("vi-VN")} ₫
                                         </h2>
                                         <p className="mb-0 opacity-50 mt-2">
                                             <small>
@@ -362,6 +411,54 @@ const Dashboard = () => {
                                     <div className="d-none d-md-block opacity-25">
                                         {(FaMoneyBillWave as any)({ size: 80 })}
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row g-4 mb-4">
+                        {/* Top Khách hàng */}
+                        <div className="col-md-6">
+                            <div className="card border-0 shadow-sm h-100">
+                                <div className="card-header bg-white py-3">
+                                    <h5 className="mb-0 fw-bold text-info">🏆 Top Khách Hàng Tiềm Năng</h5>
+                                </div>
+                                <div className="card-body p-0">
+                                    <ul className="list-group list-group-flush">
+                                        {Object.entries(orders.reduce((acc: any, order) => {
+                                            acc[order.customer_id] = (acc[order.customer_id] || 0) + Number(order.total_price);
+                                            return acc;
+                                        }, {}))
+                                            .sort(([, a]: any, [, b]: any) => b - a)
+                                            .slice(0, 5)
+                                            .map(([id, total]: any) => (
+                                                <li key={id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>{id}</span>
+                                                    <span className="fw-bold text-primary">{total.toLocaleString("vi-VN")} ₫</span>
+                                                </li>
+                                            ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Cảnh báo tồn kho */}
+                        <div className="col-md-6">
+                            <div className="card border-0 shadow-sm h-100">
+                                <div className="card-header bg-white py-3">
+                                    <h5 className="mb-0 fw-bold text-danger">⚠️ Cảnh Báo Sắp Hết Hàng</h5>
+                                </div>
+                                <div className="card-body p-0">
+                                    <ul className="list-group list-group-flush">
+                                        {products
+                                            .filter(p => p.quantity < 10)
+                                            .map(p => (
+                                                <li key={p.product_id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                    <span>{p.name}</span>
+                                                    <span className="badge bg-danger rounded-pill">{p.quantity}</span>
+                                                </li>
+                                            ))}
+                                    </ul>
                                 </div>
                             </div>
                         </div>
