@@ -76,24 +76,20 @@ const OrderHistory: React.FC = () => {
     }, []);
 
     const handleCancelOrder = async (orderId: string) => {
-        if (window.confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) {
             try {
-                await axios.post('http://localhost:5000/api/order/update_status', {
+                await axios.post('http://localhost:5000/api/order/update_status', {//
                     order_id: orderId,
                     status: 'Đã hủy'
                 });
                 logUserAction("Hủy đơn hàng " + orderId);
                 showNotification("Hủy đơn hàng thành công!");
-
-                // Refresh orders
                 setOrders(prevOrders => prevOrders.map(order =>
                     order.id === orderId ? { ...order, status: 'Đã hủy' } : order
                 ));
             } catch (error) {
                 console.error("Error cancelling order:", error);
-                showNotification("Lỗi khi hủy đơn hàng");
+                showNotification("Lỗi khi hủy đơn hàng",false);
             }
-        }
     };
 
     const getStatusStyle = (status: string) => {

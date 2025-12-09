@@ -62,7 +62,7 @@ const FormAdd = (props: any) => {
                                         className="form-add-input"
                                         value={(dataForm as any)[col.key] || ''}
                                         readOnly={col.key === 'product_id'}
-                                        onChange={(e) => setDataForm((prev) => ({ ...prev, [col.key]: e.target.value }))}
+                                        onChange={(e) => setDataForm((prev) => ({...prev, [col.key]: e.target.value}))}
                                     />
                                 ) : (
                                     <select

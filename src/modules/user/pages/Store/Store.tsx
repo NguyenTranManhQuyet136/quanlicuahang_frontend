@@ -23,7 +23,6 @@ const Store = () => {
         fetchData();
     }, []);
 
-    // Extract unique categories from products
     const categories = ['all'].concat(Array.from(new Set(products.map((p: Product) => p.type || ''))));
 
     return (
